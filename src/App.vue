@@ -1,85 +1,93 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <v-app>
+    <AppNavigation />
+    <v-main>
+      <router-view />
+    </v-main>
+    <AppFooter />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    <!-- Global Snackbar -->
+    <v-snackbar
+      v-model="snackbarStore.show"
+      :color="snackbarStore.color"
+      :timeout="snackbarStore.timeout"
+      location="top"
+    >
+      {{ snackbarStore.message }}
+      <template v-slot:actions>
+        <v-btn color="white" variant="text" @click="snackbarStore.hide()"> Close </v-btn>
+      </template>
+    </v-snackbar>
+  </v-app>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script setup>
+import AppNavigation from '@/components/layout/AppNavigation.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
+import { useSnackbarStore } from '@/stores/snackbar'
+
+const snackbarStore = useSnackbarStore()
+</script>
+
+<style>
+/* Global styles */
+html {
+  scroll-behavior: smooth;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: 100vh;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.section-spacing {
+  padding: 80px 0;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.project-card {
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.skill-chip {
+  margin: 4px;
 }
 
-nav a:first-of-type {
-  border: 0;
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+::-webkit-scrollbar-thumb {
+  background: #1976d2;
+  border-radius: 4px;
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #1565c0;
 }
 </style>
