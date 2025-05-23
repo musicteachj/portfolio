@@ -76,7 +76,7 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     // Handle scroll behavior for better UX
     if (savedPosition) {
       // Return to saved position (browser back/forward)
@@ -95,7 +95,7 @@ const router = createRouter({
 })
 
 // Global navigation guards
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // Update page title
   if (to.meta.title) {
     document.title = to.meta.title as string
@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
 })
 
 // Optional: Add loading state for lazy-loaded routes
-router.beforeResolve((to, from, next) => {
+router.beforeResolve((_to, _from, next) => {
   // You can add a loading spinner here if needed
   next()
 })
