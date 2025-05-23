@@ -21,7 +21,7 @@
   </v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AppNavigation from '@/components/layout/AppNavigation.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import { useSnackbarStore } from '@/stores/snackbar'
