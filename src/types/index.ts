@@ -37,6 +37,12 @@ export interface Experience {
   achievements: string[]
   technologies: string[]
   location?: string
+  description?: string // Add this
+  highlights?: Array<{
+    // Add this
+    name: string
+    description: string
+  }>
 }
 
 export interface ContactForm {

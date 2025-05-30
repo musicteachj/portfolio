@@ -91,6 +91,7 @@ const isDark = computed(() => theme.global.name.value === 'dark')
 const navItems: NavigationItem[] = [
   { title: 'Home', to: '/', icon: 'mdi-home' },
   { title: 'About', to: '/about', icon: 'mdi-account' },
+  { title: 'Experience', to: '/experience', icon: 'mdi-briefcase' }, // Add this line
   { title: 'Projects', to: '/projects', icon: 'mdi-code-braces' },
   { title: 'Contact', to: '/contact', icon: 'mdi-email' },
 ]
