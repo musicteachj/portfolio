@@ -243,13 +243,13 @@ const experience = ref<
   },
   {
     id: 2,
-    title: 'Frontend Developer',
+    title: 'Full Stack Engineer',
     company: 'KollaCode / IBM',
     period: 'Jul 2021 - Sept 2022',
     current: false,
     location: 'Atlanta, GA / Remote',
     description:
-      "Frontend developer specializing in Vue.js applications for IBM's internal tools and global event management systems. Focused on UI/UX improvements, component architecture, and ensuring compliance with IBM's security and design standards.",
+      "Full stack engineer specializing in Vue.js applications for IBM's internal tools and global event management systems. Focused on UI/UX improvements, component architecture, and ensuring compliance with IBM's security and design standards.",
     achievements: [
       "Ensured compliance with IBM's security and data privacy policies across all Vue.js and Node.js applications",
       'Collaborated with IBM project managers, designers, and developers to deliver version upgrades for globally-used applications',
