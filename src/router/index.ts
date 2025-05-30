@@ -1,15 +1,12 @@
-// src/router/index.ts
+// src/router/index.ts - Updated with Experience route
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-
-// Import views
-import HomeView from '@/views/HomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: () => import('@/views/HomeView.vue'),
     meta: {
       title: 'Your Name - Portfolio',
       description: 'Full Stack Developer & Problem Solver',
@@ -22,6 +19,15 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'About - Your Name',
       description: 'Learn more about my background and experience',
+    },
+  },
+  {
+    path: '/experience',
+    name: 'experience',
+    component: () => import('@/views/ExperienceView.vue'),
+    meta: {
+      title: 'Experience - Your Name',
+      description: 'My professional work experience and career journey',
     },
   },
   {
@@ -41,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
       title: 'Project Details - Your Name',
       description: 'Detailed view of my project',
     },
-    props: true, // Pass route params as props to component
+    props: true,
   },
   {
     path: '/contact',
@@ -52,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
       description: 'Get in touch for opportunities and collaborations',
     },
   },
-  // Redirect old URLs or common variations
+  // Redirects
   {
     path: '/home',
     redirect: '/',
@@ -60,6 +66,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/portfolio',
     redirect: '/projects',
+  },
+  {
+    path: '/work',
+    redirect: '/experience',
   },
   // 404 Not Found - must be last
   {
@@ -77,32 +87,25 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, _from, savedPosition) {
-    // Handle scroll behavior for better UX
     if (savedPosition) {
-      // Return to saved position (browser back/forward)
       return savedPosition
     } else if (to.hash) {
-      // Smooth scroll to anchor links
       return {
         el: to.hash,
         behavior: 'smooth',
       }
     } else {
-      // Scroll to top for new pages
       return { top: 0 }
     }
   },
 })
 
-// Global navigation guards
 router.beforeEach((to, _from, next) => {
-  // Update page title
-  if (to.meta.title) {
+  if (to.meta?.title) {
     document.title = to.meta.title as string
   }
 
-  // Update meta description
-  if (to.meta.description) {
+  if (to.meta?.description) {
     let metaDescription = document.querySelector('meta[name="description"]')
     if (!metaDescription) {
       metaDescription = document.createElement('meta')
@@ -112,20 +115,15 @@ router.beforeEach((to, _from, next) => {
     metaDescription.setAttribute('content', to.meta.description as string)
   }
 
-  // Continue navigation
   next()
 })
 
-// Optional: Add loading state for lazy-loaded routes
 router.beforeResolve((_to, _from, next) => {
-  // You can add a loading spinner here if needed
   next()
 })
 
-// Handle navigation errors
 router.onError((error) => {
   console.error('Router error:', error)
-  // You could redirect to an error page or show a notification
 })
 
 export default router
