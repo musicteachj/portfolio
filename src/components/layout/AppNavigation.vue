@@ -12,7 +12,7 @@
         :class="scrolled ? 'text-primary' : 'text-white'"
         class="font-weight-bold text-decoration-none"
       >
-        Your Name
+        James Littlefield
       </router-link>
     </v-app-bar-title>
 
