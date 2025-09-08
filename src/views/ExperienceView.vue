@@ -116,25 +116,7 @@
         <v-col cols="12">
           <h2 class="text-h3 font-weight-bold text-center mb-8">Skills Developed</h2>
         </v-col>
-
-        <v-col v-for="skillCategory in skillsSimple" :key="skillCategory.category" cols="12" md="4">
-          <v-card elevation="6" class="pa-6 fill-height">
-            <div class="text-center mb-4">
-              <v-icon :color="skillCategory.color" size="48">
-                {{ skillCategory.icon }}
-              </v-icon>
-              <h3 class="text-h5 mt-2">{{ skillCategory.category }}</h3>
-            </div>
-            <v-list density="compact">
-              <v-list-item v-for="skill in skillCategory.skills" :key="skill" class="px-0">
-                <template v-slot:prepend>
-                  <v-icon :color="skillCategory.color" size="small">mdi-check-circle</v-icon>
-                </template>
-                <v-list-item-title class="text-body-1">{{ skill }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </v-col>
+        <Skills />
       </v-row>
 
       <!-- Download Resume CTA -->
@@ -176,9 +158,9 @@
 import { ref } from 'vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import type { Experience } from '@/types'
+import Skills from '@/components/Skills.vue'
 
 const snackbar = useSnackbarStore()
-
 // Experience data with enhanced details
 const experience = ref<
   (Experience & {
@@ -407,55 +389,6 @@ const experience = ref<
         description:
           'Created reusable UI component system for monolithic application, establishing DRY principles and maintainable frontend architecture',
       },
-    ],
-  },
-])
-
-const skillsSimple = ref([
-  {
-    category: 'Frontend',
-    icon: 'mdi-monitor',
-    color: 'blue',
-    skills: [
-      'Vue 2 & Vue 3',
-      'React',
-      'TypeScript',
-      'Vuetify 2 & 3',
-      'Nuxt.js',
-      'JavaScript ES6+',
-      'CSS/Sass',
-      'Responsive Design',
-      'vue-i18n (Internationalization)',
-    ],
-  },
-  {
-    category: 'Backend & Database',
-    icon: 'mdi-server',
-    color: 'green',
-    skills: [
-      'Node.js',
-      'Express.js',
-      'PostgreSQL',
-      'Cloudant DB (NoSQL)',
-      'GraphQL',
-      'Hasura',
-      'RESTful APIs',
-      'Database Optimization',
-    ],
-  },
-  {
-    category: 'Tools & DevOps',
-    icon: 'mdi-tools',
-    color: 'orange',
-    skills: [
-      'Git/GitHub',
-      'Vite',
-      'Pinia State Management',
-      'Vuex',
-      'Jira',
-      'IBM API Services',
-      'XLSX Processing',
-      'NPM',
     ],
   },
 ])

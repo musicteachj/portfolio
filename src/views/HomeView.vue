@@ -14,13 +14,13 @@
                 ></v-img>
               </v-avatar>
 
-              <h1 class="display-1 font-weight-bold mb-4">
-                Hi, I'm <span class="text-accent">Your Name</span>
+              <h1 class="text-h4 display-1 font-weight-bold mb-4">
+                <span class="text-accent">James Littlefield</span>
               </h1>
 
               <div class="text-h4 mb-6">
                 <v-icon size="small" class="mr-2">mdi-code-tags</v-icon>
-                Full Stack Developer & Problem Solver
+                Senior Full Stack Developer & Problem Solver
               </div>
 
               <p class="text-h6 mb-8 mx-auto" style="max-width: 600px; opacity: 0.9">
@@ -62,15 +62,16 @@
     </section>
 
     <!-- Quick About Section -->
-    <section class="section-spacing">
+    <section id="about" class="section-spacing">
       <v-container>
         <v-row>
           <v-col cols="12" md="8" offset-md="2" class="text-center">
             <div class="fade-in" :class="{ visible: aboutVisible }">
               <h2 class="text-h3 font-weight-bold mb-6">Building Digital Experiences</h2>
               <p class="text-h6 mb-8" style="opacity: 0.8">
-                {{ yearsOfExperience }}+ years of experience creating web applications that solve
-                real-world problems with modern technologies.
+                Versatile and detail-oriented Full Stack Developer with {{ yearsOfExperience }}+
+                years of experience creating web applications that solve real-world problems with
+                modern technologies.
               </p>
 
               <div class="d-flex justify-center flex-wrap ga-2 mb-8">
@@ -115,6 +116,7 @@
             cols="12"
             md="6"
             lg="4"
+            class="mx-auto"
           >
             <div
               class="fade-in"
@@ -147,37 +149,7 @@
           <v-col cols="12" class="text-center mb-8">
             <h2 class="text-h3 font-weight-bold mb-4">Technical Skills</h2>
           </v-col>
-
-          <v-col
-            v-for="(skillCategory, index) in skillCategories"
-            :key="skillCategory.name"
-            cols="12"
-            md="4"
-          >
-            <div
-              class="fade-in"
-              :class="{ visible: skillsVisible }"
-              :style="{ 'transition-delay': `${index * 0.1}s` }"
-            >
-              <v-card elevation="4" class="pa-4 fill-height">
-                <div class="text-center mb-4">
-                  <v-icon :color="skillCategory.color" size="48">{{ skillCategory.icon }}</v-icon>
-                  <h3 class="text-h5 mt-2">{{ skillCategory.name }}</h3>
-                </div>
-                <div class="d-flex flex-wrap justify-center ga-2">
-                  <v-chip
-                    v-for="skill in skillCategory.skills"
-                    :key="skill"
-                    :color="skillCategory.color"
-                    variant="outlined"
-                    size="small"
-                  >
-                    {{ skill }}
-                  </v-chip>
-                </div>
-              </v-card>
-            </div>
-          </v-col>
+          <Skills />
         </v-row>
       </v-container>
     </section>
@@ -215,41 +187,36 @@ import { useIntersectionObserver } from '@vueuse/core'
 import ProjectCard from '@/components/ProjectCard.vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import { useProjectsStore } from '@/stores/projects'
+import Skills from '@/components/Skills.vue'
 
 // Stores
 const snackbar = useSnackbarStore()
 const projectsStore = useProjectsStore()
-
 // Reactive data
 const heroVisible = ref<boolean>(false)
 const aboutVisible = ref<boolean>(false)
 const projectsVisible = ref<boolean>(false)
 const skillsVisible = ref<boolean>(false)
 
-const yearsOfExperience = ref<number>(3)
+const yearsOfExperience = ref<number>(7)
 
-const featuredSkills: string[] = ['Vue.js', 'React', 'TypeScript', 'Node.js', 'Python', 'AWS']
-
-const skillCategories = ref([
-  {
-    name: 'Frontend',
-    icon: 'mdi-monitor',
-    color: 'blue',
-    skills: ['Vue.js', 'React', 'TypeScript', 'HTML5', 'CSS3', 'Sass'],
-  },
-  {
-    name: 'Backend',
-    icon: 'mdi-server',
-    color: 'green',
-    skills: ['Node.js', 'Python', 'Express', 'Django', 'PostgreSQL', 'MongoDB'],
-  },
-  {
-    name: 'Tools & Cloud',
-    icon: 'mdi-tools',
-    color: 'orange',
-    skills: ['Git', 'Docker', 'AWS', 'Firebase', 'Vite', 'Jest'],
-  },
-])
+const featuredSkills: string[] = [
+  'Vue.js',
+  'React',
+  'TypeScript',
+  'Node.js',
+  'GraphQL',
+  'RESTful APIs',
+  'State Management',
+  'Internationalization',
+  'UI/UX Design',
+  'Responsive Design',
+  'Performance Optimization',
+  'Clean Code',
+  'Agile Methodologies',
+  'Cursor AI',
+  'Claude AI',
+]
 
 // Computed
 const featuredProjects = computed(() => projectsStore.featuredProjects)
@@ -329,7 +296,8 @@ onMounted(() => {
   // Set targets to actual DOM elements
   setTimeout(() => {
     heroTarget.value = document.getElementById('home')
-    aboutTarget.value = document.querySelector('.section-spacing:nth-of-type(1)')
+    aboutTarget.value = document.getElementById('about')
+    // aboutTarget.value = document.querySelector('.section-spacing:nth-of-type(1)')
     projectsTarget.value = document.querySelector('.section-spacing:nth-of-type(2)')
     skillsTarget.value = document.querySelector('.section-spacing:nth-of-type(3)')
   }, 100)

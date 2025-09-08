@@ -11,7 +11,14 @@
           </div>
         </v-col>
 
-        <v-col v-for="project in projects" :key="project.id" cols="12" md="6" lg="4">
+        <v-col
+          v-for="project in projects"
+          :key="project.id"
+          cols="12"
+          md="6"
+          lg="4"
+          class="mx-auto"
+        >
           <ProjectCard :project="project" />
         </v-col>
 
