@@ -1,9 +1,9 @@
 <template>
-  <v-footer class="bg-grey-darken-4" app>
+  <v-footer class="bg-grey-darken-4" app height="100">
     <v-container>
       <v-row align="center" justify="center">
         <v-col cols="12" class="text-center">
-          <div class="d-flex justify-center align-center flex-wrap ga-4 mb-4">
+          <div class="d-flex justify-center align-center flex-wrap ga-8 mb-0 mt-n4">
             <v-btn
               v-for="social in socialLinks"
               :key="social.name"
@@ -16,12 +16,7 @@
               :title="`Visit my ${social.name}`"
             ></v-btn>
           </div>
-
-          <p class="text-body-2 mb-0">
-            © {{ currentYear }} Your Name. Built with
-            <v-icon size="small" color="red" class="mx-1">mdi-heart</v-icon>
-            using Vue 3, TypeScript & Vuetify 3.
-          </p>
+          <p class="text-body-2 mb-0">© {{ currentYear }} James Littlefield</p>
         </v-col>
       </v-row>
     </v-container>
@@ -37,25 +32,19 @@ const currentYear = computed(() => new Date().getFullYear())
 const socialLinks: SocialLink[] = [
   {
     name: 'GitHub',
-    url: 'https://github.com/yourusername',
+    url: 'https://github.com/musicteachj',
     icon: 'mdi-github',
     color: 'white',
   },
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/yourprofile',
+    url: 'https://www.linkedin.com/in/james-littlefield-93037713b/',
     icon: 'mdi-linkedin',
     color: 'blue',
   },
   {
-    name: 'Twitter',
-    url: 'https://twitter.com/yourhandle',
-    icon: 'mdi-twitter',
-    color: 'blue',
-  },
-  {
     name: 'Email',
-    url: 'mailto:your.email@example.com',
+    url: 'mailto:jameslittlefield3@gmail.com',
     icon: 'mdi-email',
     color: 'white',
   },

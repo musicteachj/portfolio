@@ -25,38 +25,27 @@
                 <div class="contact-info">
                   <div class="d-flex align-center mb-4">
                     <v-icon color="primary" class="mr-4">mdi-email</v-icon>
-                    <span class="text-body-1">your.email@example.com</span>
-                  </div>
-                  <div class="d-flex align-center mb-4">
-                    <v-icon color="primary" class="mr-4">mdi-phone</v-icon>
-                    <span class="text-body-1">+1 (555) 123-4567</span>
+                    <span class="text-body-1">jameslittlefield3@gmail.com</span>
                   </div>
                   <div class="d-flex align-center mb-6">
                     <v-icon color="primary" class="mr-4">mdi-map-marker</v-icon>
-                    <span class="text-body-1">Your City, State</span>
+                    <span class="text-body-1">Atlanta, Ga</span>
                   </div>
                 </div>
 
                 <!-- Social Links -->
                 <div class="d-flex ga-3">
                   <v-btn
-                    href="https://linkedin.com/in/yourprofile"
+                    href="https://www.linkedin.com/in/james-littlefield-93037713b/"
                     target="_blank"
                     icon="mdi-linkedin"
                     color="primary"
                     variant="outlined"
                   ></v-btn>
                   <v-btn
-                    href="https://github.com/yourusername"
+                    href="https://github.com/musicteachj"
                     target="_blank"
                     icon="mdi-github"
-                    color="primary"
-                    variant="outlined"
-                  ></v-btn>
-                  <v-btn
-                    href="https://twitter.com/yourhandle"
-                    target="_blank"
-                    icon="mdi-twitter"
                     color="primary"
                     variant="outlined"
                   ></v-btn>
