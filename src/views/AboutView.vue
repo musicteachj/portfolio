@@ -122,7 +122,7 @@
                 </v-btn>
                 <v-btn
                   to="/projects"
-                  color="secondary"
+                  :color="isDark ? 'primary' : 'secondary'"
                   variant="outlined"
                   size="large"
                   prepend-icon="mdi-code-braces"
@@ -131,7 +131,7 @@
                 </v-btn>
                 <v-btn
                   to="/"
-                  color="secondary"
+                  :color="isDark ? 'primary' : 'secondary'"
                   variant="outlined"
                   size="large"
                   prepend-icon="mdi-arrow-left"
@@ -148,9 +148,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useTheme } from 'vuetify'
 
-const yearsOfExperience = ref(5) // Updated to reflect 2019-2024
+const theme = useTheme()
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 </script>
 
 <style scoped>
