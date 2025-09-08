@@ -18,16 +18,6 @@ export interface Project {
 export type ProjectCategory = 'Full Stack' | 'Frontend' | 'Backend' | 'Mobile' | 'Design'
 export type ProjectStatus = 'completed' | 'in-progress' | 'maintained'
 
-export interface Skill {
-  name: string
-  category: SkillCategory
-  level: SkillLevel
-  icon?: string
-}
-
-export type SkillCategory = 'Frontend' | 'Backend' | 'Database' | 'Tools' | 'Cloud' | 'Design'
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert'
-
 export interface Experience {
   id: number
   title: string
@@ -71,4 +61,11 @@ export interface SocialLink {
   url: string
   icon: string
   color?: string
+}
+
+export interface Skill {
+  category: string
+  icon: string
+  color: string
+  skills: string[]
 }

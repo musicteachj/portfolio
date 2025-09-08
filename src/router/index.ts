@@ -2,49 +2,58 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
+// Views
+import HomeView from '@/views/HomeView.vue'
+import AboutView from '@/views/AboutView.vue'
+import ExperienceView from '@/views/ExperienceView.vue'
+import ProjectsView from '@/views/ProjectsView.vue'
+import ProjectDetailView from '@/views/ProjectDetailView.vue'
+import ContactView from '@/views/ContactView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/HomeView.vue'),
+    component: HomeView,
     meta: {
-      title: 'Your Name - Portfolio',
-      description: 'Full Stack Developer & Problem Solver',
+      title: 'James Littlefield - Portfolio',
+      description: 'Senior Full Stack Developer & Problem Solver',
     },
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/views/AboutView.vue'),
+    component: AboutView,
     meta: {
-      title: 'About - Your Name',
+      title: 'About - James Littlefield',
       description: 'Learn more about my background and experience',
     },
   },
   {
     path: '/experience',
     name: 'experience',
-    component: () => import('@/views/ExperienceView.vue'),
+    component: ExperienceView,
     meta: {
-      title: 'Experience - Your Name',
+      title: 'Experience - James Littlefield',
       description: 'My professional work experience and career journey',
     },
   },
   {
     path: '/projects',
     name: 'projects',
-    component: () => import('@/views/ProjectsView.vue'),
+    component: ProjectsView,
     meta: {
-      title: 'Projects - Your Name',
+      title: 'Projects - James Littlefield',
       description: 'Explore my featured projects and work',
     },
   },
   {
     path: '/projects/:id',
     name: 'project-detail',
-    component: () => import('@/views/ProjectDetailView.vue'),
+    component: ProjectDetailView,
     meta: {
-      title: 'Project Details - Your Name',
+      title: 'Project Details - James Littlefield',
       description: 'Detailed view of my project',
     },
     props: true,
@@ -52,9 +61,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/contact',
     name: 'contact',
-    component: () => import('@/views/ContactView.vue'),
+    component: ContactView,
     meta: {
-      title: 'Contact - Your Name',
+      title: 'Contact - James Littlefield',
       description: 'Get in touch for opportunities and collaborations',
     },
   },
@@ -75,9 +84,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('@/views/NotFoundView.vue'),
+    component: NotFoundView,
     meta: {
-      title: 'Page Not Found - Your Name',
+      title: 'Page Not Found - James Littlefield',
       description: 'The page you are looking for does not exist',
     },
   },

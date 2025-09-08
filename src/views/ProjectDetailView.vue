@@ -43,6 +43,9 @@
                   :key="feature"
                   prepend-icon="mdi-check-circle"
                 >
+                  <template v-slot:prepend>
+                    <v-icon color="green" size="small">mdi-check-circle</v-icon>
+                  </template>
                   <v-list-item-title>{{ feature }}</v-list-item-title>
                 </v-list-item>
               </v-list>
