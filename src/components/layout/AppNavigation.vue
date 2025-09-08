@@ -1,15 +1,15 @@
 <template>
   <v-app-bar
     :elevation="scrolled ? 4 : 0"
-    :color="scrolled ? 'white' : 'transparent'"
-    :theme="scrolled ? 'light' : 'dark'"
+    :color="isDark ? (scrolled ? 'black' : 'transparent') : scrolled ? 'white' : 'transparent'"
+    :theme="isDark ? 'dark' : 'light'"
     fixed
     app
   >
     <v-app-bar-title>
       <router-link
         to="/"
-        :class="scrolled ? 'text-primary' : 'text-white'"
+        :class="isDark ? 'text-white' : 'text-primary'"
         class="font-weight-bold text-decoration-none"
       >
         James Littlefield
@@ -22,7 +22,7 @@
     <v-btn
       icon
       @click="toggleTheme"
-      :color="scrolled ? 'primary' : 'white'"
+      :color="isDark ? 'white' : 'primary'"
       class="mr-2"
       :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
     >
@@ -33,7 +33,7 @@
     <v-app-bar-nav-icon
       v-if="mobile"
       @click="drawer = !drawer"
-      :color="scrolled ? 'primary' : 'white'"
+      :color="isDark ? 'white' : 'primary'"
     ></v-app-bar-nav-icon>
 
     <!-- Desktop Navigation -->
@@ -42,7 +42,7 @@
         v-for="item in navItems"
         :key="item.title"
         :to="item.to"
-        :color="scrolled ? 'primary' : 'white'"
+        :color="isDark ? 'white' : 'primary'"
         variant="text"
         class="mx-1"
       >

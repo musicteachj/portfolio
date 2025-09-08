@@ -98,7 +98,12 @@
 
             <!-- Back Button -->
             <div class="text-center mt-8">
-              <v-btn to="/" color="secondary" variant="outlined" prepend-icon="mdi-arrow-left">
+              <v-btn
+                to="/"
+                :color="isDark ? 'primary' : 'secondary'"
+                variant="outlined"
+                prepend-icon="mdi-arrow-left"
+              >
                 Back to Home
               </v-btn>
             </div>
@@ -113,6 +118,12 @@
 import { ref } from 'vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import type { ContactForm } from '@/types'
+import { computed } from 'vue'
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 
 const snackbar = useSnackbarStore()
 

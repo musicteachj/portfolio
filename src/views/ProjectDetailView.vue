@@ -66,7 +66,7 @@
                   v-if="project.githubUrl"
                   :href="project.githubUrl"
                   target="_blank"
-                  color="secondary"
+                  :color="isDark ? 'primary' : 'secondary'"
                   size="large"
                   prepend-icon="mdi-github"
                 >
@@ -95,6 +95,11 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProjectsStore } from '@/stores/projects'
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 
 const route = useRoute()
 const projectsStore = useProjectsStore()

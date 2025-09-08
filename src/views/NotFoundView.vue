@@ -13,7 +13,12 @@
 
           <div class="d-flex justify-center flex-wrap ga-4">
             <v-btn to="/" color="primary" size="large" prepend-icon="mdi-home"> Go Home </v-btn>
-            <v-btn to="/projects" color="secondary" size="large" prepend-icon="mdi-code-braces">
+            <v-btn
+              to="/projects"
+              :color="isDark ? 'primary' : 'secondary'"
+              size="large"
+              prepend-icon="mdi-code-braces"
+            >
               View Projects
             </v-btn>
           </div>
@@ -24,7 +29,12 @@
 </template>
 
 <script setup lang="ts">
-// 404 page - no logic needed
+import { computed } from 'vue'
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 </script>
 
 <style scoped>

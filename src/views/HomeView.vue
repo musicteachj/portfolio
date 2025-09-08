@@ -15,7 +15,7 @@
               </v-avatar>
 
               <h1 class="text-h4 display-1 font-weight-bold mb-4">
-                <span class="text-accent">James Littlefield</span>
+                <span class="">James Littlefield</span>
               </h1>
 
               <div class="text-h4 mb-6">
