@@ -395,10 +395,9 @@ const experience = ref<
 
 const downloadResume = (): void => {
   const link = document.createElement('a')
-  link.href = '/resume.pdf' // Replace with actual resume path
-  link.download = 'Your_Name_Resume.pdf'
+  link.href = `${import.meta.env.BASE_URL}james_littlefield_resume.docx`
+  link.download = 'james_littlefield_resume.docx'
   link.click()
-
   snackbar.success('Resume download started!')
 }
 </script>
