@@ -54,12 +54,13 @@
 
               <!-- Contact Form -->
               <v-col cols="12" md="6">
-                <v-form @submit.prevent="submitForm">
+                <v-form ref="formRef" @submit.prevent="submitForm" v-model="formValid">
                   <v-text-field
                     v-model="form.name"
                     label="Name"
                     variant="outlined"
                     required
+                    :rules="nameRules"
                     class="mb-3"
                   ></v-text-field>
 
@@ -69,6 +70,7 @@
                     type="email"
                     variant="outlined"
                     required
+                    :rules="emailRules"
                     class="mb-3"
                   ></v-text-field>
 
@@ -77,6 +79,7 @@
                     label="Subject"
                     variant="outlined"
                     required
+                    :rules="subjectRules"
                     class="mb-3"
                   ></v-text-field>
 
@@ -84,12 +87,20 @@
                     v-model="form.message"
                     label="Message"
                     variant="outlined"
-                    rows="4"
+                    rows="6"
                     required
+                    :rules="messageRules"
                     class="mb-4"
                   ></v-textarea>
 
-                  <v-btn type="submit" color="primary" size="large" block :loading="submitting">
+                  <v-btn
+                    type="submit"
+                    color="primary"
+                    size="large"
+                    block
+                    :loading="submitting"
+                    :disabled="!formValid"
+                  >
                     Send Message
                   </v-btn>
                 </v-form>
@@ -128,6 +139,9 @@ const isDark = computed(() => theme.global.name.value === 'dark')
 const snackbar = useSnackbarStore()
 
 const submitting = ref(false)
+const formValid = ref(false)
+const formRef = ref()
+
 const form = ref<ContactForm>({
   name: '',
   email: '',
@@ -135,7 +149,37 @@ const form = ref<ContactForm>({
   message: '',
 })
 
+// Validation rules
+const nameRules = [
+  (v: string) => !!v || 'Name is required',
+  (v: string) => (v && v.length <= 30) || 'Name must be 30 characters or less',
+]
+
+const emailRules = [
+  (v: string) => !!v || 'Email is required',
+  (v: string) => (v && v.length <= 30) || 'Email must be 30 characters or less',
+  (v: string) => /.+@.+\..+/.test(v) || 'Email must be valid',
+]
+
+const subjectRules = [
+  (v: string) => !!v || 'Subject is required',
+  (v: string) => (v && v.length <= 30) || 'Subject must be 30 characters or less',
+]
+
+const messageRules = [
+  (v: string) => !!v || 'Message is required',
+  (v: string) => (v && v.length <= 1000) || 'Message must be 1000 characters or less',
+]
+
 const submitForm = async (): Promise<void> => {
+  // Validate form before submission
+  const { valid } = await formRef.value.validate()
+
+  if (!valid) {
+    snackbar.error('Please fix the form errors before submitting.')
+    return
+  }
+
   submitting.value = true
 
   try {
@@ -158,6 +202,8 @@ const resetForm = (): void => {
     subject: '',
     message: '',
   }
+  // Reset form validation state
+  formRef.value?.resetValidation()
 }
 </script>
 
