@@ -8,7 +8,7 @@
             <div class="fade-in" :class="{ visible: heroVisible }">
               <v-avatar size="180" class="mb-8 elevation-8">
                 <v-img
-                  src="/assets/James.png"
+                  :src="JamesPic"
                   alt="James Littlefield Profile Picture"
                   class="profile-image"
                 ></v-img>
@@ -188,6 +188,7 @@ import ProjectCard from '@/components/ProjectCard.vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import { useProjectsStore } from '@/stores/projects'
 import Skills from '@/components/Skills.vue'
+import JamesPic from '../assets/images/James.png'
 
 // Stores
 const snackbar = useSnackbarStore()

@@ -3,6 +3,9 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Project, ProjectCategory } from '@/types'
 
+import PortfolioPic from '../assets/images/Portfolio.png'
+import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
+
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
     {
@@ -12,7 +15,7 @@ export const useProjectsStore = defineStore('projects', () => {
         'This responsive portfolio website showcasing projects and skills, built with modern web technologies and best practices.',
       longDescription:
         'A modern, responsive portfolio website built with Vue 3, TypeScript, and Vuetify 3. Features include dark/light theme toggle, smooth animations, optimized performance, and a clean, professional design. Deployed with automated CI/CD pipeline.',
-      image: '/assets/Portfolio.png',
+      image: PortfolioPic,
       technologies: ['Vue.js', 'TypeScript', 'Vuetify', 'Vite', 'Pinia', 'CSS3', 'Node.js'],
       liveUrl: 'https://musicteachj.github.io/portfolio/',
       githubUrl: 'https://github.com/musicteachj/portfolio',
@@ -38,7 +41,7 @@ export const useProjectsStore = defineStore('projects', () => {
         'Modern CRUD application designed for users to create, scan, and print their own barcodes',
       longDescription:
         'An accessible, simple to use application designed for users to create, scan and print their own barcodes. Built with Vue 3, Typescript, Node.js, Mongo DB, Vuelidate form validation and more. Deployed with railway',
-      image: '/assets/BarcodeCrud.png',
+      image: BarcodeCrudPic,
       technologies: [
         'Vue.js',
         'TypeScript',
