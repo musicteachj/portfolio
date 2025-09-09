@@ -8,8 +8,8 @@
             <div class="fade-in" :class="{ visible: heroVisible }">
               <v-avatar size="180" class="mb-8 elevation-8">
                 <v-img
-                  src="/api/placeholder/180/180"
-                  alt="Profile Picture"
+                  src="/assets/James.png"
+                  alt="James Littlefield Profile Picture"
                   class="profile-image"
                 ></v-img>
               </v-avatar>
