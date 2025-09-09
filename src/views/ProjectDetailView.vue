@@ -27,7 +27,14 @@
 
           <!-- Project Image -->
           <v-col cols="12" md="8" offset-md="2" class="mb-8">
-            <v-img :src="project.image" height="400" cover class="rounded-lg elevation-8"></v-img>
+            <v-img
+              :src="project.image"
+              height="400"
+              cover
+              class="rounded-lg elevation-8"
+              :alt="`${project.title} details preview`"
+              loading="lazy"
+            ></v-img>
           </v-col>
 
           <!-- Project Details -->

@@ -5,7 +5,14 @@
     @click="goToProject"
     style="cursor: pointer"
   >
-    <v-img :src="project.image" height="200" cover class="project-image">
+    <v-img
+      :src="project.image"
+      height="200"
+      cover
+      class="project-image"
+      :alt="`${project.title}`"
+      loading="lazy"
+    >
       <template v-slot:placeholder>
         <div class="d-flex align-center justify-center fill-height">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
