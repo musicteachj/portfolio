@@ -76,6 +76,12 @@
                       >Developed agricultural technology solutions</span
                     >
                   </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-currency-usd</v-icon>
+                    <span class="font-weight-medium"
+                      >Contributed to Series A to Series B funding growth</span
+                    >
+                  </div>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <div class="highlight-item mb-3">
@@ -93,6 +99,12 @@
                   <div class="highlight-item mb-3">
                     <v-icon color="success" size="small" class="mr-2">mdi-security</v-icon>
                     <span class="font-weight-medium">Ensured enterprise security compliance</span>
+                  </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-barcode-scan</v-icon>
+                    <span class="font-weight-medium"
+                      >Integrated barcode & QR Code scanning technology</span
+                    >
                   </div>
                 </v-col>
               </v-row>
