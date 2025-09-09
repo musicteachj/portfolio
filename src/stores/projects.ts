@@ -12,15 +12,14 @@ export const useProjectsStore = defineStore('projects', () => {
         'This responsive portfolio website showcasing projects and skills, built with modern web technologies and best practices.',
       longDescription:
         'A modern, responsive portfolio website built with Vue 3, TypeScript, and Vuetify 3. Features include dark/light theme toggle, smooth animations, optimized performance, and a clean, professional design. Deployed with automated CI/CD pipeline.',
-      image: '/api/placeholder/400/200',
-      gallery: ['/api/placeholder/800/600', '/api/placeholder/800/600'],
-      technologies: ['Vue.js', 'TypeScript', 'Vuetify', 'Vite', 'Pinia', 'CSS3'],
+      image: '/assets/Portfolio.png',
+      technologies: ['Vue.js', 'TypeScript', 'Vuetify', 'Vite', 'Pinia', 'CSS3', 'Node.js'],
       liveUrl: 'https://musicteachj.github.io/portfolio/',
       githubUrl: 'https://github.com/musicteachj/portfolio',
       featured: true,
       category: 'Frontend',
       year: 2025,
-      status: 'in-progress',
+      status: 'completed',
       features: [
         'Responsive design optimized for all devices',
         'Dark/light theme toggle with persistence',
@@ -34,13 +33,12 @@ export const useProjectsStore = defineStore('projects', () => {
     },
     {
       id: 2,
-      title: 'Barcode CRUD',
+      title: 'Barcode Gen',
       description:
-        'This responsive portfolio website showcasing projects and skills, built with modern web technologies and best practices.',
+        'Modern CRUD application designed for users to create, scan, and print their own barcodes',
       longDescription:
-        'A modern, responsive portfolio website built with Vue 3, TypeScript, and Vuetify 3. Features include dark/light theme toggle, smooth animations, optimized performance, and a clean, professional design. Deployed with automated CI/CD pipeline.',
-      image: '/api/placeholder/400/200',
-      gallery: ['/api/placeholder/800/600', '/api/placeholder/800/600'],
+        'An accessible, simple to use application designed for users to create, scan and print their own barcodes. Built with Vue 3, Typescript, Node.js, Mongo DB, Vuelidate form validation and more. Deployed with railway',
+      image: '/assets/BarcodeCrud.png',
       technologies: [
         'Vue.js',
         'TypeScript',
@@ -50,26 +48,21 @@ export const useProjectsStore = defineStore('projects', () => {
         'CSS3',
         'Node.js',
         'Express.js',
-        'PostgreSQL',
-        'Cloudant DB',
-        'GraphQL',
-        'Hasura',
-        'RESTful APIs',
-        'Database Optimization',
+        'Mongo DB',
+        'Quagga scanner',
       ],
       liveUrl: 'https://musicteachj.github.io/portfolio/',
-      githubUrl: 'https://github.com/musicteachj/portfolio',
+      githubUrl: 'https://github.com/musicteachj/barcode-crud',
       featured: true,
       category: 'Full Stack',
       year: 2025,
       status: 'in-progress',
       features: [
-        'Full Stack development with Vue.js, TypeScript, and Vuetify',
-        'Database optimization with PostgreSQL and Cloudant DB',
-        'GraphQL with Hasura',
-        'RESTful APIs',
-        'Database optimization',
-        'Continuous deployment with GitHub Actions',
+        'Vue animations and transitions',
+        'Form validation using Vuelidate',
+        'Leveraged PrintD NPM library for printable barcodes',
+        'Responsive design optimized for all devices',
+        'TypeScript for enhanced code quality',
       ],
     },
   ])
@@ -80,24 +73,6 @@ export const useProjectsStore = defineStore('projects', () => {
   const categories = computed(() => {
     const cats = [...new Set(projects.value.map((p) => p.category))]
     return ['All', ...cats] as Array<'All' | ProjectCategory>
-  })
-
-  const projectsByYear = computed(() => {
-    const grouped = projects.value.reduce(
-      (acc, project) => {
-        const year = project.year
-        if (!acc[year]) {
-          acc[year] = []
-        }
-        acc[year].push(project)
-        return acc
-      },
-      {} as Record<number, Project[]>,
-    )
-
-    return Object.entries(grouped)
-      .sort(([a], [b]) => parseInt(b) - parseInt(a))
-      .map(([year, projects]) => ({ year: parseInt(year), projects }))
   })
 
   // Methods
@@ -112,38 +87,11 @@ export const useProjectsStore = defineStore('projects', () => {
     return projects.value.find((project) => project.id === id)
   }
 
-  const addProject = (project: Omit<Project, 'id'>): void => {
-    const newId = Math.max(...projects.value.map((p) => p.id)) + 1
-    projects.value.push({ ...project, id: newId })
-  }
-
-  const updateProject = (id: number, updates: Partial<Project>): boolean => {
-    const index = projects.value.findIndex((p) => p.id === id)
-    if (index !== -1) {
-      projects.value[index] = { ...projects.value[index], ...updates }
-      return true
-    }
-    return false
-  }
-
-  const deleteProject = (id: number): boolean => {
-    const index = projects.value.findIndex((p) => p.id === id)
-    if (index !== -1) {
-      projects.value.splice(index, 1)
-      return true
-    }
-    return false
-  }
-
   return {
     projects,
     featuredProjects,
     categories,
-    projectsByYear,
     getProjectsByCategory,
     getProjectById,
-    addProject,
-    updateProject,
-    deleteProject,
   }
 })
