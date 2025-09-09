@@ -291,7 +291,7 @@ const experience = ref<
       'Software engineer at an innovative vertical farming startup, developing Vue.js applications for automated packaging and delivery systems. Contributed to scaling operations from Series A to Series B funding while modernizing legacy systems and mentoring junior developers.',
     achievements: [
       'Developed Vue.js and Node.js applications for conveyor belt packaging stations, streamlining product tracking and delivery workflows',
-      'Integrated barcode scanning technology using NPM vue-barcode, enhancing accuracy and efficiency in packaging operations',
+      'Integrated QR Code scanning technology, enhancing accuracy and efficiency in packaging operations',
       'Solely responsible for modernizing UI library of monolithic Vue.js application, migrating Vuetify from v1.5 to v2.3',
       'Executed PostgreSQL and Hasura table updates to scale MRP system while maintaining data integrity and optimizing performance',
       'Adjusted GraphQL queries and database relationships to support growing data demands and improve system responsiveness',
@@ -316,7 +316,7 @@ const experience = ref<
       {
         name: 'Automated Packaging System',
         description:
-          'Built Vue.js applications for conveyor belt stations with integrated barcode scanning, improving packaging accuracy and workflow efficiency',
+          'Built Vue.js applications for conveyor belt stations with integrated QR Code scanning, improving packaging accuracy and workflow efficiency',
       },
       {
         name: 'Vuetify Migration & UI Modernization',
