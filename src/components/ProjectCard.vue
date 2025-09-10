@@ -1,9 +1,9 @@
 <template>
   <v-card
-    class="project-card fill-height"
+    class="project-card fill-height d-flex flex-column"
     elevation="6"
     @click="goToProject"
-    style="cursor: pointer"
+    style="cursor: pointer; height: 100%"
   >
     <v-img
       :src="project.image"
@@ -33,7 +33,7 @@
       <div class="project-overlay">
         <div class="d-flex ga-2">
           <v-btn
-            v-if="project.liveUrl"
+            v-if="project.liveUrl && project.status === 'completed'"
             :href="project.liveUrl"
             target="_blank"
             @click.stop
@@ -56,38 +56,68 @@
       </div>
     </v-img>
 
-    <v-card-title class="text-h6">
-      {{ project.title }}
-      <v-chip :color="categoryColor" size="x-small" class="ml-2" variant="outlined">
-        {{ project.category }}
-      </v-chip>
-    </v-card-title>
-
-    <v-card-text>
-      <p class="text-body-2 mb-3">{{ project.description }}</p>
-
-      <!-- Technology chips -->
-      <div class="d-flex flex-wrap ga-1 mb-2">
-        <v-chip
-          v-for="tech in displayedTechnologies"
-          :key="tech"
-          size="x-small"
-          color="primary"
-          variant="outlined"
-        >
-          {{ tech }}
-        </v-chip>
-        <v-chip
-          v-if="project.technologies.length > maxTechDisplay"
-          size="x-small"
-          color="grey"
-          variant="outlined"
-        >
-          +{{ project.technologies.length - maxTechDisplay }}
+    <!-- Fixed height title section -->
+    <v-card-title class="text-h6 card-title-section">
+      <div class="d-flex align-center flex-wrap">
+        <span class="title-text">{{ project.title }}</span>
+        <v-chip :color="categoryColor" size="x-small" class="ml-2" variant="outlined">
+          {{ project.category }}
         </v-chip>
       </div>
+    </v-card-title>
 
-      <!-- Year -->
+    <!-- Flexible content section that grows -->
+    <v-card-text class="flex-grow-1 d-flex flex-column">
+      <!-- Description with fixed height -->
+      <div class="description-section mb-3">
+        <p class="text-body-2 description-text">{{ project.description }}</p>
+      </div>
+
+      <!-- Technology chips with fixed height -->
+      <div class="tech-section mb-2">
+        <div class="d-flex flex-wrap ga-1">
+          <v-chip
+            v-for="tech in displayedTechnologies"
+            :key="tech"
+            size="x-small"
+            color="primary"
+            variant="outlined"
+          >
+            {{ tech }}
+          </v-chip>
+          <v-chip
+            v-if="project.technologies.length > maxTechDisplay"
+            size="x-small"
+            color="grey"
+            variant="outlined"
+          >
+            +{{ project.technologies.length - maxTechDisplay }}
+          </v-chip>
+        </div>
+      </div>
+
+      <!-- Viewport indicators -->
+      <div class="d-flex align-center ga-2 mb-2">
+        <div class="text-caption text-medium-emphasis">
+          <v-icon size="small" class="mr-1">mdi-devices</v-icon>
+          Supports:
+        </div>
+        <div class="d-flex ga-1">
+          <v-icon
+            v-for="viewport in project.viewport"
+            :key="viewport"
+            :icon="getViewportIcon(viewport)"
+            size="small"
+            :color="getViewportColor(viewport)"
+            :title="`Optimized for ${viewport}`"
+          ></v-icon>
+        </div>
+      </div>
+
+      <!-- Spacer to push year to bottom of content area -->
+      <v-spacer></v-spacer>
+
+      <!-- Year at bottom of content -->
       <div class="text-caption text-medium-emphasis">
         <v-icon size="small" class="mr-1">mdi-calendar</v-icon>
         {{ project.year }}
@@ -108,7 +138,7 @@
       <v-spacer></v-spacer>
 
       <v-btn
-        v-if="project.liveUrl"
+        v-if="project.liveUrl && project.status === 'completed'"
         :href="project.liveUrl"
         target="_blank"
         @click.stop
@@ -175,6 +205,32 @@ const categoryColor = computed(() => {
   }
 })
 
+const getViewportIcon = (viewport: string): string => {
+  switch (viewport) {
+    case 'mobile':
+      return 'mdi-cellphone'
+    case 'tablet':
+      return 'mdi-tablet'
+    case 'desktop':
+      return 'mdi-monitor'
+    default:
+      return 'mdi-devices'
+  }
+}
+
+const getViewportColor = (viewport: string): string => {
+  switch (viewport) {
+    case 'mobile':
+      return 'success'
+    case 'tablet':
+      return 'warning'
+    case 'desktop':
+      return 'info'
+    default:
+      return 'grey'
+  }
+}
+
 const goToProject = (): void => {
   if (props.showDetailsLink) {
     router.push(`/projects/${props.project.id}`)
@@ -187,6 +243,7 @@ const goToProject = (): void => {
   transition:
     transform 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
+  min-height: 500px; /* Ensure minimum height for uniformity */
 }
 
 .project-card:hover {
@@ -196,6 +253,7 @@ const goToProject = (): void => {
 
 .project-image {
   position: relative;
+  flex-shrink: 0; /* Prevent image from shrinking */
 }
 
 .project-overlay {
@@ -208,5 +266,37 @@ const goToProject = (): void => {
 
 .project-card:hover .project-overlay {
   opacity: 1;
+}
+
+/* Fixed height sections for uniformity */
+.card-title-section {
+  min-height: 64px; /* Fixed height for title area */
+  flex-shrink: 0;
+}
+
+.title-text {
+  line-height: 1.2;
+}
+
+.description-section {
+  min-height: 96px; /* Fixed height for description to maintain card uniformity */
+  display: flex;
+  align-items: flex-start;
+}
+
+.description-text {
+  line-height: 1.4;
+}
+
+.tech-section {
+  min-height: 40px; /* Fixed height for technology chips */
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Ensure card actions are always at the bottom */
+.v-card-actions {
+  margin-top: auto;
+  flex-shrink: 0;
 }
 </style>
