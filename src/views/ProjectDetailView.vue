@@ -53,7 +53,7 @@
                   <template v-slot:prepend>
                     <v-icon color="green" size="small">mdi-check-circle</v-icon>
                   </template>
-                  <v-list-item-title>{{ feature }}</v-list-item-title>
+                  <v-list-item-title class="text-wrap">{{ feature }}</v-list-item-title>
                 </v-list-item>
               </v-list>
 
@@ -121,5 +121,11 @@ const project = computed(() => {
 .project-detail-page {
   padding: 80px 0;
   min-height: 100vh;
+}
+
+.text-wrap {
+  white-space: normal !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 </style>

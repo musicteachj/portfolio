@@ -12,10 +12,12 @@ export interface Project {
   year: number
   features: string[]
   status: ProjectStatus
+  viewport: ProjectViewport[]
 }
 
 export type ProjectCategory = 'Full Stack' | 'Frontend' | 'Backend' | 'Mobile' | 'Design'
 export type ProjectStatus = 'completed' | 'in-progress' | 'maintained'
+export type ProjectViewport = 'desktop' | 'mobile' | 'tablet'
 
 export interface Experience {
   id: number

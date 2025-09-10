@@ -204,6 +204,7 @@ const yearsOfExperience = ref<number>(7)
 const featuredSkills: string[] = [
   'Vue.js',
   'React.js',
+  'JavaScript ES6+',
   'TypeScript',
   'Node.js',
   'GraphQL',
@@ -212,11 +213,19 @@ const featuredSkills: string[] = [
   'Internationalization',
   'UI/UX Design',
   'Responsive Design',
+  'CSS3',
+  'Vuetify',
+  'Cloudant DB',
+  'Mongo DB',
   'NoSQL',
+  'PostgreSQL',
   'Agile Methodologies',
   'Cursor AI',
   'Claude AI',
   'Agent Programming',
+  'Docker',
+  'CI/CD',
+  'Railway',
 ]
 
 // Computed

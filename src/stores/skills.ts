@@ -49,12 +49,12 @@ export const useSkillsStore = defineStore('skills', () => {
         'Jira',
         'IBM API Services',
         'XLSX Processing',
-        'NPM',
         'Slack/Teams',
         'Cursor AI',
         'Agent Programming',
         'Claude',
         'CI/CD',
+        'Docker',
       ],
     },
   ])
