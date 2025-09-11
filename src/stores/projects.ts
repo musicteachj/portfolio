@@ -5,6 +5,7 @@ import type { Project, ProjectCategory } from '@/types'
 
 import PortfolioPic from '../assets/images/Portfolio.png'
 import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
+import EmployeeManagementPic from '../assets/images/Employee.png'
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
@@ -97,10 +98,11 @@ export const useProjectsStore = defineStore('projects', () => {
     },
     {
       id: 3,
-      title: 'New Project',
-      description: 'Thinking of a new project...',
-      longDescription: 'Thinking of a new project...',
-      image: 'https://via.placeholder.com/150',
+      title: 'Employee Management System',
+      description: 'Employee management system for a company',
+      longDescription:
+        'Employee management system for a company with features like employee management, leave management, attendance management, and more.',
+      image: EmployeeManagementPic,
       technologies: [
         'Vue 3',
         'Vuetify 3',
@@ -114,13 +116,20 @@ export const useProjectsStore = defineStore('projects', () => {
         'CI/CD',
       ],
       liveUrl: '',
-      githubUrl: '',
+      githubUrl: 'https://github.com/musicteachj/employee-management-system',
       featured: true,
       category: 'Full Stack',
       year: 2025,
       status: 'in-progress',
-      features: ['Thinking of a new project...'],
-      viewport: ['desktop'],
+      features: [
+        'Employee management',
+        'Leave management',
+        'Attendance management',
+        'Salary management',
+        'Performance management',
+        'HR management',
+      ],
+      viewport: ['desktop', 'tablet'],
     },
   ])
 
