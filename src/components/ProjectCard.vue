@@ -58,9 +58,14 @@
 
     <!-- Fixed height title section -->
     <v-card-title class="text-h6 card-title-section">
-      <div class="d-flex align-center flex-wrap">
+      <div class="d-flex flex-column">
         <span class="title-text">{{ project.title }}</span>
-        <v-chip :color="categoryColor" size="x-small" class="ml-2" variant="outlined">
+        <v-chip
+          :color="categoryColor"
+          size="x-small"
+          class="mt-1 align-self-start"
+          variant="outlined"
+        >
           {{ project.category }}
         </v-chip>
       </div>
