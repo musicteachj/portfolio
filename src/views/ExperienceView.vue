@@ -184,7 +184,7 @@ const experience = ref<
       'Architected and built reusable UI component library improving development efficiency across teams',
       'Developed comprehensive "Amenities" application used by IBMers globally for event management',
       'Optimized Cloudant DB (NoSQL) views and indexes, improving data retrieval performance by 40%',
-      'Enhanced API security and performance through input validation, error handling, and query optimization',
+      'Enhanced API security and performance through input validation, error handling, Jest unit tests, and query optimization',
     ],
     technologies: [
       'Vue 2',
@@ -425,8 +425,8 @@ const experience = ref<
 
 const downloadResume = (): void => {
   const link = document.createElement('a')
-  link.href = `${import.meta.env.BASE_URL}james_littlefield_resume.docx`
-  link.download = 'james_littlefield_resume.docx'
+  link.href = `${import.meta.env.BASE_URL}James_Littlefield_Senior_Full_Stack_Developer.pdf`
+  link.download = 'James_Littlefield_Senior_Full_Stack_Developer.pdf'
   link.click()
   snackbar.success('Resume download started!')
 }

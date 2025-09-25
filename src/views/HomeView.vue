@@ -214,6 +214,7 @@ const featuredSkills: string[] = [
   'Pinia',
   'Internationalization',
   'UI/UX Design',
+  'Jest Unit Tests',
   'Responsive Design',
   'CSS3',
   'Vuetify',
@@ -237,8 +238,8 @@ const featuredProjects = computed(() => projectsStore.featuredProjects)
 // Methods
 const downloadResume = (): void => {
   const link = document.createElement('a')
-  link.href = `${import.meta.env.BASE_URL}james_littlefield_resume.docx`
-  link.download = 'james_littlefield_resume.docx'
+  link.href = `${import.meta.env.BASE_URL}James_Littlefield_Senior_Full_Stack_Developer.pdf`
+  link.download = 'James_Littlefield_Senior_Full_Stack_Developer.pdf'
   link.click()
   snackbar.success('Resume download started!')
 }
