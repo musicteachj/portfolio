@@ -47,7 +47,7 @@ export const useSkillsStore = defineStore('skills', () => {
         'Git/GitHub',
         'Vite/Vue CLI',
         'Jira',
-        'IBM API Services',
+        'Jest Unit Tests',
         'XLSX Processing',
         'Slack/Teams',
         'Cursor AI',

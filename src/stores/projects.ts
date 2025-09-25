@@ -56,7 +56,7 @@ export const useProjectsStore = defineStore('projects', () => {
       description:
         'A full-stack barcode app for scanning, creating, storing, and printing professional barcodes. Built with Vue.js/Express.js, supports 8+ types with cloud storage.',
       longDescription:
-        'Barcode Gen is a comprehensive barcode lifecycle management system that enables users to scan existing barcodes using their device camera or manually create new ones with real-time validation and preview. The application supports 8+ professional barcode formats including EAN-13, UPC, CODE128, and CODE39, with automatic check digit calculation and industry-standard compliance. Built as a full-stack TypeScript application with Vue.js frontend and Express.js backend, it features MongoDB cloud storage, professional print layouts, and a mobile-optimized responsive design with fullscreen scanning interface. Users can manage up to 20 barcodes with complete CRUD operations, including bulk printing capabilities and haptic feedback for enhanced mobile experience. The application is production-ready with Railway deployment, Docker containerization, comprehensive error handling, and health monitoring endpoints.',
+        'Barcode Gen is a comprehensive barcode lifecycle management system that enables users to scan existing barcodes using their device camera or manually create new ones with real-time validation and preview. The application supports 8+ professional barcode formats including EAN-13, UPC, CODE128, and CODE39, with automatic check digit calculation and industry-standard compliance. Built as a full-stack TypeScript application with Vue.js frontend and Express.js backend, it features MongoDB cloud storage, professional print layouts, and a mobile-optimized responsive design with fullscreen scanning interface. Users can manage up to 20 barcodes with complete CRUD operations, including bulk printing capabilities and haptic feedback for enhanced mobile experience. The application is production-ready with Railway deployment, Docker containerization, comprehensive error handling, Jest unit tests, and health monitoring endpoints.',
       image: BarcodeCrudPic,
       technologies: [
         'Vue 2',
@@ -66,6 +66,7 @@ export const useProjectsStore = defineStore('projects', () => {
         'Vuex',
         'JavaScript ES6+',
         'TypeScript',
+        'Jest Unit Tests',
         'Vuelidate',
         'PrintD',
         'Quagga scanner',
@@ -92,6 +93,7 @@ export const useProjectsStore = defineStore('projects', () => {
         'Mobile-optimized responsive design with fullscreen scanning',
         'Full-stack TypeScript with Vue.js frontend & Express.js API',
         'Real-time barcode preview and validation with form checks',
+        'Jest unit tests for frontend and backend',
         'Production-ready Railway deployment with Docker & monitoring',
       ],
       viewport: ['desktop', 'mobile', 'tablet'],
