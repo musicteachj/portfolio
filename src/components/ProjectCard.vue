@@ -90,13 +90,8 @@
           >
             {{ tech }}
           </v-chip>
-          <v-chip
-            v-if="project.technologies.length > maxTechDisplay"
-            size="x-small"
-            color="grey"
-            variant="outlined"
-          >
-            +{{ project.technologies.length - maxTechDisplay }}
+          <v-chip v-if="remainingTechCount > 0" size="x-small" color="grey" variant="outlined">
+            +{{ remainingTechCount }}
           </v-chip>
         </div>
       </div>
@@ -176,9 +171,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 
-const displayedTechnologies = computed(() =>
-  props.project.technologies[1].skills.slice(0, props.maxTechDisplay),
-)
+const allTechnologies = computed(() => {
+  // Flatten all skills from all technology categories into a single array
+  return props.project.technologies.flatMap((category) => category.skills)
+})
+
+const displayedTechnologies = computed(() => allTechnologies.value.slice(0, props.maxTechDisplay))
+
+const remainingTechCount = computed(() => {
+  const total = allTechnologies.value.length
+  return total > props.maxTechDisplay ? total - props.maxTechDisplay : 0
+})
 
 const statusColor = computed(() => {
   switch (props.project.status) {

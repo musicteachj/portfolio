@@ -117,16 +117,21 @@ describe('Skills Store', () => {
       const categories = store.skillsList.map((skill) => skill.category)
 
       // Check for expected categories (adjust based on your actual data)
-      expect(categories).toContain('Frontend')
-      expect(categories).toContain('Backend & Database')
-      expect(categories).toContain('Tools & DevOps')
+      expect(categories).toContain('Programming Languages')
+      expect(categories).toContain('Frontend Technologies')
+      expect(categories).toContain('Backend Technologies')
+      expect(categories).toContain('Databases & Storage')
+      expect(categories).toContain('Cloud & DevOps')
+      expect(categories).toContain('Tools & Others')
     })
   })
 
   describe('Skills Content Validation', () => {
-    it('should have frontend skills in Frontend category', () => {
+    it('should have frontend skills in Frontend Technologies category', () => {
       const store = useSkillsStore()
-      const frontendSkill = store.skillsList.find((skill) => skill.category === 'Frontend')
+      const frontendSkill = store.skillsList.find(
+        (skill) => skill.category === 'Frontend Technologies',
+      )
 
       if (frontendSkill) {
         const frontendTechnologies = [
@@ -146,7 +151,7 @@ describe('Skills Store', () => {
       }
     })
 
-    it('should have backend skills in Backend category', () => {
+    it('should have backend skills in Backend Technologies category', () => {
       const store = useSkillsStore()
       const backendSkill = store.skillsList.find((skill) =>
         skill.category.toLowerCase().includes('backend'),
