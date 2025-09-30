@@ -4,7 +4,7 @@ export interface Project {
   description: string
   longDescription: string
   image: string
-  technologies: string[]
+  technologies: SkillsList
   liveUrl?: string
   githubUrl?: string
   featured: boolean
@@ -28,9 +28,8 @@ export interface Experience {
   achievements: string[]
   technologies: string[]
   location?: string
-  description?: string // Add this
+  description?: string
   highlights?: Array<{
-    // Add this
     name: string
     description: string
   }>
@@ -64,9 +63,84 @@ export interface SocialLink {
   color?: string
 }
 
-export interface Skill {
-  category: string
-  icon: string
-  color: string
-  skills: string[]
+export type ProgrammingLanguage = 'JavaScript ES6+' | 'TypeScript' | 'Python'
+export type FrontendTechnology =
+  | 'Vue.js'
+  | 'Vue 2'
+  | 'Vue 3'
+  | 'React.js'
+  | 'Vuex'
+  | 'Vuetify'
+  | 'Vuetify 2'
+  | 'Vuetify 3'
+  | 'Vue Router 3'
+  | 'Vue Router 4'
+  | 'Pinia'
+  | 'HTML'
+  | 'CSS'
+  | 'Sass'
+  | 'Bootstrap'
+  | 'Carbon-vue'
+export type BackendTechnology = 'Node.js' | 'Express.js' | 'REST APIs' | 'GraphQL' | 'FastAPI'
+export type Database = 'PostgreSQL' | 'MongoDB' | 'Cloudant DB' | 'NoSQL'
+export type CloudTechnology = 'Docker' | 'CI/CD' | 'GitHub Actions' | 'Git/GitHub' | 'Railway'
+export type Tool = string
+
+export interface ProgrammingSkill {
+  category: 'Programming Languages'
+  icon: 'mdi-code-json'
+  color: 'blue'
+  skills: ProgrammingLanguage[]
 }
+
+export interface FrontendSkill {
+  category: 'Frontend Technologies'
+  icon: 'mdi-monitor'
+  color: 'green'
+  skills: FrontendTechnology[]
+}
+
+export interface BackendSkill {
+  category: 'Backend Technologies'
+  icon: 'mdi-server'
+  color: 'orange'
+  skills: BackendTechnology[]
+}
+
+export interface DatabaseSkill {
+  category: 'Databases & Storage'
+  icon: 'mdi-database-outline'
+  color: 'red'
+  skills: Database[]
+}
+
+export interface CloudSkill {
+  category: 'Cloud & DevOps'
+  icon: 'mdi-cloud-outline'
+  color: 'purple'
+  skills: CloudTechnology[]
+}
+
+export interface ToolSkill {
+  category: 'Tools & Others'
+  icon: 'mdi-tools'
+  color: 'brown'
+  skills: Tool[]
+}
+
+export type Skill =
+  | ProgrammingSkill
+  | FrontendSkill
+  | BackendSkill
+  | DatabaseSkill
+  | CloudSkill
+  | ToolSkill
+
+export type SkillsList = [
+  ProgrammingSkill,
+  FrontendSkill,
+  BackendSkill,
+  DatabaseSkill,
+  CloudSkill,
+  ToolSkill,
+]

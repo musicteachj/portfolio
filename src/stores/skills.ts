@@ -1,60 +1,64 @@
-// src/stores/projects.ts
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Skill } from '@/types'
+import type { SkillsList } from '@/types'
 
 export const useSkillsStore = defineStore('skills', () => {
-  const skillsList = ref<Skill[]>([
+  const skillsList = ref<SkillsList>([
     {
-      category: 'Frontend',
-      icon: 'mdi-monitor',
+      category: 'Programming Languages',
+      icon: 'mdi-code-json',
       color: 'blue',
-      skills: [
-        'Vue.js',
-        'Nuxt.js',
-        'React.js',
-        'Vuex/Pinia State Management',
-        'JavaScript ES6+',
-        'TypeScript',
-        'Vuetify',
-        'Bootstrap',
-        'CSS/Sass',
-        'Responsive Design',
-        'vue-i18n (Internationalization)',
-      ],
+      skills: ['JavaScript ES6+', 'TypeScript', 'Python'],
     },
     {
-      category: 'Backend & Database',
-      icon: 'mdi-server',
+      category: 'Frontend Technologies',
+      icon: 'mdi-monitor',
       color: 'green',
       skills: [
-        'Node.js',
-        'Express.js',
-        'PostgreSQL',
-        'Cloudant DB (NoSQL)',
-        'Mongo DB (NoSQL)',
-        'GraphQL',
-        'REST APIs',
-        'Hasura',
-        'Database Optimization',
+        'Vue.js',
+        'React.js',
+        'Vuetify',
+        'Vuex',
+        'Pinia',
+        'HTML',
+        'CSS',
+        'Sass',
+        'Bootstrap',
+        'Carbon-vue',
       ],
     },
     {
-      category: 'Tools & DevOps',
-      icon: 'mdi-tools',
+      category: 'Backend Technologies',
+      icon: 'mdi-server',
       color: 'orange',
+      skills: ['Node.js', 'Express.js', 'REST APIs', 'GraphQL', 'FastAPI'],
+    },
+    {
+      category: 'Databases & Storage',
+      icon: 'mdi-database-outline',
+      color: 'red',
+      skills: ['PostgreSQL', 'MongoDB', 'Cloudant DB', 'NoSQL'],
+    },
+    {
+      category: 'Cloud & DevOps',
+      icon: 'mdi-cloud-outline',
+      color: 'purple',
+      skills: ['Docker', 'CI/CD', 'GitHub Actions', 'Git/GitHub', 'Railway'],
+    },
+    {
+      category: 'Tools & Others',
+      icon: 'mdi-tools',
+      color: 'brown',
       skills: [
-        'Git/GitHub',
-        'Vite/Vue CLI',
+        'Vite',
+        'Jest',
+        'UI/UX Design',
         'Jira',
-        'Jest Unit Tests',
-        'XLSX Processing',
-        'Slack/Teams',
+        'OAuth',
         'Cursor AI',
+        'Claude AI',
         'Agent Programming',
-        'Claude',
-        'CI/CD',
-        'Docker',
+        'Slack/Teams',
       ],
     },
   ])

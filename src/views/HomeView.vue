@@ -6,12 +6,8 @@
         <v-row align="center" justify="center" class="text-center">
           <v-col cols="12" md="8">
             <div class="fade-in" :class="{ visible: heroVisible }">
-              <v-avatar size="180" class="mb-8 elevation-8">
-                <v-img
-                  :src="JamesPic"
-                  alt="James Littlefield Profile Picture"
-                  class="profile-image"
-                ></v-img>
+              <v-avatar size="200" class="mb-8 elevation-8 mt-8">
+                <v-img :src="JamesPic2" alt="James Littlefield Profile Picture"></v-img>
               </v-avatar>
 
               <h1 class="text-h4 display-1 font-weight-bold mb-4">
@@ -69,22 +65,18 @@
             <div class="fade-in" :class="{ visible: aboutVisible }">
               <h2 class="text-h3 font-weight-bold mb-6">Building Digital Experiences</h2>
               <p class="text-h6 mb-8" style="opacity: 0.8">
-                Versatile and detail-oriented Full Stack Developer with {{ yearsOfExperience }}+
-                years of experience creating web applications that solve real-world problems with
-                modern technologies.
+                Accomplished Senior Full Stack Engineer with {{ yearsOfExperience }}+ years of
+                experience architecting and delivering enterprise-grade web applications for global
+                organizations. Specialized in Vue and React ecosystems with proven expertise leading
+                complex migrations, implementing AI integrations, and building scalable solutions
+                using Node.js, Express.js, and NoSQL databases. Track record of project leadership
+                on mission-critical IBM applications serving thousands of users worldwide. Deep
+                experience in internationalization, currency conversion systems, form validation
+                frameworks, and CI/CD practices. Successfully mentored junior developers while
+                driving company growth from Series A to Series B funding. Expert in transforming
+                legacy systems, optimizing database performance, and implementing automated
+                workflows that eliminate hundreds of manual support hours.
               </p>
-
-              <div class="d-flex justify-center flex-wrap ga-2 mb-8">
-                <v-chip
-                  v-for="skill in featuredSkills"
-                  :key="skill"
-                  color="primary"
-                  variant="outlined"
-                  size="large"
-                >
-                  {{ skill }}
-                </v-chip>
-              </div>
 
               <v-btn
                 to="/about"
@@ -189,6 +181,7 @@ import { useSnackbarStore } from '@/stores/snackbar'
 import { useProjectsStore } from '@/stores/projects'
 import Skills from '@/components/Skills.vue'
 import JamesPic from '../assets/images/James.png'
+import JamesPic2 from '../assets/images/James2.jpg'
 
 // Stores
 const snackbar = useSnackbarStore()
@@ -200,37 +193,6 @@ const projectsVisible = ref<boolean>(false)
 const skillsVisible = ref<boolean>(false)
 
 const yearsOfExperience = ref<number>(7)
-
-const featuredSkills: string[] = [
-  'Vue.js',
-  'React.js',
-  'JavaScript ES6+',
-  'TypeScript',
-  'Node.js',
-  'GraphQL',
-  'REST APIs',
-  'State Management',
-  'Vuex',
-  'Pinia',
-  'Internationalization',
-  'UI/UX Design',
-  'Jest Unit Tests',
-  'Responsive Design',
-  'CSS3',
-  'Vuetify',
-  'Bootstrap',
-  'Cloudant DB',
-  'Mongo DB',
-  'NoSQL',
-  'PostgreSQL',
-  'Agile Methodologies',
-  'Cursor AI',
-  'Claude AI',
-  'Agent Programming',
-  'Docker',
-  'CI/CD',
-  'Railway',
-]
 
 // Computed
 const featuredProjects = computed(() => projectsStore.featuredProjects)
@@ -317,10 +279,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.profile-image {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-}
-
 .scroll-indicator {
   animation: bounce 2s infinite;
 }
