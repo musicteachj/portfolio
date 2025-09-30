@@ -56,15 +56,55 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      mockProject.technologies.slice(0, 4).forEach((tech) => {
-        expect(wrapper.text()).toContain(tech)
+      // Check that technologies from skill categories are displayed
+      mockProject.technologies.forEach((category) => {
+        category.skills.forEach((skill) => {
+          expect(wrapper.text()).toContain(skill)
+        })
       })
     })
 
     it('should show overflow indicator when technologies exceed maxTechDisplay', () => {
       const projectWithManyTechs: Project = {
         ...mockProject,
-        technologies: ['Tech1', 'Tech2', 'Tech3', 'Tech4', 'Tech5', 'Tech6'],
+        technologies: [
+          {
+            category: 'Programming Languages',
+            icon: 'mdi-code-json',
+            color: 'blue',
+            skills: ['JavaScript ES6+', 'TypeScript'],
+          },
+          {
+            category: 'Frontend Technologies',
+            icon: 'mdi-monitor',
+            color: 'green',
+            skills: ['Vue.js', 'React.js'],
+          },
+          {
+            category: 'Backend Technologies',
+            icon: 'mdi-server',
+            color: 'orange',
+            skills: ['Node.js', 'Express.js'],
+          },
+          {
+            category: 'Databases & Storage',
+            icon: 'mdi-database-outline',
+            color: 'red',
+            skills: [],
+          },
+          {
+            category: 'Cloud & DevOps',
+            icon: 'mdi-cloud-outline',
+            color: 'purple',
+            skills: [],
+          },
+          {
+            category: 'Tools & Others',
+            icon: 'mdi-tools',
+            color: 'brown',
+            skills: [],
+          },
+        ],
       }
 
       const wrapper = mountComponent(ProjectCard, {
@@ -110,17 +150,55 @@ describe('ProjectCard', () => {
       // Test default behavior: should show "View Details" button (default showDetailsLink: true)
       expect(wrapper.text()).toContain('View Details')
 
-      // Test default maxTechDisplay: should show first 4 technologies
-      const displayedTechs = mockProject.technologies.slice(0, 4)
-      displayedTechs.forEach((tech) => {
-        expect(wrapper.text()).toContain(tech)
+      // Test default maxTechDisplay: verify technologies are displayed
+      mockProject.technologies.forEach((category) => {
+        category.skills.forEach((skill) => {
+          expect(wrapper.text()).toContain(skill)
+        })
       })
     })
 
     it('should respect custom maxTechDisplay prop', () => {
-      const projectWithManyTechs = {
+      const projectWithManyTechs: Project = {
         ...mockProject,
-        technologies: ['Tech1', 'Tech2', 'Tech3', 'Tech4', 'Tech5', 'Tech6'],
+        technologies: [
+          {
+            category: 'Programming Languages',
+            icon: 'mdi-code-json',
+            color: 'blue',
+            skills: ['JavaScript ES6+', 'TypeScript'],
+          },
+          {
+            category: 'Frontend Technologies',
+            icon: 'mdi-monitor',
+            color: 'green',
+            skills: ['Vue.js', 'React.js'],
+          },
+          {
+            category: 'Backend Technologies',
+            icon: 'mdi-server',
+            color: 'orange',
+            skills: ['Node.js', 'Express.js'],
+          },
+          {
+            category: 'Databases & Storage',
+            icon: 'mdi-database-outline',
+            color: 'red',
+            skills: [],
+          },
+          {
+            category: 'Cloud & DevOps',
+            icon: 'mdi-cloud-outline',
+            color: 'purple',
+            skills: [],
+          },
+          {
+            category: 'Tools & Others',
+            icon: 'mdi-tools',
+            color: 'brown',
+            skills: [],
+          },
+        ],
       }
 
       const wrapper = mountComponent(ProjectCard, {
@@ -131,8 +209,8 @@ describe('ProjectCard', () => {
       })
 
       // Should only show first 2 technologies
-      expect(wrapper.text()).toContain('Tech1')
-      expect(wrapper.text()).toContain('Tech2')
+      expect(wrapper.text()).toContain('JavaScript ES6+')
+      expect(wrapper.text()).toContain('TypeScript')
       // Should show overflow indicator for remaining technologies
       expect(wrapper.text()).toContain('+4')
     })
@@ -152,9 +230,46 @@ describe('ProjectCard', () => {
 
   describe('Computed Properties', () => {
     it('should display correct number of technologies based on maxTechDisplay', () => {
-      const projectWithManyTechs = {
+      const projectWithManyTechs: Project = {
         ...mockProject,
-        technologies: ['Vue.js', 'TypeScript', 'Vitest', 'Jest', 'Cypress'],
+        technologies: [
+          {
+            category: 'Programming Languages',
+            icon: 'mdi-code-json',
+            color: 'blue',
+            skills: ['TypeScript'],
+          },
+          {
+            category: 'Frontend Technologies',
+            icon: 'mdi-monitor',
+            color: 'green',
+            skills: ['Vue.js'],
+          },
+          {
+            category: 'Backend Technologies',
+            icon: 'mdi-server',
+            color: 'orange',
+            skills: [],
+          },
+          {
+            category: 'Databases & Storage',
+            icon: 'mdi-database-outline',
+            color: 'red',
+            skills: [],
+          },
+          {
+            category: 'Cloud & DevOps',
+            icon: 'mdi-cloud-outline',
+            color: 'purple',
+            skills: [],
+          },
+          {
+            category: 'Tools & Others',
+            icon: 'mdi-tools',
+            color: 'brown',
+            skills: ['Vitest', 'Jest', 'Cypress'],
+          },
+        ],
       }
 
       const wrapper = mountComponent(ProjectCard, {
@@ -165,8 +280,8 @@ describe('ProjectCard', () => {
       })
 
       // Should display first 2 technologies
-      expect(wrapper.text()).toContain('Vue.js')
       expect(wrapper.text()).toContain('TypeScript')
+      expect(wrapper.text()).toContain('Vue.js')
       // Should show overflow indicator
       expect(wrapper.text()).toContain('+3')
     })

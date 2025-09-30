@@ -177,7 +177,7 @@ const props = withDefaults(defineProps<Props>(), {
 const router = useRouter()
 
 const displayedTechnologies = computed(() =>
-  props.project.technologies.slice(0, props.maxTechDisplay),
+  props.project.technologies[1].skills.slice(0, props.maxTechDisplay),
 )
 
 const statusColor = computed(() => {
