@@ -3,7 +3,6 @@ import { setActivePinia, createPinia } from 'pinia'
 import { mountComponent } from '@/test/utils'
 import Skills from '../Skills.vue'
 import { useSkillsStore } from '@/stores/skills'
-import type { Skill } from '@/types'
 
 describe('Skills Component', () => {
   beforeEach(() => {
@@ -137,44 +136,36 @@ describe('Skills Component', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      const initialCardCount = wrapper.findAll('.v-card').length
+      const initialText = wrapper.text()
+      expect(initialText).not.toContain('Postman')
 
-      // Add a new skill category
-      const newSkill: Skill = {
-        category: 'Testing',
-        icon: 'mdi-test-tube',
-        color: 'purple',
-        skills: ['Vitest', 'Jest', 'Vue Test Utils'],
-      }
-
-      skillsStore.skillsList.push(newSkill)
+      // Modify an existing skill category by adding a new skill
+      // Using Tools & Others category (index 5) which accepts any string
+      skillsStore.skillsList[5].skills.push('Postman')
       await wrapper.vm.$nextTick()
 
-      const updatedCardCount = wrapper.findAll('.v-card').length
-      expect(updatedCardCount).toBe(initialCardCount + 1)
-      expect(wrapper.text()).toContain('Testing')
+      const updatedText = wrapper.text()
+      expect(updatedText).toContain('Postman')
     })
 
     it('should handle empty skills gracefully', async () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      // Add a skill category with no skills
-      const emptySkill: Skill = {
-        category: 'Empty Category',
-        icon: 'mdi-empty',
-        color: 'grey',
-        skills: [],
-      }
+      const initialCategoryName = skillsStore.skillsList[5].category
+      const initialListItems = wrapper.findAll('.v-list')[5].findAll('.v-list-item')
+      const initialItemCount = initialListItems.length
+      expect(initialItemCount).toBeGreaterThan(0)
 
-      skillsStore.skillsList.push(emptySkill)
+      // Empty out a skill category's skills
+      skillsStore.skillsList[5].skills = []
       await wrapper.vm.$nextTick()
 
-      expect(wrapper.text()).toContain('Empty Category')
+      expect(wrapper.text()).toContain(initialCategoryName)
 
       // Should still render the card and category, just no skill items
       const lists = wrapper.findAll('.v-list')
-      const emptyList = lists[lists.length - 1]
+      const emptyList = lists[5]
       const listItems = emptyList.findAll('.v-list-item')
       expect(listItems.length).toBe(0)
     })

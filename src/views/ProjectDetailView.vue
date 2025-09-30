@@ -13,7 +13,7 @@
           <!-- Project Header -->
           <div class="text-center mb-8">
             <h1 class="text-h2 font-weight-bold mb-4">{{ project.title }}</h1>
-            <div class="d-flex justify-center flex-wrap ga-2 mb-4">
+            <!-- <div class="d-flex justify-center flex-wrap ga-2 mb-4">
               <v-chip
                 v-for="tech in project.technologies"
                 :key="tech"
@@ -22,7 +22,7 @@
               >
                 {{ tech }}
               </v-chip>
-            </div>
+            </div> -->
           </div>
 
           <!-- Project Image -->
@@ -82,6 +82,10 @@
               </div>
             </v-card>
           </v-col>
+          <v-col cols="12" class="text-center mb-8 mt-8">
+            <h2 class="text-h3 font-weight-bold mb-4">Technical Skills</h2>
+          </v-col>
+          <Skills :skills="project.technologies" />
         </v-col>
       </v-row>
 
@@ -103,6 +107,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProjectsStore } from '@/stores/projects'
 import { useTheme } from 'vuetify'
+import Skills from '@/components/Skills.vue'
 
 const theme = useTheme()
 
