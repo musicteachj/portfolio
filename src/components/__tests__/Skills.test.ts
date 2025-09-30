@@ -56,7 +56,7 @@ describe('Skills Component', () => {
       })
     })
 
-    it('should render check circle icons for each skill', () => {
+    it('should render chips for each skill', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
@@ -66,8 +66,9 @@ describe('Skills Component', () => {
         0,
       )
 
-      const checkIcons = wrapper.findAll('.mdi-check-circle')
-      expect(checkIcons.length).toBe(totalSkills)
+      // Find all skill chips (excluding any category chips)
+      const allChips = wrapper.findAll('.v-chip')
+      expect(allChips.length).toBe(totalSkills)
     })
   })
 
@@ -97,23 +98,14 @@ describe('Skills Component', () => {
 
     it('should have proper card structure', () => {
       const wrapper = mountComponent(Skills)
+      const skillsStore = useSkillsStore()
 
       const cards = wrapper.findAll('.v-card')
+      expect(cards.length).toBe(skillsStore.skillsList.length)
+
       cards.forEach((card) => {
         expect(card.classes()).toContain('fill-height')
         expect(card.classes()).toContain('pa-6')
-      })
-    })
-
-    it('should have proper list structure', () => {
-      const wrapper = mountComponent(Skills)
-
-      const lists = wrapper.findAll('.v-list')
-      const skillsStore = useSkillsStore()
-      expect(lists.length).toBe(skillsStore.skillsList.length)
-
-      lists.forEach((list) => {
-        expect(list.classes()).toContain('v-list--density-compact')
       })
     })
   })
@@ -152,22 +144,26 @@ describe('Skills Component', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      const initialCategoryName = skillsStore.skillsList[5].category
-      const initialListItems = wrapper.findAll('.v-list')[5].findAll('.v-list-item')
-      const initialItemCount = initialListItems.length
-      expect(initialItemCount).toBeGreaterThan(0)
+      // Use the last category (Tools & Others) which is at index 5
+      const categoryIndex = 5
+      expect(skillsStore.skillsList.length).toBeGreaterThan(categoryIndex)
+
+      const initialCategoryName = skillsStore.skillsList[categoryIndex].category
+      const initialChipsCount = skillsStore.skillsList[categoryIndex].skills.length
+      expect(initialChipsCount).toBeGreaterThan(0)
+
+      // Get initial total chips count
+      const initialTotalChips = wrapper.findAll('.v-chip').length
 
       // Empty out a skill category's skills
-      skillsStore.skillsList[5].skills = []
+      skillsStore.skillsList[categoryIndex].skills = []
       await wrapper.vm.$nextTick()
 
       expect(wrapper.text()).toContain(initialCategoryName)
 
-      // Should still render the card and category, just no skill items
-      const lists = wrapper.findAll('.v-list')
-      const emptyList = lists[5]
-      const listItems = emptyList.findAll('.v-list-item')
-      expect(listItems.length).toBe(0)
+      // Should still render the card and category, but with fewer chips
+      const updatedTotalChips = wrapper.findAll('.v-chip').length
+      expect(updatedTotalChips).toBe(initialTotalChips - initialChipsCount)
     })
   })
 
@@ -187,15 +183,6 @@ describe('Skills Component', () => {
             icon.classes().some((cls) => cls.includes('48')),
         ).toBe(true)
       })
-
-      // Check circle icons should be small
-      const checkIcons = wrapper.findAll('.mdi-check-circle')
-      checkIcons.forEach((icon) => {
-        expect(
-          icon.attributes('style')?.includes('small') ||
-            icon.classes().some((cls) => cls.includes('small')),
-        ).toBe(true)
-      })
     })
 
     it('should apply correct text classes', () => {
@@ -205,12 +192,6 @@ describe('Skills Component', () => {
       const titles = wrapper.findAll('h3')
       titles.forEach((title) => {
         expect(title.classes()).toContain('text-h5')
-      })
-
-      // Skill items should have text-body-1 class
-      const skillTitles = wrapper.findAll('.v-list-item-title')
-      skillTitles.forEach((title) => {
-        expect(title.classes()).toContain('text-body-1')
       })
     })
 
