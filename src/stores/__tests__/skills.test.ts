@@ -195,9 +195,9 @@ describe('Skills Store', () => {
 
       // Add a new skill category
       const newSkill: Skill = {
-        category: 'Testing',
-        icon: 'mdi-test-tube',
-        color: 'purple',
+        category: 'Tools & Others',
+        icon: 'mdi-tools',
+        color: 'brown',
         skills: ['Vitest', 'Jest', 'Vue Test Utils'],
       }
 
@@ -214,10 +214,11 @@ describe('Skills Store', () => {
         const firstSkill = store.skillsList[0]
         const initialSkillsCount = firstSkill.skills.length
 
-        firstSkill.skills.push('New Skill')
+        // Use type assertion to test reactivity with dynamic data
+        firstSkill.skills.push('TypeScript' as any)
 
         expect(firstSkill.skills.length).toBe(initialSkillsCount + 1)
-        expect(firstSkill.skills[firstSkill.skills.length - 1]).toBe('New Skill')
+        expect(firstSkill.skills[firstSkill.skills.length - 1]).toBe('TypeScript')
       }
     })
   })
@@ -229,12 +230,12 @@ describe('Skills Store', () => {
       // This test ensures the store can handle edge cases
       // In a real scenario, you might want to validate that skills arrays are never empty
       expect(() => {
-        const emptySkill: Skill = {
-          category: 'Empty',
-          icon: 'mdi-empty',
-          color: 'grey',
+        const emptySkill = {
+          category: 'Tools & Others',
+          icon: 'mdi-tools',
+          color: 'brown',
           skills: [],
-        }
+        } as Skill
         store.skillsList.push(emptySkill)
       }).not.toThrow()
     })
