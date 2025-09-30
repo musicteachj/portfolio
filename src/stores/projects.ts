@@ -1,4 +1,3 @@
-// src/stores/projects.ts
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Project, ProjectCategory } from '@/types'
