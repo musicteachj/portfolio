@@ -13,16 +13,6 @@
           <!-- Project Header -->
           <div class="text-center mb-8">
             <h1 class="text-h2 font-weight-bold mb-4">{{ project.title }}</h1>
-            <!-- <div class="d-flex justify-center flex-wrap ga-2 mb-4">
-              <v-chip
-                v-for="tech in project.technologies"
-                :key="tech"
-                color="primary"
-                variant="outlined"
-              >
-                {{ tech }}
-              </v-chip>
-            </div> -->
           </div>
 
           <!-- Project Image -->

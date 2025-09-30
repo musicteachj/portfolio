@@ -8,15 +8,6 @@
           </v-icon>
           <h3 class="text-h5 mt-2">{{ skillCategory.category }}</h3>
         </div>
-        <!-- <v-list density="compact">
-          <v-list-item v-for="skill in skillCategory.skills" :key="skill" class="px-0">
-            <template v-slot:prepend>
-              <v-icon :color="skillCategory.color" size="small">mdi-check-circle</v-icon>
-            </template>
-            <v-list-item-title class="text-body-1">{{ skill }}</v-list-item-title>
-          </v-list-item>
-        </v-list> -->
-        <!-- <v-chip-group> -->
         <v-chip
           v-for="skill in skillCategory.skills"
           :key="skill"
@@ -26,7 +17,6 @@
         >
           {{ skill }}
         </v-chip>
-        <!-- </v-chip-group> -->
       </v-card>
     </v-col>
   </v-row>
