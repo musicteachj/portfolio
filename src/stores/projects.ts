@@ -155,9 +155,10 @@ export const useProjectsStore = defineStore('projects', () => {
     {
       id: 3,
       title: 'Employee Management System',
-      description: 'Employee management system for a company',
+      description:
+        'Full‑stack employee management system to create/search/update records, assign managers, visualize org charts, run bulk changes, and schedule/conduct reviews, with real‑time analytics on headcount, departments, salaries, and hiring trends.',
       longDescription:
-        'Employee management system for a company with features like employee management, leave management, attendance management, and more.',
+        'The Employee Management System is a full‑stack web application for centralizing and streamlining HR operations. It lets you create, update, search, and organize employee records; assign managers; visualize the org chart; perform bulk updates; and manage performance reviews end‑to‑end (scheduling, conducting, tracking, and monitoring overdue reviews). An interactive analytics dashboard surfaces key insights like department and status distributions, job levels, salaries, and hiring/performance trends via rich charts. The frontend is built with Vue 3, Vuetify, Pinia, and Chart.js, while the backend uses FastAPI with async MongoDB (Motor), with Vite-powered local development, SPA serving in production, and Dockerized deployment.',
       image: EmployeeManagementPic,
       technologies: [
         {
@@ -176,7 +177,7 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Backend Technologies',
           icon: 'mdi-server',
           color: 'orange',
-          skills: ['Node.js', 'FastAPI'],
+          skills: ['FastAPI', 'Pydantic', 'Motor'],
         },
         {
           category: 'Databases & Storage',
@@ -194,7 +195,7 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Tools & Others',
           icon: 'mdi-tools',
           color: 'brown',
-          skills: [],
+          skills: ['Vite', 'Vee-validate', 'Chart.js'],
         },
       ],
       liveUrl: '',
@@ -204,12 +205,13 @@ export const useProjectsStore = defineStore('projects', () => {
       year: 2025,
       status: 'in-progress',
       features: [
-        'Employee management',
-        'Leave management',
-        'Attendance management',
-        'Salary management',
-        'Performance management',
-        'HR management',
+        'Create, edit, and search employee records fast',
+        'Assign managers with built‑in validation guardrails',
+        'Visualize reporting lines with an interactive org chart',
+        'Run bulk updates across roles, status, and assignments',
+        'Schedule, conduct, and track performance reviews',
+        'Monitor overdue reviews and next review dates automatically',
+        'Explore analytics on headcount, departments, salary, and trends',
       ],
       viewport: ['desktop', 'tablet'],
     },

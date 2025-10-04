@@ -81,7 +81,14 @@ export type FrontendTechnology =
   | 'Sass'
   | 'Bootstrap'
   | 'Carbon-vue'
-export type BackendTechnology = 'Node.js' | 'Express.js' | 'REST APIs' | 'GraphQL' | 'FastAPI'
+export type BackendTechnology =
+  | 'Node.js'
+  | 'Express.js'
+  | 'REST APIs'
+  | 'GraphQL'
+  | 'FastAPI'
+  | 'Pydantic'
+  | 'Motor'
 export type Database = 'PostgreSQL' | 'MongoDB' | 'Cloudant DB' | 'NoSQL'
 export type CloudTechnology = 'Docker' | 'CI/CD' | 'GitHub Actions' | 'Git/GitHub' | 'Railway'
 export type Tool = string
