@@ -36,8 +36,8 @@ export default defineConfig({
   preview: {
     port: 4173,
   },
-  // For GitHub Pages deployment
-  base: process.env.NODE_ENV === 'production' ? '/portfolio/' : '/',
+  // For custom domain deployment (AWS S3 + CloudFront)
+  base: '/',
 
   // Ensure assets are handled correctly
   assetsInclude: ['**/*.md'],
