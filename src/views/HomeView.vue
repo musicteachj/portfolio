@@ -72,10 +72,13 @@
                 using Node.js, Express.js, and NoSQL databases. Track record of project leadership
                 on mission-critical IBM applications serving thousands of users worldwide. Deep
                 experience in internationalization, currency conversion systems, form validation
-                frameworks, and CI/CD practices. Successfully mentored junior developers while
-                driving company growth from Series A to Series B funding. Expert in transforming
-                legacy systems, optimizing database performance, and implementing automated
-                workflows that eliminate hundreds of manual support hours.
+                frameworks, and CI/CD practices. Hands-on expertise deploying production
+                applications to AWS cloud infrastructure using ECS for container orchestration, EC2
+                instances, Route 53 for DNS management, and CloudFront for content delivery.
+                Successfully mentored junior developers while driving company growth from Series A
+                to Series B funding. Expert in transforming legacy systems, optimizing database
+                performance, and implementing automated workflows that eliminate hundreds of manual
+                support hours.
               </p>
 
               <v-btn

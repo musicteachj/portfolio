@@ -90,7 +90,17 @@ export type BackendTechnology =
   | 'Pydantic'
   | 'Motor'
 export type Database = 'PostgreSQL' | 'MongoDB' | 'Cloudant DB' | 'NoSQL'
-export type CloudTechnology = 'Docker' | 'CI/CD' | 'GitHub Actions' | 'Git/GitHub' | 'Railway'
+export type CloudTechnology =
+  | 'Docker'
+  | 'CI/CD'
+  | 'GitHub Actions'
+  | 'Git/GitHub'
+  | 'AWS'
+  | 'CloudFront'
+  | 'S3'
+  | 'Route 53'
+  | 'EC2'
+  | 'ECS'
 export type Tool = string
 
 export interface ProgrammingSkill {

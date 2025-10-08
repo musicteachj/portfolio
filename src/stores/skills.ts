@@ -43,7 +43,18 @@ export const useSkillsStore = defineStore('skills', () => {
       category: 'Cloud & DevOps',
       icon: 'mdi-cloud-outline',
       color: 'purple',
-      skills: ['Docker', 'CI/CD', 'GitHub Actions', 'Git/GitHub', 'Railway'],
+      skills: [
+        'Docker',
+        'CI/CD',
+        'GitHub Actions',
+        'Git/GitHub',
+        'AWS',
+        'CloudFront',
+        'S3',
+        'Route 53',
+        'EC2',
+        'ECS',
+      ],
     },
     {
       category: 'Tools & Others',
@@ -52,6 +63,7 @@ export const useSkillsStore = defineStore('skills', () => {
       skills: [
         'Vite',
         'Jest',
+        'Chart.js',
         'UI/UX Design',
         'Jira',
         'OAuth',
