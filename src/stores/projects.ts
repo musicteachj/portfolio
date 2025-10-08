@@ -63,7 +63,7 @@ export const useProjectsStore = defineStore('projects', () => {
       ],
       liveUrl: 'https://musicteachj.github.io/portfolio/',
       githubUrl: 'https://github.com/musicteachj/portfolio',
-      featured: true,
+      featured: false,
       category: 'Frontend',
       year: 2025,
       status: 'completed',
@@ -85,7 +85,7 @@ export const useProjectsStore = defineStore('projects', () => {
       description:
         'A full-stack barcode app for scanning, creating, storing, and printing professional barcodes. Built with Vue.js/Express.js, supports 8+ types with cloud storage.',
       longDescription:
-        'Barcode Gen is a comprehensive barcode lifecycle management system that enables users to scan existing barcodes using their device camera or manually create new ones with real-time validation and preview. The application supports 8+ professional barcode formats including EAN-13, UPC, CODE128, and CODE39, with automatic check digit calculation and industry-standard compliance. Built as a full-stack TypeScript application with Vue.js frontend and Express.js backend, it features MongoDB cloud storage, professional print layouts, and a mobile-optimized responsive design with fullscreen scanning interface. Users can manage up to 20 barcodes with complete CRUD operations, including bulk printing capabilities and haptic feedback for enhanced mobile experience. The application is production-ready with Railway deployment, Docker containerization, comprehensive error handling, Jest unit tests, and health monitoring endpoints.',
+        'Barcode Gen is a comprehensive barcode lifecycle management system that enables users to scan existing barcodes using their device camera or manually create new ones with real-time validation and preview. The application supports 8+ professional barcode formats including EAN-13, UPC, CODE128, and CODE39, with automatic check digit calculation and industry-standard compliance. Built as a full-stack TypeScript application with Vue.js frontend and Express.js backend, it features MongoDB cloud storage, professional print layouts, and a mobile-optimized responsive design with fullscreen scanning interface. Users can manage up to 20 barcodes with complete CRUD operations, including bulk printing capabilities and haptic feedback for enhanced mobile experience. The application is production-ready with AWS deployment using ECS for container orchestration on EC2 instances, Route 53 for DNS management, CloudFront for content delivery, Docker containerization, comprehensive error handling, Jest unit tests, and health monitoring endpoints.',
       image: BarcodeCrudPic,
       technologies: [
         {
@@ -116,7 +116,18 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Cloud & DevOps',
           icon: 'mdi-cloud-outline',
           color: 'purple',
-          skills: ['CI/CD', 'Docker', 'Git/GitHub', 'GitHub Actions', 'Railway'],
+          skills: [
+            'CI/CD',
+            'Docker',
+            'Git/GitHub',
+            'GitHub Actions',
+            'AWS',
+            'CloudFront',
+            'S3',
+            'Route 53',
+            'EC2',
+            'ECS',
+          ],
         },
         {
           category: 'Tools & Others',
@@ -133,7 +144,7 @@ export const useProjectsStore = defineStore('projects', () => {
           ],
         },
       ],
-      liveUrl: 'https://barcode-crud-production.up.railway.app',
+      liveUrl: 'https://barcode.jameslittlefield.net',
       githubUrl: 'https://github.com/musicteachj/barcode-crud',
       featured: true,
       category: 'Full Stack',
@@ -148,7 +159,7 @@ export const useProjectsStore = defineStore('projects', () => {
         'Full-stack TypeScript with Vue.js frontend & Express.js API',
         'Real-time barcode preview and validation with form checks',
         'Jest unit tests for frontend and backend',
-        'Production-ready Railway deployment with Docker & monitoring',
+        'Production-ready AWS deployment with ECS, EC2, Route 53 & monitoring',
       ],
       viewport: ['desktop', 'mobile', 'tablet'],
     },
@@ -156,7 +167,7 @@ export const useProjectsStore = defineStore('projects', () => {
       id: 3,
       title: 'Employee Management System',
       description:
-        'Full‑stack employee management system to create/search/update records, assign managers, visualize org charts, run bulk changes, and schedule/conduct reviews, with real‑time analytics on headcount, departments, salaries, and hiring trends.',
+        'Full‑stack employee management system to create/search/update records, assign managers, visualize org charts, run bulk updates, and schedule/conduct reviews with real‑time analytics on headcount, departments, salaries, and trends.',
       longDescription:
         'The Employee Management System is a full‑stack web application for centralizing and streamlining HR operations. It lets you create, update, search, and organize employee records; assign managers; visualize the org chart; perform bulk updates; and manage performance reviews end‑to‑end (scheduling, conducting, tracking, and monitoring overdue reviews). An interactive analytics dashboard surfaces key insights like department and status distributions, job levels, salaries, and hiring/performance trends via rich charts. The frontend is built with Vue 3, Vuetify, Pinia, and Chart.js, while the backend uses FastAPI with async MongoDB (Motor), with Vite-powered local development, SPA serving in production, and Dockerized deployment.',
       image: EmployeeManagementPic,
@@ -189,7 +200,7 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Cloud & DevOps',
           icon: 'mdi-cloud-outline',
           color: 'purple',
-          skills: ['CI/CD', 'Docker', 'Git/GitHub', 'GitHub Actions', 'Railway'],
+          skills: ['CI/CD', 'Docker', 'Git/GitHub', 'GitHub Actions', 'AWS'],
         },
         {
           category: 'Tools & Others',

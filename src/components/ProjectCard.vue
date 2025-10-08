@@ -21,10 +21,11 @@
 
       <!-- Project Status Badge -->
       <v-chip
+        variant="flat"
         :color="statusColor"
-        size="small"
+        size="x-small"
         class="ma-2"
-        style="position: absolute; top: 0; left: 0"
+        :style="{ position: 'absolute', top: 0, left: 0, opacity: 0.8 }"
       >
         {{ project.status }}
       </v-chip>
