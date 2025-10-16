@@ -18,39 +18,41 @@
             <h2 class="text-h4 mb-6">My Story</h2>
             <p class="text-body-1 mb-4">
               My journey into software development began in an unexpected place: the innovative
-              world of vertical farming at 80 Acres Farms. Starting as a Jr. Developer in 2018, I
-              discovered my passion for creating technology solutions that solve real-world problems
-              when I helped build custom MRP systems for indoor agriculture operations.
+              world of vertical farming at 80 Acres Farms. Starting as a Software Engineer in 2018,
+              I discovered my passion for creating technology solutions that solve real-world
+              problems when I built a comprehensive MRP system for indoor agriculture operations
+              using Vue.js, Node.js, and PostgreSQL to manage the entire crop lifecycle from seeding
+              to delivery.
             </p>
             <p class="text-body-1 mb-4">
-              During my time at 80 Acres Farms, I grew from junior developer to software engineer,
-              contributing to the company's remarkable journey from Series A to Series B funding. I
-              specialized in Vue.js applications for automated packaging systems, integrated barcode
-              scanning technology, and led the modernization of legacy systems by migrating from
-              Vuetify 1.5 to 2.3 while mentoring junior developers.
+              During my three years at 80 Acres Farms, I was solely responsible for designing and
+              implementing an industry-standard packaging barcode system, developed factory conveyor
+              belt applications integrating QR Code scanning technology, and led the migration of
+              the entire Vuetify UI library from v1.5 to v2.3 across a monolithic legacy
+              application. I mentored junior developers and contributed to the company's remarkable
+              journey from Series A to Series B funding, gaining invaluable experience in building
+              production systems from the ground up.
             </p>
             <p class="text-body-1 mb-4">
-              In 2021, I transitioned to KollaCode/IBM, where I expanded my expertise in
-              enterprise-scale applications. As a Frontend Developer, I focused on compliance with
-              IBM's rigorous security standards, migrated UI frameworks to align with the Carbon
-              Design System, and contributed to applications used globally by IBMers. My work
-              included complex database optimization and multi-language support for over 30
-              languages.
+              In 2021, I transitioned to KollaCode as a Full Stack Engineer, where I expanded my
+              expertise to enterprise-scale applications serving IBM's global ecosystem. I built and
+              maintained CTEBA, IBM's worldwide event management application with specialized
+              modules for tracking sponsored events globally. I led the full-stack development of
+              the EDIT application v2 with Excel XLSX upload capabilities, implemented AG Grid for
+              bulk editing, and wrote complex Cloudant DB queries to support Express.js APIs. My
+              work required strict compliance with IBM's security standards including PII data
+              encryption, OIDC authentication, and comprehensive audit logging.
             </p>
             <p class="text-body-1 mb-4">
-              Currently, as a Senior Full Stack Engineer at KollaCode, I lead the development of
-              international applications like the IBM Partner Plus Awards platform, which I built
-              with full internationalization support for 11 languages. I spearhead modernization
-              initiatives, migrating applications from Vue 2 to Vue 3, and architect scalable
-              solutions that serve IBM's global partner ecosystem.
-            </p>
-            <p class="text-body-1 mb-6">
-              What drives me is the intersection of innovative technology and meaningful impact.
-              Whether it's optimizing crop production through smart farming systems or enabling
-              global business partnerships through enterprise applications, I'm passionate about
-              writing clean, efficient code that makes a difference. I thrive in collaborative
-              environments and enjoy mentoring other developers while continuously learning new
-              technologies and best practices.
+              I was promoted to Senior Full Stack Engineer in 2023, where I now lead development on
+              mission-critical IBM applications serving thousands of users worldwide. As project and
+              application lead for CTEBA, I implemented CRON jobs with automated email tracking and
+              acknowledgment monitoring. I served as lead developer on the IBM Partner Plus Awards
+              application with internationalization support for 11 languages, architected the IBM
+              Amenities application with dual workflow systems and comprehensive currency
+              conversion, and integrated AI-based compliance tools that eliminated hundreds of
+              manual support hours. I've spearheaded multiple Vue 2 to Vue 3 migrations, improving
+              performance and user experience across the IBM portfolio.
             </p>
 
             <!-- Career Highlights -->
@@ -59,21 +61,53 @@
               <v-row>
                 <v-col cols="12" sm="6">
                   <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-rocket-launch</v-icon>
+                    <v-icon color="success" size="small" class="mr-2">mdi-briefcase</v-icon>
                     <span class="font-weight-medium"
-                      >Led Vue 2 → Vue 3 modernization initiatives</span
+                      >7+ years architecting enterprise-grade applications</span
+                    >
+                  </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-robot</v-icon>
+                    <span class="font-weight-medium"
+                      >Integrated AI tools saving hundreds of support hours</span
+                    >
+                  </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-cloud</v-icon>
+                    <span class="font-weight-medium"
+                      >Deployed production apps to AWS (ECS, Route 53, CloudFront)</span
                     >
                   </div>
                   <div class="highlight-item mb-3">
                     <v-icon color="success" size="small" class="mr-2">mdi-earth</v-icon>
                     <span class="font-weight-medium"
-                      >Built applications supporting 11+ languages</span
+                      >Built internationalization supporting 11+ languages</span
                     >
                   </div>
                   <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-sprout</v-icon>
+                    <v-icon color="success" size="small" class="mr-2">mdi-rocket-launch</v-icon>
                     <span class="font-weight-medium"
-                      >Developed agricultural technology solutions</span
+                      >Led multiple Vue 2 → Vue 3 migration projects</span
+                    >
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-account-star</v-icon>
+                    <span class="font-weight-medium"
+                      >Project lead on mission-critical IBM applications</span
+                    >
+                  </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-database-sync</v-icon>
+                    <span class="font-weight-medium"
+                      >Optimized database queries reducing retrieval time by 40%</span
+                    >
+                  </div>
+                  <div class="highlight-item mb-3">
+                    <v-icon color="success" size="small" class="mr-2">mdi-shield-lock</v-icon>
+                    <span class="font-weight-medium"
+                      >Implemented OAuth, OIDC authentication & PII encryption</span
                     >
                   </div>
                   <div class="highlight-item mb-3">
@@ -82,28 +116,10 @@
                       >Contributed to Series A to Series B funding growth</span
                     >
                   </div>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-account-group</v-icon>
-                    <span class="font-weight-medium"
-                      >Mentored junior developers and led code reviews</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-database</v-icon>
-                    <span class="font-weight-medium"
-                      >Optimized database performance and scaling</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-security</v-icon>
-                    <span class="font-weight-medium">Ensured enterprise security compliance</span>
-                  </div>
                   <div class="highlight-item mb-3">
                     <v-icon color="success" size="small" class="mr-2">mdi-barcode-scan</v-icon>
                     <span class="font-weight-medium"
-                      >Integrated barcode & QR Code scanning technology</span
+                      >Designed industry-standard barcode & QR scanning systems</span
                     >
                   </div>
                 </v-col>
@@ -114,16 +130,22 @@
             <div class="personal-section">
               <h3 class="text-h5 mb-4 text-primary">Beyond Code</h3>
               <p class="text-body-1 mb-4">
-                When I'm not developing applications, I'm passionate about staying current with
-                emerging technologies and contributing to the developer community. I enjoy exploring
-                the intersection of technology and sustainability, having seen firsthand how
-                software can revolutionize traditional industries like agriculture.
+                When I'm not developing applications, you'll find me enjoying live music—especially
+                blues and jazz. I play guitar and piano when I get a chance, which provides a
+                perfect creative outlet and helps me think through complex technical challenges.
+              </p>
+              <p class="text-body-1 mb-4">
+                I'm also passionate about staying current with emerging technologies and exploring
+                new AI tools like Cursor AI and Claude for agentic programming. Having seen
+                firsthand how software can revolutionize traditional industries like agriculture, I
+                enjoy discovering how innovative technologies can make a real-world impact.
               </p>
               <p class="text-body-1">
-                I'm also an advocate for clean code practices, accessibility standards, and
-                mentoring the next generation of developers. Whether it's playing guitar,
-                experimenting with new JavaScript frameworks, or contributing to open source
-                projects, I'm always looking for ways to grow both personally and professionally.
+                Outside of tech, I enjoy experimenting with new cocktail recipes and exploring the
+                craft of mixology. I'm an advocate for clean code practices, accessibility
+                standards, and mentoring the next generation of developers. Whether it's jamming on
+                guitar, testing out a new recipe, or diving into the latest JavaScript frameworks,
+                I'm always looking for ways to grow both personally and professionally.
               </p>
             </div>
 
