@@ -183,7 +183,6 @@ import ProjectCard from '@/components/ProjectCard.vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import { useProjectsStore } from '@/stores/projects'
 import Skills from '@/components/Skills.vue'
-import JamesPic from '../assets/images/James.png'
 import JamesPic2 from '../assets/images/James2.jpg'
 
 // Stores
