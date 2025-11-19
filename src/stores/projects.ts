@@ -61,7 +61,7 @@ export const useProjectsStore = defineStore('projects', () => {
           ],
         },
       ],
-      liveUrl: 'https://musicteachj.github.io/portfolio/',
+      liveUrl: 'https://jameslittlefield.net',
       githubUrl: 'https://github.com/musicteachj/portfolio',
       featured: false,
       category: 'Frontend',
