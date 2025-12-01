@@ -6,6 +6,7 @@ import PortfolioPic from '../assets/images/Portfolio2.png'
 import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
 import EmployeeManagementPic from '../assets/images/Employee.png'
 import CrapsGamePic from '../assets/images/Craps.png'
+import SmartResumePic from '../assets/images/SmartResume.svg'
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
@@ -54,6 +55,7 @@ export const useProjectsStore = defineStore('projects', () => {
           color: 'brown',
           skills: [
             'Vite',
+            'NPM',
             'UI/UX Design',
             'Responsive Design',
             'Vitest',
@@ -99,7 +101,7 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Frontend Technologies',
           icon: 'mdi-monitor',
           color: 'green',
-          skills: ['Vue 2', 'Vuetify 2', 'Vuex', 'Vue Router 3', 'CSS'],
+          skills: ['Vue 2', 'Vuetify 2', 'Vuex', 'Vue Router 3', 'CSS', 'Axios'],
         },
         {
           category: 'Backend Technologies',
@@ -136,12 +138,15 @@ export const useProjectsStore = defineStore('projects', () => {
           color: 'brown',
           skills: [
             'Vue CLI',
+            'NPM',
             'Jest Unit Tests',
             'UI/UX Design',
             'Quagga scanner',
             'PrintD',
             'Vuelidate',
             'Vue-barcode',
+            'UI/UX Design',
+            'Responsive Design',
           ],
         },
       ],
@@ -183,7 +188,7 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Frontend Technologies',
           icon: 'mdi-monitor',
           color: 'green',
-          skills: ['Vue 3', 'Vuetify 3', 'Vue Router 4', 'Pinia', 'CSS'],
+          skills: ['Vue 3', 'Vuetify 3', 'Vue Router 4', 'Pinia', 'CSS', 'Axios'],
         },
         {
           category: 'Backend Technologies',
@@ -216,7 +221,18 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Tools & Others',
           icon: 'mdi-tools',
           color: 'brown',
-          skills: ['Vite', 'Vee-validate', 'Chart.js', 'JWT', 'PIP', 'Zod', 'XLSX'],
+          skills: [
+            'Vite',
+            'NPM',
+            'Vee-validate',
+            'Chart.js',
+            'JWT',
+            'PIP',
+            'Zod',
+            'XLSX',
+            'UI/UX Design',
+            'Responsive Design',
+          ],
         },
       ],
       liveUrl: 'https://employees.jameslittlefield.net',
@@ -320,6 +336,105 @@ export const useProjectsStore = defineStore('projects', () => {
         'Automated deployment to GitHub Pages via GitHub Actions',
       ],
       viewport: ['desktop', 'mobile', 'tablet'],
+    },
+    {
+      id: 5,
+      title: 'Smart Resume Builder - AI',
+      description:
+        'An AI-powered resume builder built with React that helps users create professional resumes with intelligent content improvements. Users can create multiple resumes, get AI suggestions to enhance their bullet points, preview their resume in real time, and export to PDF',
+      longDescription:
+        'Smart Resume Builder is a full-stack, AI-assisted resume platform built with a React 18 + TypeScript frontend (Vite, Tailwind, React Router, React Hook Form with Zod validation, TanStack Query, Axios) and a Node.js 18/Express backend wired through Prisma to PostgreSQL. Users register via secure email/password JWT auth (with Google OAuth planned), manage multiple resumes, and edit them in a split-screen form/live preview experience that auto-saves sections for personal info, work history, education, skills, and projects. A one-click Puppeteer-powered export reproduces the preview as a polished PDF, while a Claude-powered "Improve with AI" flow (post-MVP) suggests stronger bullet points and enforces configurable daily/monthly usage limits. The project runs in a pnpm monorepo, shares typed schemas, and ships through Docker/Docker Compose into AWS ECS/RDS with secrets in AWS Secrets Manager and CI/CD via GitHub Actions',
+      image: SmartResumePic,
+      technologies: [
+        {
+          category: 'Programming Languages',
+          icon: 'mdi-code-json',
+          color: 'blue',
+          skills: ['JavaScript ES6+', 'TypeScript', 'SQL'],
+        },
+        {
+          category: 'Frontend Technologies',
+          icon: 'mdi-monitor',
+          color: 'green',
+          skills: [
+            'React 18',
+            'Tailwind',
+            'CSS',
+            'React Router',
+            'React Hook Form',
+            'TanStack Query',
+            'Axios',
+          ],
+        },
+        {
+          category: 'Backend Technologies',
+          icon: 'mdi-server',
+          color: 'orange',
+          skills: ['Node.js', 'Express.js', 'Passport.js', 'bcrypt', 'Puppeteer'],
+        },
+        {
+          category: 'Databases & Storage',
+          icon: 'mdi-database-outline',
+          color: 'red',
+          skills: ['PostgreSQL', 'Prisma', 'JSONB content structure'],
+        },
+        {
+          category: 'Cloud & DevOps',
+          icon: 'mdi-cloud-outline',
+          color: 'purple',
+          skills: [
+            'Docker',
+            'AWS',
+            'ECS',
+            'ECR',
+            'RDS',
+            'Secrets Manager',
+            'CI/CD',
+            'GitHub Actions',
+            'Git/GitHub',
+          ],
+        },
+        {
+          category: 'Tools & Others',
+          icon: 'mdi-tools',
+          color: 'brown',
+          skills: [
+            'Vite',
+            'PNPM',
+            'Zod',
+            'JWT',
+            'Jest Unit Tests',
+            'Passport.js',
+            'Google OAuth',
+            'UI/UX Design',
+            'Responsive Design',
+            'Cursor AI',
+            'Claude AI',
+            'Agentic Programming',
+          ],
+        },
+      ],
+      liveUrl: '',
+      githubUrl: 'https://github.com/musicteachj/smart-resume-builder',
+      featured: true,
+      category: 'Full Stack',
+      year: 2025,
+      status: 'in-progress',
+      features: [
+        'React 18 + TypeScript frontend built with Vite and Tailwind for responsive UI',
+        'React Hook Form with Zod validation powering the split-screen resume editor',
+        'TanStack Query + Axios for authenticated data fetching and optimistic updates',
+        'JWT-secured email/password auth pipeline with bcrypt hashing and Passport.js',
+        'Multi-resume dashboard backed by Prisma ORM and PostgreSQL 15',
+        'Auto-save and real-time preview of personal info, experience, education, skills, and projects',
+        'Claude-powered AI bullet improvements with daily/monthly usage enforcement',
+        'Puppeteer-driven PDF export that renders the React template server-side for pixel-perfect output',
+        'Shared TypeScript schemas and resume templates published via pnpm workspaces',
+        'Dockerized services deployed to AWS ECS/RDS with GitHub Actions CI/CD and AWS Secrets Manager',
+        'Google OAuth + account linking support (post-MVP) through passport-google-oauth20',
+        'AI usage telemetry stored in Prisma models for per-user analytics and cost controls',
+      ],
+      viewport: ['desktop', 'tablet'],
     },
   ])
 
