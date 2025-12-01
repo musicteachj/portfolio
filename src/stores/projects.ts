@@ -5,6 +5,7 @@ import type { Project, ProjectCategory } from '@/types'
 import PortfolioPic from '../assets/images/Portfolio2.png'
 import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
 import EmployeeManagementPic from '../assets/images/Employee.png'
+import CrapsGamePic from '../assets/images/Craps.png'
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
@@ -242,6 +243,83 @@ export const useProjectsStore = defineStore('projects', () => {
         'Vue 3 Composition API with modern reactive programming patterns',
       ],
       viewport: ['desktop', 'tablet'],
+    },
+    {
+      id: 4,
+      title: 'Craps Game',
+      description:
+        'Craps is an interactive web-based dice game that simulates a simplified version of casino craps. Built with React.js, Vite, Styled-Components, and Vitest for testing.',
+      longDescription:
+        'An interactive web-based implementation of simplified craps featuring a React-based UI with animated dice, real-time game state management, and comprehensive game statistics. Built with TypeScript, styled-components, and Vitest for testing, this application demonstrates modern frontend development practices including component composition, type safety, and test-driven development.',
+      image: CrapsGamePic,
+      technologies: [
+        {
+          category: 'Programming Languages',
+          icon: 'mdi-code-json',
+          color: 'blue',
+          skills: ['JavaScript ES6+', 'TypeScript'],
+        },
+        {
+          category: 'Frontend Technologies',
+          icon: 'mdi-monitor',
+          color: 'green',
+          skills: ['React.js', 'React DOM', 'CSS', 'Styled-Components'],
+        },
+        {
+          category: 'Backend Technologies',
+          icon: 'mdi-server',
+          color: 'orange',
+          skills: ['Node.js'],
+        },
+        {
+          category: 'Databases & Storage',
+          icon: 'mdi-database-outline',
+          color: 'red',
+          skills: [],
+        },
+        {
+          category: 'Cloud & DevOps',
+          icon: 'mdi-cloud-outline',
+          color: 'purple',
+          skills: ['Git/GitHub', 'GitHub Actions', 'CI/CD', 'GitHub Pages'],
+        },
+        {
+          category: 'Tools & Others',
+          icon: 'mdi-tools',
+          color: 'brown',
+          skills: [
+            'Vite',
+            'Vitest',
+            'ESLint',
+            'Yarn',
+            'Cursor AI',
+            'Claude AI',
+            'Agentic Programming',
+          ],
+        },
+      ],
+      liveUrl: 'https://musicteachj.github.io/city-base-craps/',
+      githubUrl: 'https://github.com/musicteachj/city-base-craps',
+      featured: true,
+      category: 'Frontend',
+      year: 2025,
+      status: 'completed',
+      features: [
+        'Interactive casino-style craps game with simplified ruleset',
+        'Built with React 18 and TypeScript for type safety',
+        'Real-time bankroll management and betting system',
+        'Animated 3D CSS dice displaying actual roll values',
+        'Comprehensive input validation with user-friendly error messages',
+        'Configurable bankroll ($5-$1000) and bet amounts',
+        'Game statistics showing total wins/losses and final bankroll',
+        'Fully responsive design for mobile, tablet, and desktop',
+        'WCAG accessibility compliant with semantic HTML and ARIA labels',
+        'Styled with styled-components for component-scoped CSS',
+        'Built with Vite for fast development and optimized production builds',
+        'Comprehensive unit tests using Vitest and React Testing Library',
+        'Automated deployment to GitHub Pages via GitHub Actions',
+      ],
+      viewport: ['desktop', 'mobile', 'tablet'],
     },
   ])
 
