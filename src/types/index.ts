@@ -63,7 +63,7 @@ export interface SocialLink {
   color?: string
 }
 
-export type ProgrammingLanguage = 'JavaScript ES6+' | 'TypeScript' | 'Python'
+export type ProgrammingLanguage = 'JavaScript ES6+' | 'TypeScript' | 'Python' | 'SQL'
 export type FrontendTechnology =
   | 'Vue.js'
   | 'Vue 2'
@@ -76,6 +76,7 @@ export type FrontendTechnology =
   | 'Vue Router 4'
   | 'Pinia'
   | 'React.js'
+  | 'React 18'
   | 'React Native'
   | 'React DOM'
   | 'HTML'
@@ -84,6 +85,11 @@ export type FrontendTechnology =
   | 'Bootstrap'
   | 'Carbon-vue'
   | 'Styled-Components'
+  | 'Tailwind'
+  | 'React Router'
+  | 'React Hook Form'
+  | 'TanStack Query'
+  | 'Axios'
 export type BackendTechnology =
   | 'Node.js'
   | 'Express.js'
@@ -92,7 +98,16 @@ export type BackendTechnology =
   | 'FastAPI'
   | 'Pydantic'
   | 'Motor'
-export type Database = 'PostgreSQL' | 'MongoDB' | 'Cloudant DB' | 'NoSQL'
+  | 'Passport.js'
+  | 'bcrypt'
+  | 'Puppeteer'
+export type Database =
+  | 'PostgreSQL'
+  | 'MongoDB'
+  | 'Cloudant DB'
+  | 'NoSQL'
+  | 'Prisma'
+  | 'JSONB content structure'
 export type CloudTechnology =
   | 'Docker'
   | 'CI/CD'
@@ -105,6 +120,9 @@ export type CloudTechnology =
   | 'Route 53'
   | 'EC2'
   | 'ECS'
+  | 'ECR'
+  | 'RDS'
+  | 'Secrets Manager'
 export type Tool = string
 
 export interface ProgrammingSkill {
