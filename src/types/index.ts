@@ -68,6 +68,7 @@ export type FrontendTechnology =
   | 'Vue.js'
   | 'Vue 2'
   | 'Vue 3'
+  | 'Nuxt.js'
   | 'Vuex'
   | 'Vuetify'
   | 'Vuetify 2'
@@ -101,6 +102,7 @@ export type BackendTechnology =
   | 'Passport.js'
   | 'bcrypt'
   | 'Puppeteer'
+  | 'Python CLI'
 export type Database =
   | 'PostgreSQL'
   | 'MongoDB'
@@ -108,6 +110,7 @@ export type Database =
   | 'NoSQL'
   | 'Prisma'
   | 'JSONB content structure'
+  | 'Browser localStorage'
 export type CloudTechnology =
   | 'Docker'
   | 'CI/CD'

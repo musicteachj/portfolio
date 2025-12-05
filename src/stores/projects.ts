@@ -6,6 +6,7 @@ import PortfolioPic from '../assets/images/Portfolio2.png'
 import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
 import EmployeeManagementPic from '../assets/images/Employee.png'
 import CrapsGamePic from '../assets/images/Craps.png'
+import DocQuizPipelinePic from '../assets/images/CommandLineParser.png'
 import SmartResumePic from '../assets/images/SmartResume.svg'
 
 export const useProjectsStore = defineStore('projects', () => {
@@ -339,6 +340,77 @@ export const useProjectsStore = defineStore('projects', () => {
     },
     {
       id: 5,
+      title: 'DocQuiz Pipeline',
+      description:
+        'A full-stack application demonstrating document parsing, modern web development, and DevOps automation. Built with Python, Vue 3/TypeScript, and deployed via GitHub Actions CI/CD pipeline. Transforms Word documents into an interactive quiz with persistent state management.',
+      longDescription:
+        'DocQuiz Pipeline is a full-stack web application that automatically converts Microsoft Word documents into interactive quiz experiences with complete CI/CD automation. The project features a custom Python parser that extracts quiz questions from .docx files using only standard library modules, outputting validated JSON data. The frontend is built with Vue 3, TypeScript, and Vite, featuring localStorage persistence for automatic progress saving, real-time progress tracking, comprehensive results review, and responsive design. A GitHub Actions pipeline automatically regenerates quiz data, runs automated tests (11 backend tests with Python unittest, 22 frontend tests with Vitest), builds the production bundle, and deploys to GitHub Pages on every push. The application demonstrates proficiency in Python, Vue 3 Composition API, TypeScript, automated testing, DevOps practices, and modern software architecture.',
+      image: DocQuizPipelinePic,
+      technologies: [
+        {
+          category: 'Programming Languages',
+          icon: 'mdi-code-json',
+          color: 'blue',
+          skills: ['Python', 'JavaScript ES6+', 'TypeScript'],
+        },
+        {
+          category: 'Frontend Technologies',
+          icon: 'mdi-monitor',
+          color: 'green',
+          skills: ['Vue 3', 'CSS'],
+        },
+        {
+          category: 'Backend Technologies',
+          icon: 'mdi-server',
+          color: 'orange',
+          skills: ['Python CLI'],
+        },
+        {
+          category: 'Databases & Storage',
+          icon: 'mdi-database-outline',
+          color: 'red',
+          skills: ['Browser localStorage'],
+        },
+        {
+          category: 'Cloud & DevOps',
+          icon: 'mdi-cloud-outline',
+          color: 'purple',
+          skills: ['Git/GitHub', 'GitHub Actions', 'CI/CD', 'GitHub Pages'],
+        },
+        {
+          category: 'Tools & Others',
+          icon: 'mdi-tools',
+          color: 'brown',
+          skills: ['Node.js', 'Vitest', 'Python unittest', 'Vue Test Utils'],
+        },
+      ],
+      liveUrl: 'https://musicteachj.github.io/command-line-parser/',
+      githubUrl: 'https://github.com/musicteachj/command-line-parser',
+      featured: true,
+      category: 'Frontend',
+      year: 2025,
+      status: 'completed',
+      features: [
+        'Custom Python CLI parser that extracts quiz questions from Microsoft Word (.docx) files',
+        'Zero-dependency parsing using Python standard library (zipfile, xml.etree, argparse)',
+        'Interactive quiz interface built with Vue 3 Composition API and TypeScript',
+        'Automatic progress saving with localStorage persistence - resume anytime without losing answers',
+        'Real-time progress tracking showing completion percentage',
+        'Comprehensive results review displaying all questions with user answers highlighted',
+        'Responsive design that works seamlessly across desktop and mobile devices',
+        'Automated CI/CD pipeline using GitHub Actions for continuous deployment',
+        'Automated testing with 11 backend tests (Python unittest) and 22 frontend tests (Vitest)',
+        'One-push deployment: update Word document, commit, and the app rebuilds automatically',
+        'Fast development and optimized builds with Vite bundler',
+        'Type-safe codebase with TypeScript strict mode enabled',
+        'Clean, accessible UI with keyboard navigation support',
+        'Component-based architecture with clear separation of concerns',
+        'Deployed on GitHub Pages as a static single-page application',
+      ],
+      viewport: ['desktop', 'tablet', 'mobile'],
+    },
+    {
+      id: 6,
       title: 'Smart Resume Builder - AI',
       description:
         'An AI-powered resume builder built with React that helps users create professional resumes with intelligent content improvements. Users can create multiple resumes, get AI suggestions to enhance their bullet points, preview their resume in real time, and export to PDF',
