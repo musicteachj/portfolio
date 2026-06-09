@@ -1,223 +1,272 @@
-<!-- Updated About Page My Story Section -->
 <template>
   <div class="about-page">
     <v-container>
-      <!-- Page Header -->
+      <!-- Header -->
+      <div class="section-head mb-12">
+        <p class="eyebrow mb-2">About</p>
+        <h1 class="page-title">A bit about me</h1>
+        <div class="accent-rule is-visible"></div>
+        <p class="page-subtitle">Background, journey, and what I do when I'm away from the keyboard.</p>
+      </div>
+
+      <!-- My Story -->
       <v-row>
-        <v-col cols="12">
-          <div class="text-center mb-12">
-            <h1 class="text-h2 font-weight-bold mb-4">About Me</h1>
-            <p class="text-h6" style="opacity: 0.8">
-              Get to know more about my background and journey
-            </p>
-          </div>
-        </v-col>
-
-        <v-col cols="12" md="8" offset-md="2">
-          <v-card elevation="8" class="pa-8">
-            <h2 class="text-h4 mb-6">My Story</h2>
-            <p class="text-body-1 mb-4">
-              My journey into software development began in an unexpected place: the innovative
-              world of vertical farming at 80 Acres Farms. Starting as a Software Engineer in 2018,
-              I discovered my passion for creating technology solutions that solve real-world
-              problems when I built a comprehensive MRP system for indoor agriculture operations
-              using Vue.js, Node.js, and PostgreSQL to manage the entire crop lifecycle from seeding
-              to delivery.
-            </p>
-            <p class="text-body-1 mb-4">
-              During my three years at 80 Acres Farms, I was solely responsible for designing and
-              implementing an industry-standard packaging barcode system, developed factory conveyor
-              belt applications integrating QR Code scanning technology, and led the migration of
-              the entire Vuetify UI library from v1.5 to v2.3 across a monolithic legacy
-              application. I mentored junior developers and contributed to the company's remarkable
-              journey from Series A to Series B funding, gaining invaluable experience in building
-              production systems from the ground up.
-            </p>
-            <p class="text-body-1 mb-4">
-              In 2021, I transitioned to KollaCode as a Full Stack Engineer, where I expanded my
-              expertise to enterprise-scale applications serving IBM's global ecosystem. I built and
-              maintained CTEBA, IBM's worldwide event management application with specialized
-              modules for tracking sponsored events globally. I led the full-stack development of
-              the EDIT application v2 with Excel XLSX upload capabilities, implemented AG Grid for
-              bulk editing, and wrote complex Cloudant DB queries to support Express.js APIs. My
-              work required strict compliance with IBM's security standards including PII data
-              encryption, OIDC authentication, and comprehensive audit logging.
-            </p>
-            <p class="text-body-1 mb-4">
-              I was promoted to Senior Full Stack Engineer in 2023, where I now lead development on
-              mission-critical IBM applications serving thousands of users worldwide. As project and
-              application lead for CTEBA, I implemented CRON jobs with automated email tracking and
-              acknowledgment monitoring. I served as lead developer on the IBM Partner Plus Awards
-              application with internationalization support for 11 languages, architected the IBM
-              Amenities application with dual workflow systems and comprehensive currency
-              conversion, and integrated AI-based compliance tools that eliminated hundreds of
-              manual support hours. I've spearheaded multiple Vue 2 to Vue 3 migrations, improving
-              performance and user experience across the IBM portfolio.
-            </p>
-
-            <!-- Career Highlights -->
-            <div class="career-highlights mb-6">
-              <h3 class="text-h5 mb-4 text-primary">Career Highlights</h3>
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-briefcase</v-icon>
-                    <span class="font-weight-medium"
-                      >7+ years architecting enterprise-grade applications</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-robot</v-icon>
-                    <span class="font-weight-medium"
-                      >Integrated AI tools saving hundreds of support hours</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-cloud</v-icon>
-                    <span class="font-weight-medium"
-                      >Deployed production apps to AWS (ECS, Route 53, CloudFront)</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-earth</v-icon>
-                    <span class="font-weight-medium"
-                      >Built internationalization supporting 11+ languages</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-rocket-launch</v-icon>
-                    <span class="font-weight-medium"
-                      >Led multiple Vue 2 → Vue 3 migration projects</span
-                    >
-                  </div>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-account-star</v-icon>
-                    <span class="font-weight-medium"
-                      >Project lead on mission-critical IBM applications</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-database-sync</v-icon>
-                    <span class="font-weight-medium"
-                      >Optimized database queries reducing retrieval time by 40%</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-shield-lock</v-icon>
-                    <span class="font-weight-medium"
-                      >Implemented OAuth, OIDC authentication & PII encryption</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-currency-usd</v-icon>
-                    <span class="font-weight-medium"
-                      >Contributed to Series A to Series B funding growth</span
-                    >
-                  </div>
-                  <div class="highlight-item mb-3">
-                    <v-icon color="success" size="small" class="mr-2">mdi-barcode-scan</v-icon>
-                    <span class="font-weight-medium"
-                      >Designed industry-standard barcode & QR scanning systems</span
-                    >
-                  </div>
-                </v-col>
-              </v-row>
-            </div>
-
-            <!-- Personal Interests -->
-            <div class="personal-section">
-              <h3 class="text-h5 mb-4 text-primary">Beyond Code</h3>
-              <p class="text-body-1 mb-4">
-                When I'm not developing applications, you'll find me enjoying live music—especially
-                blues and jazz. I play guitar and piano when I get a chance, which provides a
-                perfect creative outlet and helps me think through complex technical challenges.
-              </p>
-              <p class="text-body-1 mb-4">
-                I'm also passionate about staying current with emerging technologies and exploring
-                new AI tools like Cursor AI and Claude for agentic programming. Having seen
-                firsthand how software can revolutionize traditional industries like agriculture, I
-                enjoy discovering how innovative technologies can make a real-world impact.
-              </p>
-              <p class="text-body-1">
-                Outside of tech, I enjoy experimenting with new cocktail recipes and exploring the
-                craft of mixology. I'm an advocate for clean code practices, accessibility
-                standards, and mentoring the next generation of developers. Whether it's jamming on
-                guitar, testing out a new recipe, or diving into the latest JavaScript frameworks,
-                I'm always looking for ways to grow both personally and professionally.
-              </p>
-            </div>
-
-            <div class="text-center mt-8">
-              <div class="d-flex justify-center flex-wrap ga-4">
-                <v-btn to="/experience" color="primary" size="large" prepend-icon="mdi-briefcase">
-                  View My Experience
-                </v-btn>
-                <v-btn
-                  to="/projects"
-                  :color="isDark ? 'primary' : 'secondary'"
-                  variant="outlined"
-                  size="large"
-                  prepend-icon="mdi-code-braces"
-                >
-                  See My Projects
-                </v-btn>
-                <v-btn
-                  to="/"
-                  :color="isDark ? 'primary' : 'secondary'"
-                  variant="outlined"
-                  size="large"
-                  prepend-icon="mdi-arrow-left"
-                >
-                  Back to Home
-                </v-btn>
-              </div>
-            </div>
-          </v-card>
+        <v-col cols="12" md="10" lg="9">
+          <h2 class="block-title">My story</h2>
+          <p class="lead-paragraph">
+            My journey into software development began in an unexpected place: the innovative world
+            of vertical farming at 80 Acres Farms.
+          </p>
+          <p class="body-paragraph">
+            Starting as a Software Engineer in 2018, I discovered my passion for building technology
+            that solves real-world problems — creating a comprehensive MRP system for indoor
+            agriculture using Vue.js, Node.js, and PostgreSQL to manage the entire crop lifecycle
+            from seeding to delivery. Over three years I designed an industry-standard packaging
+            barcode system, built conveyor-belt applications with QR Code scanning, led the Vuetify
+            UI migration from v1.5 to v2.3 across a monolithic legacy app, mentored junior
+            developers, and contributed to the company's growth from Series A to Series B.
+          </p>
+          <p class="body-paragraph">
+            In 2021, I joined KollaCode as a Full Stack Engineer, expanding into enterprise-scale
+            applications serving IBM's global ecosystem. I built and maintained CTEBA — IBM's
+            worldwide event management platform — led full-stack development of the EDIT application
+            v2 with XLSX upload and AG Grid bulk editing, and wrote complex Cloudant DB queries
+            backing Express.js APIs, all under strict IBM security standards including PII
+            encryption, OIDC authentication, and audit logging.
+          </p>
+          <p class="body-paragraph">
+            Promoted to Senior Full Stack Engineer in 2023, I led development on mission-critical IBM
+            applications serving thousands of users worldwide — implementing automated CRON-based
+            email tracking, leading the IBM Partner Plus Awards application with i18n for 11
+            languages, architecting the IBM Amenities application with dual workflows and currency
+            conversion, and integrating AI-based compliance tools that eliminated hundreds of manual
+            support hours.
+          </p>
+          <p class="body-paragraph">
+            After wrapping up at KollaCode in October 2025, I joined Surface Design Solutions in
+            January 2026 as a Senior Software Engineer. There I lead UI/UX design and full-stack
+            frontend development for a ground-up rebuild of a physics-informed AI SaaS platform for
+            materials science — working directly with PhD co-founders to translate deep-tech research
+            into accessible software, while also driving brand, web presence, and digital marketing
+            as part of a founding-stage team. Increasingly, I build through agentic tools like Claude
+            Code — focusing on architecture, technical direction, and decision-making while AI
+            accelerates the implementation. These days I'm just as comfortable owning product
+            architecture as I am running content strategy and SEO — bridging technical execution and
+            audience growth.
+          </p>
         </v-col>
       </v-row>
+
+      <!-- Career Highlights -->
+      <h2 class="block-title mt-16">Career highlights</h2>
+      <div class="highlights-grid">
+        <div v-for="(item, i) in highlights" :key="item.text" class="highlight-card">
+          <span class="highlight-card__num">{{ String(i + 1).padStart(2, '0') }}</span>
+          <v-icon class="highlight-card__icon" size="22">{{ item.icon }}</v-icon>
+          <p class="highlight-card__text">{{ item.text }}</p>
+        </div>
+      </div>
+
+      <!-- Beyond Code -->
+      <v-row class="mt-16">
+        <v-col cols="12" md="10" lg="9">
+          <h2 class="block-title">Beyond code</h2>
+          <p class="body-paragraph">
+            When I'm not developing, you'll find me enjoying live music — especially blues and jazz.
+            I play guitar and piano when I get the chance, which is a perfect creative outlet and
+            helps me think through complex technical challenges. I'm also passionate about emerging
+            tech and AI tooling, and outside of all that I enjoy experimenting with new cocktail
+            recipes and the craft of mixology.
+          </p>
+          <div class="interest-pills">
+            <span v-for="interest in interests" :key="interest.label" class="interest-pill">
+              <v-icon size="16" class="mr-1">{{ interest.icon }}</v-icon>
+              {{ interest.label }}
+            </span>
+          </div>
+        </v-col>
+      </v-row>
+
+      <!-- Actions -->
+      <div class="d-flex flex-wrap ga-4 mt-12">
+        <v-btn to="/experience" color="accent" size="large" class="text-none px-6" prepend-icon="mdi-briefcase-outline">
+          View my experience
+        </v-btn>
+        <v-btn to="/projects" variant="outlined" size="large" class="text-none px-6" prepend-icon="mdi-code-braces">
+          See my projects
+        </v-btn>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useTheme } from 'vuetify'
+interface Highlight {
+  icon: string
+  text: string
+}
 
-const theme = useTheme()
+interface Interest {
+  icon: string
+  label: string
+}
 
-const isDark = computed(() => theme.global.name.value === 'dark')
+const highlights: Highlight[] = [
+  { icon: 'mdi-briefcase-outline', text: '8+ years architecting enterprise-grade applications' },
+  { icon: 'mdi-robot-outline', text: 'Integrated AI tools saving hundreds of support hours' },
+  { icon: 'mdi-cloud-outline', text: 'Deployed production apps to AWS (ECS, Route 53, CloudFront)' },
+  { icon: 'mdi-earth', text: 'Built internationalization supporting 11+ languages' },
+  { icon: 'mdi-rocket-launch-outline', text: 'Led multiple Vue 2 → Vue 3 migration projects' },
+  { icon: 'mdi-account-star-outline', text: 'Project lead on mission-critical IBM applications' },
+  { icon: 'mdi-database-sync-outline', text: 'Optimized database queries, cutting retrieval time 40%' },
+  { icon: 'mdi-shield-lock-outline', text: 'Implemented OAuth, OIDC authentication & PII encryption' },
+  { icon: 'mdi-currency-usd', text: 'Contributed to Series A → Series B funding growth' },
+  { icon: 'mdi-barcode-scan', text: 'Designed industry-standard barcode & QR scanning systems' },
+]
+
+const interests: Interest[] = [
+  { icon: 'mdi-music-clef-treble', label: 'Blues & Jazz' },
+  { icon: 'mdi-guitar-acoustic', label: 'Guitar' },
+  { icon: 'mdi-piano', label: 'Piano' },
+  { icon: 'mdi-robot-happy-outline', label: 'AI Tooling' },
+  { icon: 'mdi-glass-cocktail', label: 'Mixology' },
+  { icon: 'mdi-account-group-outline', label: 'Mentoring' },
+  { icon: 'mdi-code-tags-check', label: 'Clean Code' },
+  { icon: 'mdi-human', label: 'Accessibility' },
+]
 </script>
 
 <style scoped>
 .about-page {
-  padding: 80px 0;
+  padding: var(--section-py) 0;
   min-height: 100vh;
 }
 
-.career-highlights {
-  background-color: rgba(var(--v-theme-primary), 0.05);
-  border-radius: 12px;
-  padding: 24px;
-  border-left: 4px solid rgb(var(--v-theme-primary));
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 16px;
 }
 
-.highlight-item {
+.page-subtitle {
+  margin-top: 18px;
+  font-size: 1.05rem;
+  color: rgb(var(--v-theme-secondary));
+}
+
+.block-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  letter-spacing: -0.02em;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 20px;
+}
+
+.lead-paragraph {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 20px;
+}
+
+.body-paragraph {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgb(var(--v-theme-secondary));
+  margin-bottom: 18px;
+}
+
+/* Highlights grid */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.highlight-card {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.25));
+  border-radius: var(--border-radius-lg);
+  padding: 22px;
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+  border-color: rgba(var(--v-theme-accent), 0.4);
+}
+
+.highlight-card__num {
+  position: absolute;
+  top: 6px;
+  right: 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.75rem;
+  line-height: 1;
+  color: rgb(var(--v-theme-primary));
+  opacity: 0.05;
+  user-select: none;
+}
+
+.highlight-card__icon {
+  color: rgb(var(--v-theme-accent));
+  margin-bottom: 12px;
+}
+
+.highlight-card__text {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgb(var(--v-theme-primary));
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Interest pills */
+.interest-pills {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
 }
 
-.personal-section {
-  background-color: rgba(var(--v-theme-surface), 0.5);
-  border-radius: 12px;
-  padding: 24px;
-  margin-top: 24px;
+.interest-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: rgb(var(--v-theme-secondary));
+  background: rgb(var(--v-theme-surface-variant));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.2));
+  transition: all 0.22s var(--ease-out);
+}
+
+.interest-pill:hover {
+  color: rgb(var(--v-theme-accent));
+  border-color: rgba(var(--v-theme-accent), 0.4);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 600px) {
   .about-page {
-    padding: 60px 0;
+    padding: var(--section-py-mobile) 0;
   }
 }
 </style>

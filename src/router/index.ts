@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
     component: ContactView,
     meta: {
       title: 'Contact - James Littlefield',
-      description: 'Get in touch for opportunities and collaborations',
+      description: 'Get in touch about collaborations, ideas, or just to say hello',
     },
   },
   // Redirects

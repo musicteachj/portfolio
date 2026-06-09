@@ -14,9 +14,9 @@ describe('Skills Component', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      // Should render a card for each skill category
-      const cards = wrapper.findAll('.v-card')
-      expect(cards.length).toBe(skillsStore.skillsList.length)
+      // One bento cell per skill category
+      const cells = wrapper.findAll('.skill-cell')
+      expect(cells.length).toBe(skillsStore.skillsList.length)
     })
 
     it('should render category titles correctly', () => {
@@ -28,20 +28,15 @@ describe('Skills Component', () => {
       })
     })
 
-    it('should render category icons with correct colors', () => {
+    it('should render category icons with correct icon classes', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      const icons = wrapper.findAll('.v-icon')
-
-      // Filter out the check circle icons, focus on category icons
-      const categoryIcons = icons.filter((icon) => !icon.classes().includes('mdi-check-circle'))
-
-      expect(categoryIcons.length).toBe(skillsStore.skillsList.length)
+      const icons = wrapper.findAll('.skill-cell__icon .v-icon')
+      expect(icons.length).toBe(skillsStore.skillsList.length)
 
       skillsStore.skillsList.forEach((skillCategory, index) => {
-        const icon = categoryIcons[index]
-        expect(icon.classes()).toContain(skillCategory.icon)
+        expect(icons[index].classes()).toContain(skillCategory.icon)
       })
     })
 
@@ -56,56 +51,39 @@ describe('Skills Component', () => {
       })
     })
 
-    it('should render chips for each skill', () => {
+    it('should render a tag for each skill', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      // Count total skills across all categories
       const totalSkills = skillsStore.skillsList.reduce(
         (total, category) => total + category.skills.length,
         0,
       )
 
-      // Find all skill chips (excluding any category chips)
-      const allChips = wrapper.findAll('.v-chip')
-      expect(allChips.length).toBe(totalSkills)
+      const allTags = wrapper.findAll('.tech-tag')
+      expect(allTags.length).toBe(totalSkills)
     })
   })
 
   describe('Layout and Structure', () => {
-    it('should use proper grid layout', () => {
-      const wrapper = mountComponent(Skills)
-
-      // Should have v-row as root element
-      expect(wrapper.find('.v-row').exists()).toBe(true)
-
-      // Should have v-col for each skill category (check for cards instead as Vuetify classes may not be applied in tests)
-      const cards = wrapper.findAll('.v-card')
-      const skillsStore = useSkillsStore()
-      expect(cards.length).toBe(skillsStore.skillsList.length)
-    })
-
-    it('should have responsive column classes', () => {
-      const wrapper = mountComponent(Skills)
-
-      const columns = wrapper.findAll('.v-col')
-      columns.forEach((col) => {
-        // Should have responsive classes for different screen sizes
-        expect(col.classes()).toContain('v-col-12') // Full width on mobile
-        expect(col.classes()).toContain('v-col-md-4') // 1/3 width on medium+
-      })
-    })
-
-    it('should have proper card structure', () => {
+    it('should use a bento grid layout', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      const cards = wrapper.findAll('.v-card')
-      expect(cards.length).toBe(skillsStore.skillsList.length)
+      // Root is the bento grid container
+      expect(wrapper.find('.skills-bento').exists()).toBe(true)
 
-      cards.forEach((card) => {
-        expect(card.classes()).toContain('fill-height')
-        expect(card.classes()).toContain('pa-6')
+      const cells = wrapper.findAll('.skill-cell')
+      expect(cells.length).toBe(skillsStore.skillsList.length)
+    })
+
+    it('should give each cell a column span', () => {
+      const wrapper = mountComponent(Skills)
+
+      const cells = wrapper.findAll('.skill-cell')
+      cells.forEach((cell) => {
+        // spanFor() sets an inline grid-column span on every cell
+        expect(cell.attributes('style')).toContain('grid-column')
       })
     })
   })
@@ -115,13 +93,11 @@ describe('Skills Component', () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      // Component should render data from the skills store
       expect(skillsStore.skillsList).toBeDefined()
       expect(skillsStore.skillsList.length).toBeGreaterThan(0)
 
-      // Verify the component renders the store data
-      const cards = wrapper.findAll('.v-card')
-      expect(cards.length).toBe(skillsStore.skillsList.length)
+      const cells = wrapper.findAll('.skill-cell')
+      expect(cells.length).toBe(skillsStore.skillsList.length)
     })
 
     it('should react to store changes', async () => {
@@ -131,20 +107,17 @@ describe('Skills Component', () => {
       const initialText = wrapper.text()
       expect(initialText).not.toContain('Postman')
 
-      // Modify an existing skill category by adding a new skill
-      // Using Tools & Others category (index 5) which accepts any string
+      // Tools & Others (index 5) accepts any string
       skillsStore.skillsList[5].skills.push('Postman')
       await wrapper.vm.$nextTick()
 
-      const updatedText = wrapper.text()
-      expect(updatedText).toContain('Postman')
+      expect(wrapper.text()).toContain('Postman')
     })
 
     it('should handle empty skills gracefully', async () => {
       const wrapper = mountComponent(Skills)
       const skillsStore = useSkillsStore()
 
-      // Use the last category (Tools & Others) which is at index 5
       const categoryIndex = 5
       expect(skillsStore.skillsList.length).toBeGreaterThan(categoryIndex)
 
@@ -152,63 +125,43 @@ describe('Skills Component', () => {
       const initialChipsCount = skillsStore.skillsList[categoryIndex].skills.length
       expect(initialChipsCount).toBeGreaterThan(0)
 
-      // Get initial total chips count
-      const initialTotalChips = wrapper.findAll('.v-chip').length
+      const initialTotalTags = wrapper.findAll('.tech-tag').length
 
-      // Empty out a skill category's skills
       skillsStore.skillsList[categoryIndex].skills = []
       await wrapper.vm.$nextTick()
 
+      // Cell + category title still rendered, just with fewer tags
       expect(wrapper.text()).toContain(initialCategoryName)
 
-      // Should still render the card and category, but with fewer chips
-      const updatedTotalChips = wrapper.findAll('.v-chip').length
-      expect(updatedTotalChips).toBe(initialTotalChips - initialChipsCount)
+      const updatedTotalTags = wrapper.findAll('.tech-tag').length
+      expect(updatedTotalTags).toBe(initialTotalTags - initialChipsCount)
     })
   })
 
   describe('Styling and Appearance', () => {
-    it('should apply correct icon sizes', () => {
+    it('should render a category icon per cell', () => {
       const wrapper = mountComponent(Skills)
+      const skillsStore = useSkillsStore()
 
-      // Category icons should be large (size="48")
-      const categoryIcons = wrapper
-        .findAll('.v-icon')
-        .filter((icon) => !icon.classes().includes('mdi-check-circle'))
-
-      categoryIcons.forEach((icon) => {
-        // Vuetify applies size as a style or class
-        expect(
-          icon.attributes('style')?.includes('48') ||
-            icon.classes().some((cls) => cls.includes('48')),
-        ).toBe(true)
-      })
+      const icons = wrapper.findAll('.skill-cell__icon .v-icon')
+      expect(icons.length).toBe(skillsStore.skillsList.length)
     })
 
-    it('should apply correct text classes', () => {
+    it('should render category titles as headings', () => {
       const wrapper = mountComponent(Skills)
+      const skillsStore = useSkillsStore()
 
-      // Category titles should have text-h5 class
-      const titles = wrapper.findAll('h3')
-      titles.forEach((title) => {
-        expect(title.classes()).toContain('text-h5')
-      })
-    })
-
-    it('should center category headers', () => {
-      const wrapper = mountComponent(Skills)
-
-      const headers = wrapper.findAll('.text-center')
-      expect(headers.length).toBeGreaterThan(0)
+      const titles = wrapper.findAll('h3.skill-cell__title')
+      expect(titles.length).toBe(skillsStore.skillsList.length)
     })
   })
 
   describe('Accessibility', () => {
     it('should have proper heading structure', () => {
       const wrapper = mountComponent(Skills)
+      const skillsStore = useSkillsStore()
 
       const headings = wrapper.findAll('h3')
-      const skillsStore = useSkillsStore()
       expect(headings.length).toBe(skillsStore.skillsList.length)
 
       headings.forEach((heading) => {
@@ -219,11 +172,9 @@ describe('Skills Component', () => {
     it('should have meaningful icon usage', () => {
       const wrapper = mountComponent(Skills)
 
-      // All icons should have semantic meaning
       const icons = wrapper.findAll('.v-icon')
       expect(icons.length).toBeGreaterThan(0)
 
-      // Category icons should represent the category
       const skillsStore = useSkillsStore()
       skillsStore.skillsList.forEach((category) => {
         expect(category.icon).toMatch(/^mdi-/)
@@ -234,16 +185,11 @@ describe('Skills Component', () => {
   describe('Performance', () => {
     it('should use v-for keys correctly', () => {
       const wrapper = mountComponent(Skills)
-
-      // Vue should not show any key-related warnings
-      // This is more of a compile-time check, but we can verify structure
       const skillsStore = useSkillsStore()
 
-      // Should render correct number of items
-      const cards = wrapper.findAll('.v-card')
-      expect(cards.length).toBe(skillsStore.skillsList.length)
+      const cells = wrapper.findAll('.skill-cell')
+      expect(cells.length).toBe(skillsStore.skillsList.length)
 
-      // Each category should render all its skills
       skillsStore.skillsList.forEach((category) => {
         expect(wrapper.text()).toContain(category.category)
         category.skills.forEach((skill) => {

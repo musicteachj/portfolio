@@ -1,47 +1,41 @@
 <template>
-  <v-card
-    class="project-card fill-height d-flex flex-column"
-    elevation="6"
-    @click="goToProject"
-    style="cursor: pointer; height: 100%"
-  >
-    <v-img
-      :src="project.image"
-      height="200"
-      cover
-      class="project-image"
-      :alt="`${project.title}`"
-      loading="lazy"
-    >
-      <template v-slot:placeholder>
-        <div class="d-flex align-center justify-center fill-height">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </div>
-      </template>
+  <v-card class="pcard d-flex flex-column" @click="goToProject">
+    <span class="pcard__accent" aria-hidden="true"></span>
 
-      <!-- Project Status Badge -->
-      <v-chip
-        variant="flat"
-        :color="statusColor"
-        size="x-small"
-        class="ma-2"
-        :style="{ position: 'absolute', top: 0, left: 0, opacity: 0.8 }"
+    <!-- Media -->
+    <div class="pcard__media">
+      <v-img
+        :src="project.image"
+        :alt="project.title"
+        height="220"
+        cover
+        class="pcard__img"
+        loading="lazy"
       >
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular indeterminate color="accent"></v-progress-circular>
+          </div>
+        </template>
+      </v-img>
+
+      <v-chip :color="statusColor" size="x-small" variant="flat" class="pcard__status">
         {{ project.status }}
       </v-chip>
 
-      <!-- Overlay with action buttons -->
-      <div class="project-overlay">
-        <div class="d-flex ga-2">
+      <!-- Hover overlay -->
+      <div class="pcard__overlay">
+        <div class="pcard__actions">
           <v-btn
             v-if="project.liveUrl && project.status === 'completed'"
             :href="project.liveUrl"
             target="_blank"
             @click.stop
             icon="mdi-open-in-new"
-            color="white"
             size="small"
-            :title="`View ${project.title} live demo`"
+            variant="flat"
+            color="white"
+            :title="`View ${project.title} live`"
           ></v-btn>
           <v-btn
             v-if="project.githubUrl"
@@ -49,108 +43,48 @@
             target="_blank"
             @click.stop
             icon="mdi-github"
-            color="white"
             size="small"
-            :title="`View ${project.title} source code`"
+            variant="flat"
+            color="white"
+            :title="`View ${project.title} source`"
           ></v-btn>
         </div>
       </div>
-    </v-img>
+    </div>
 
-    <!-- Fixed height title section -->
-    <v-card-title class="text-h6 card-title-section">
-      <div class="d-flex flex-column">
-        <span class="title-text">{{ project.title }}</span>
-        <v-chip
-          :color="categoryColor"
-          size="x-small"
-          class="mt-1 align-self-start"
-          variant="outlined"
-        >
-          {{ project.category }}
-        </v-chip>
-      </div>
-    </v-card-title>
-
-    <!-- Flexible content section that grows -->
-    <v-card-text class="flex-grow-1 d-flex flex-column">
-      <!-- Description with fixed height -->
-      <div class="description-section mb-3">
-        <p class="text-body-2 description-text">{{ project.description }}</p>
+    <!-- Body -->
+    <div class="pcard__body">
+      <div class="pcard__meta">
+        <span class="pcard__category">{{ project.category }}</span>
+        <span class="pcard__year">{{ project.year }}</span>
       </div>
 
-      <!-- Technology chips with fixed height -->
-      <div class="tech-section mb-2">
-        <div class="d-flex flex-wrap ga-1">
-          <v-chip
-            v-for="tech in displayedTechnologies"
-            :key="tech"
-            size="x-small"
-            color="primary"
-            variant="outlined"
-          >
-            {{ tech }}
-          </v-chip>
-          <v-chip v-if="remainingTechCount > 0" size="x-small" color="grey" variant="outlined">
-            +{{ remainingTechCount }}
-          </v-chip>
-        </div>
+      <h3 class="pcard__title">{{ project.title }}</h3>
+      <p class="pcard__desc">{{ project.description }}</p>
+
+      <div class="pcard__tech">
+        <span v-for="tech in displayedTechnologies" :key="tech" class="tech-tag">{{ tech }}</span>
+        <span v-if="remainingTechCount > 0" class="tech-tag tech-tag--more">
+          +{{ remainingTechCount }}
+        </span>
       </div>
 
-      <!-- Viewport indicators -->
-      <div class="d-flex align-center ga-2 mb-2">
-        <div class="text-caption text-medium-emphasis">
-          <v-icon size="small" class="mr-1">mdi-devices</v-icon>
-          Supports:
-        </div>
-        <div class="d-flex ga-1">
+      <div class="pcard__footer">
+        <span v-if="showDetailsLink" class="pcard__link">
+          View details
+          <v-icon size="small">mdi-arrow-right</v-icon>
+        </span>
+        <div class="pcard__viewports">
           <v-icon
             v-for="viewport in project.viewport"
             :key="viewport"
             :icon="getViewportIcon(viewport)"
-            size="small"
-            :color="getViewportColor(viewport)"
+            size="x-small"
             :title="`Optimized for ${viewport}`"
           ></v-icon>
         </div>
       </div>
-
-      <!-- Spacer to push year to bottom of content area -->
-      <v-spacer></v-spacer>
-
-      <!-- Year at bottom of content -->
-      <div class="text-caption text-medium-emphasis">
-        <v-icon size="small" class="mr-1">mdi-calendar</v-icon>
-        {{ project.year }}
-      </div>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-btn
-        v-if="showDetailsLink"
-        color="primary"
-        variant="text"
-        @click.stop="goToProject"
-        append-icon="mdi-arrow-right"
-      >
-        View Details
-      </v-btn>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        v-if="project.liveUrl && project.status === 'completed'"
-        :href="project.liveUrl"
-        target="_blank"
-        @click.stop
-        color="primary"
-        variant="outlined"
-        size="small"
-        prepend-icon="mdi-open-in-new"
-      >
-        Live Demo
-      </v-btn>
-    </v-card-actions>
+    </div>
   </v-card>
 </template>
 
@@ -172,10 +106,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 
-const allTechnologies = computed(() => {
-  // Flatten all skills from all technology categories into a single array
-  return props.project.technologies.flatMap((category) => category.skills)
-})
+const allTechnologies = computed(() =>
+  props.project.technologies.flatMap((category) => category.skills),
+)
 
 const displayedTechnologies = computed(() => allTechnologies.value.slice(0, props.maxTechDisplay))
 
@@ -197,23 +130,6 @@ const statusColor = computed(() => {
   }
 })
 
-const categoryColor = computed(() => {
-  switch (props.project.category) {
-    case 'Full Stack':
-      return 'primary'
-    case 'Frontend':
-      return 'success'
-    case 'Backend':
-      return 'info'
-    case 'Mobile':
-      return 'warning'
-    case 'Design':
-      return 'purple'
-    default:
-      return 'grey'
-  }
-})
-
 const getViewportIcon = (viewport: string): string => {
   switch (viewport) {
     case 'mobile':
@@ -227,19 +143,6 @@ const getViewportIcon = (viewport: string): string => {
   }
 }
 
-const getViewportColor = (viewport: string): string => {
-  switch (viewport) {
-    case 'mobile':
-      return 'success'
-    case 'tablet':
-      return 'warning'
-    case 'desktop':
-      return 'info'
-    default:
-      return 'grey'
-  }
-}
-
 const goToProject = (): void => {
   if (props.showDetailsLink) {
     router.push(`/projects/${props.project.id}`)
@@ -248,64 +151,205 @@ const goToProject = (): void => {
 </script>
 
 <style scoped>
-.project-card {
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
-  min-height: 500px; /* Ensure minimum height for uniformity */
-}
-
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
-}
-
-.project-image {
+.pcard {
   position: relative;
-  flex-shrink: 0; /* Prevent image from shrinking */
+  height: 100%;
+  min-height: 460px;
+  cursor: pointer;
+  overflow: hidden;
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.25));
+  box-shadow: var(--shadow-light);
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
 }
 
-.project-overlay {
+.pcard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-heavy);
+  border-color: rgb(var(--v-theme-accent));
+}
+
+/* Left accent bar slides in on hover */
+.pcard__accent {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgb(var(--v-theme-accent));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s var(--ease-out);
+  z-index: 3;
 }
 
-.project-card:hover .project-overlay {
+.pcard:hover .pcard__accent {
+  transform: scaleY(1);
+}
+
+/* Media */
+.pcard__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.pcard__img {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.pcard:hover .pcard__img {
+  transform: scale(1.07);
+}
+
+.pcard__status {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: capitalize;
+}
+
+.pcard__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(11, 18, 32, 0.1) 0%, rgba(11, 18, 32, 0.65) 100%);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.pcard:hover .pcard__overlay {
   opacity: 1;
 }
 
-/* Fixed height sections for uniformity */
-.card-title-section {
-  min-height: 64px; /* Fixed height for title area */
-  flex-shrink: 0;
-}
-
-.title-text {
-  line-height: 1.2;
-}
-
-.description-section {
-  min-height: 96px; /* Fixed height for description to maintain card uniformity */
+.pcard__actions {
   display: flex;
-  align-items: flex-start;
+  gap: 10px;
+  transform: translateY(8px);
+  transition: transform 0.3s var(--ease-out);
 }
 
-.description-text {
-  line-height: 1.4;
+.pcard:hover .pcard__actions {
+  transform: translateY(0);
 }
 
-.tech-section {
-  min-height: 40px; /* Fixed height for technology chips */
+/* Body */
+.pcard__body {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 22px 22px;
 }
 
-/* Ensure card actions are always at the bottom */
-.v-card-actions {
+.pcard__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.pcard__category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--v-theme-accent));
+}
+
+.pcard__year {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--v-theme-on-surface-muted, #64748b);
+  opacity: 0.8;
+}
+
+.pcard__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 10px;
+  transition: color 0.25s var(--ease-out);
+}
+
+.pcard:hover .pcard__title {
+  color: rgb(var(--v-theme-accent));
+}
+
+.pcard__desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgb(var(--v-theme-secondary));
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pcard__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  color: rgb(var(--v-theme-secondary));
+  background: rgb(var(--v-theme-surface-variant));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.2));
+}
+
+.tech-tag--more {
+  color: rgb(var(--v-theme-accent));
+}
+
+.pcard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: auto;
-  flex-shrink: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.18));
+}
+
+.pcard__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgb(var(--v-theme-primary));
+  transition:
+    gap 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
+}
+
+.pcard:hover .pcard__link {
+  color: rgb(var(--v-theme-accent));
+  gap: 10px;
+}
+
+.pcard__viewports {
+  display: flex;
+  gap: 6px;
+  color: var(--v-theme-on-surface-muted, #64748b);
+  opacity: 0.7;
 }
 </style>
