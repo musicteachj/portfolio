@@ -1,176 +1,234 @@
 <template>
   <div>
-    <!-- Hero Section -->
-    <section id="home" class="hero-section">
-      <v-container class="fill-height">
-        <v-row align="center" justify="center" class="text-center">
-          <v-col cols="12" md="8">
-            <div class="fade-in" :class="{ visible: heroVisible }">
-              <v-avatar size="200" class="mb-8 elevation-8 mt-8">
-                <v-img :src="JamesPic2" alt="James Littlefield Profile Picture"></v-img>
-              </v-avatar>
+    <!-- ============================ HERO ============================ -->
+    <section id="home" class="hero" :class="{ 'hero--in': heroVisible }">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__noise" aria-hidden="true"></div>
 
-              <h1 class="text-h4 display-1 font-weight-bold mb-4">
-                <span class="">James Littlefield</span>
-              </h1>
+      <v-container class="hero__inner">
+        <div class="hero__grid">
+          <!-- Left: copy -->
+          <div class="hero__copy">
+            <p class="hero__eyebrow">
+              <span class="hero__status-dot"></span>
+              Currently @ Surface Design Solutions
+            </p>
 
-              <div class="text-h4 mb-6">
-                <v-icon size="small" class="mr-2">mdi-code-tags</v-icon>
-                Senior Full Stack Developer & Problem Solver
-              </div>
+            <h1 class="hero__name">
+              <span class="hero__line">James</span>
+              <span class="hero__line hero__line--accent">Littlefield</span>
+            </h1>
 
-              <p class="text-h6 mb-8 mx-auto" style="max-width: 600px; opacity: 0.9">
-                Passionate about creating innovative web applications and solving complex problems
-                with clean, efficient code.
-              </p>
+            <p class="hero__role">
+              <span class="hero__prompt">$</span> Senior Software Engineer
+            </p>
 
-              <div class="d-flex justify-center flex-wrap ga-4">
-                <v-btn
-                  color="white"
-                  variant="outlined"
-                  size="large"
-                  @click="downloadResume"
-                  prepend-icon="mdi-download"
-                >
-                  Download Resume
-                </v-btn>
-                <v-btn
-                  to="/contact"
-                  color="white"
-                  variant="flat"
-                  size="large"
-                  prepend-icon="mdi-email"
-                >
-                  Get In Touch
-                </v-btn>
-              </div>
+            <p class="hero__desc">
+              I build enterprise web applications and the growth engines around them — full-stack
+              engineering, AI integration, and go-to-market. {{ yearsOfExperience }}+ years turning
+              complex problems into clean, scalable products.
+            </p>
+
+            <div class="hero__actions">
+              <v-btn
+                color="accent"
+                size="large"
+                class="text-none px-6"
+                prepend-icon="mdi-email-outline"
+                to="/contact"
+              >
+                Get in touch
+              </v-btn>
+              <!-- Résumé download — restore when back in the market / needed again
+              <v-btn
+                variant="outlined"
+                size="large"
+                class="text-none px-6 hero__btn-ghost"
+                prepend-icon="mdi-download"
+                @click="downloadResume"
+              >
+                Download résumé
+              </v-btn>
+              -->
             </div>
-          </v-col>
-        </v-row>
 
-        <!-- Scroll Indicator -->
-        <div class="text-center" style="position: absolute; bottom: 20px; width: 100%">
-          <v-btn icon variant="text" color="white" @click="scrollToNext" class="scroll-indicator">
-            <v-icon>mdi-chevron-down</v-icon>
-          </v-btn>
+            <div class="hero__socials">
+              <a
+                href="https://github.com/musicteachj"
+                target="_blank"
+                rel="noopener"
+                aria-label="GitHub"
+                class="hero__social"
+              >
+                <v-icon>mdi-github</v-icon>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/james-littlefield-93037713b/"
+                target="_blank"
+                rel="noopener"
+                aria-label="LinkedIn"
+                class="hero__social"
+              >
+                <v-icon>mdi-linkedin</v-icon>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: portrait + floating tech badges -->
+          <div class="hero__visual">
+            <div class="hero__frame"></div>
+            <div class="hero__portrait">
+              <v-img :src="JamesPic2" alt="James Littlefield" cover />
+            </div>
+            <span
+              v-for="badge in techBadges"
+              :key="badge.label"
+              class="tech-badge"
+              :style="badge.style"
+            >
+              {{ badge.label }}
+            </span>
+          </div>
+        </div>
+      </v-container>
+
+      <button class="hero__scroll" @click="scrollToNext" aria-label="Scroll to content">
+        <v-icon>mdi-chevron-down</v-icon>
+      </button>
+    </section>
+
+    <!-- ============================ ABOUT ============================ -->
+    <section id="about" class="section-spacing">
+      <v-container>
+        <div ref="aboutSection" class="fade-in" :class="{ visible: aboutVisible }">
+          <div class="section-head">
+            <span class="section-number">01</span>
+            <p class="eyebrow mb-2">About</p>
+            <h2 class="section-title">Building digital experiences that matter</h2>
+            <div class="accent-rule" :class="{ 'is-visible': aboutVisible }"></div>
+          </div>
+
+          <v-row>
+            <v-col cols="12" md="10" lg="8">
+              <p class="lead-paragraph">
+                Senior Software Engineer and growth generalist with {{ yearsOfExperience }}+ years
+                building enterprise web applications.
+              </p>
+              <p class="body-paragraph">
+                Currently at Surface Design Solutions, a physics-informed AI SaaS company for
+                manufacturing, where I work across full-stack engineering and go-to-market — owning
+                LinkedIn content strategy, campaign production, and SEO execution alongside product
+                development.
+              </p>
+              <p class="body-paragraph">
+                My engineering background spans framework migrations, internationalization for global
+                applications, AI integration, and AWS production deployments. I've also led content
+                operations and marketing strategy at the early-stage level, bridging the gap between
+                technical execution and audience growth.
+              </p>
+              <p class="body-paragraph">
+                These days I work increasingly through agentic tools like Claude Code — leaning into
+                architecture, technical direction, and decision-making while AI handles more of the
+                implementation. I take strong ownership of what I build, collaborate across functions
+                naturally, and stay genuinely curious about how emerging AI tools create real
+                business leverage.
+              </p>
+              <v-btn
+                to="/about"
+                variant="text"
+                color="accent"
+                class="text-none px-0 mt-2"
+                append-icon="mdi-arrow-right"
+              >
+                More about me
+              </v-btn>
+            </v-col>
+          </v-row>
         </div>
       </v-container>
     </section>
 
-    <!-- Quick About Section -->
-    <section id="about" class="section-spacing">
+    <!-- ======================= FEATURED PROJECTS ======================= -->
+    <section class="section-spacing section-spacing--tinted">
       <v-container>
-        <v-row>
-          <v-col cols="12" md="8" offset-md="2" class="text-center">
-            <div class="fade-in" :class="{ visible: aboutVisible }">
-              <h2 class="text-h3 font-weight-bold mb-6">Building Digital Experiences</h2>
-              <p class="text-h6 mb-8" style="opacity: 0.8">
-                Accomplished Senior Full Stack Engineer with {{ yearsOfExperience }}+ years of
-                experience architecting and delivering enterprise-grade web applications for global
-                organizations. Specialized in Vue and React ecosystems with proven expertise leading
-                complex migrations, implementing AI integrations, and building scalable solutions
-                using Node.js, Express.js, and NoSQL databases. Track record of project leadership
-                on mission-critical IBM applications serving thousands of users worldwide. Deep
-                experience in internationalization, currency conversion systems, form validation
-                frameworks, and CI/CD practices. Hands-on expertise deploying production
-                applications to AWS cloud infrastructure using ECS for container orchestration, EC2
-                instances, Route 53 for DNS management, and CloudFront for content delivery.
-                Successfully mentored junior developers while driving company growth from Series A
-                to Series B funding. Expert in transforming legacy systems, optimizing database
-                performance, and implementing automated workflows that eliminate hundreds of manual
-                support hours.
-              </p>
+        <div ref="projectsSection" class="fade-in" :class="{ visible: projectsVisible }">
+          <div class="section-head">
+            <span class="section-number">02</span>
+            <p class="eyebrow mb-2">Selected Work</p>
+            <h2 class="section-title">Featured projects</h2>
+            <div class="accent-rule" :class="{ 'is-visible': projectsVisible }"></div>
+          </div>
 
-              <v-btn
-                to="/about"
-                color="primary"
-                variant="outlined"
-                size="large"
-                append-icon="mdi-arrow-right"
-              >
-                Learn More About Me
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </section>
-
-    <!-- Featured Projects -->
-    <section class="section-spacing" style="background-color: rgb(var(--v-theme-surface))">
-      <v-container>
-        <v-row>
-          <v-col cols="12" class="text-center mb-8">
-            <h2 class="text-h3 font-weight-bold mb-4">Featured Projects</h2>
-            <p class="text-h6" style="opacity: 0.7">My recent work that I'm proud of</p>
-          </v-col>
-
-          <v-col
-            v-for="(project, index) in featuredProjects"
-            :key="project.id"
-            cols="12"
-            md="6"
-            lg="4"
-            class="mx-auto"
-          >
-            <div
-              class="fade-in"
-              :class="{ visible: projectsVisible }"
-              :style="{ 'transition-delay': `${index * 0.1}s` }"
+          <v-row>
+            <v-col
+              v-for="(project, index) in featuredProjects"
+              :key="project.id"
+              cols="12"
+              md="6"
+              lg="4"
             >
-              <ProjectCard :project="project" />
-            </div>
-          </v-col>
+              <div
+                class="fade-in"
+                :class="{ visible: projectsVisible }"
+                :style="{ 'transition-delay': `${0.1 + index * 0.1}s` }"
+              >
+                <ProjectCard :project="project" />
+              </div>
+            </v-col>
+          </v-row>
 
-          <v-col cols="12" class="text-center mt-6">
+          <div class="text-center mt-10">
             <v-btn
               to="/projects"
-              color="primary"
-              variant="flat"
+              variant="outlined"
               size="large"
+              class="text-none px-6"
               append-icon="mdi-arrow-right"
             >
-              View All Projects
+              View all projects
             </v-btn>
-          </v-col>
-        </v-row>
+          </div>
+        </div>
       </v-container>
     </section>
 
-    <!-- Skills Overview -->
+    <!-- ============================ SKILLS ============================ -->
     <section class="section-spacing">
       <v-container>
-        <v-row>
-          <v-col cols="12" class="text-center mb-8">
-            <h2 class="text-h3 font-weight-bold mb-4">Technical Skills</h2>
-          </v-col>
+        <div ref="skillsSection" class="fade-in" :class="{ visible: skillsVisible }">
+          <div class="section-head">
+            <span class="section-number">03</span>
+            <p class="eyebrow mb-2">Toolkit</p>
+            <h2 class="section-title">Technical skills</h2>
+            <div class="accent-rule" :class="{ 'is-visible': skillsVisible }"></div>
+          </div>
           <Skills />
-        </v-row>
+        </div>
       </v-container>
     </section>
 
-    <!-- Contact CTA -->
+    <!-- ============================ CTA ============================ -->
     <section class="section-spacing">
       <v-container>
-        <v-row>
-          <v-col cols="12" md="8" offset-md="2">
-            <v-card elevation="12" class="pa-8 text-center" color="primary" theme="dark">
-              <h2 class="text-h3 font-weight-bold mb-4">Let's Work Together</h2>
-              <p class="text-h6 mb-6" style="opacity: 0.9">
-                I'm always interested in new opportunities and exciting projects.
-              </p>
-              <v-btn
-                to="/contact"
-                color="white"
-                variant="flat"
-                size="large"
-                prepend-icon="mdi-email"
-              >
-                Start a Conversation
-              </v-btn>
-            </v-card>
-          </v-col>
-        </v-row>
+        <div ref="ctaSection" class="fade-in cta-card" :class="{ visible: ctaVisible }">
+          <div class="cta-card__bg" aria-hidden="true"></div>
+          <div class="cta-card__content">
+            <p class="eyebrow mb-3" style="color: #93c5fd">Let's talk</p>
+            <h2 class="cta-card__title">Have a project in mind?</h2>
+            <p class="cta-card__desc">
+              Always happy to talk shop, trade ideas, or collaborate on something interesting.
+            </p>
+            <v-btn
+              to="/contact"
+              color="accent"
+              size="large"
+              class="text-none px-6 mt-2"
+              prepend-icon="mdi-email-outline"
+            >
+              Start a conversation
+            </v-btn>
+          </div>
+        </div>
       </v-container>
     </section>
   </div>
@@ -178,6 +236,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import type { Ref } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import ProjectCard from '@/components/ProjectCard.vue'
 import { useSnackbarStore } from '@/stores/snackbar'
@@ -185,21 +244,50 @@ import { useProjectsStore } from '@/stores/projects'
 import Skills from '@/components/Skills.vue'
 import JamesPic2 from '../assets/images/James2.jpg'
 
-// Stores
 const snackbar = useSnackbarStore()
 const projectsStore = useProjectsStore()
-// Reactive data
+
+const yearsOfExperience = ref<number>(8)
+const featuredProjects = computed(() => projectsStore.featuredProjects)
+
+// Floating hero badges (positions are decorative)
+const techBadges = [
+  { label: 'Claude', style: 'top: 6%; left: -6%;' },
+  { label: 'TypeScript', style: 'top: 28%; right: -12%;' },
+  { label: 'Node.js', style: 'bottom: 20%; left: -12%;' },
+  { label: 'AWS', style: 'bottom: 4%; right: -4%;' },
+] as const
+
+// Visibility flags
 const heroVisible = ref<boolean>(false)
 const aboutVisible = ref<boolean>(false)
 const projectsVisible = ref<boolean>(false)
 const skillsVisible = ref<boolean>(false)
+const ctaVisible = ref<boolean>(false)
 
-const yearsOfExperience = ref<number>(7)
+// Section template refs
+const aboutSection = ref<HTMLElement | null>(null)
+const projectsSection = ref<HTMLElement | null>(null)
+const skillsSection = ref<HTMLElement | null>(null)
+const ctaSection = ref<HTMLElement | null>(null)
 
-// Computed
-const featuredProjects = computed(() => projectsStore.featuredProjects)
+function reveal(
+  target: Ref<HTMLElement | null>,
+  flag: Ref<boolean>,
+  threshold = 0.15,
+): void {
+  const { stop } = useIntersectionObserver(
+    target,
+    ([entry]) => {
+      if (entry?.isIntersecting) {
+        flag.value = true
+        stop()
+      }
+    },
+    { threshold },
+  )
+}
 
-// Methods
 const downloadResume = (): void => {
   const link = document.createElement('a')
   link.href = `${import.meta.env.BASE_URL}James_Littlefield_Senior_Full_Stack_Developer.pdf`
@@ -209,108 +297,372 @@ const downloadResume = (): void => {
 }
 
 const scrollToNext = (): void => {
-  const nextSection = document.querySelector('.section-spacing')
-  if (nextSection) {
-    nextSection.scrollIntoView({ behavior: 'smooth' })
-  }
+  document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-// Intersection observers for animations
 onMounted(() => {
-  // Hero section observer
-  const heroTarget = ref<HTMLElement | null>(null)
-  const { stop: stopHeroObserver } = useIntersectionObserver(
-    heroTarget,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        heroVisible.value = true
-        stopHeroObserver()
-      }
-    },
-    { threshold: 0.1 },
-  )
+  // Hero is above the fold — animate in on next frame
+  requestAnimationFrame(() => {
+    heroVisible.value = true
+  })
 
-  // About section observer
-  const aboutTarget = ref<HTMLElement | null>(null)
-  const { stop: stopAboutObserver } = useIntersectionObserver(
-    aboutTarget,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        aboutVisible.value = true
-        stopAboutObserver()
-      }
-    },
-    { threshold: 0.3 },
-  )
-
-  // Projects section observer
-  const projectsTarget = ref<HTMLElement | null>(null)
-  const { stop: stopProjectsObserver } = useIntersectionObserver(
-    projectsTarget,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        projectsVisible.value = true
-        stopProjectsObserver()
-      }
-    },
-    { threshold: 0.2 },
-  )
-
-  // Skills section observer - FIXED
-  const skillsTarget = ref<HTMLElement | null>(null)
-  const { stop: stopSkillsObserver } = useIntersectionObserver(
-    skillsTarget,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        skillsVisible.value = true
-        stopSkillsObserver()
-      }
-    },
-    { threshold: 0.2 },
-  )
-
-  // Set targets to actual DOM elements
-  setTimeout(() => {
-    heroTarget.value = document.getElementById('home')
-    aboutTarget.value = document.getElementById('about')
-    // aboutTarget.value = document.querySelector('.section-spacing:nth-of-type(1)')
-    projectsTarget.value = document.querySelector('.section-spacing:nth-of-type(2)')
-    skillsTarget.value = document.querySelector('.section-spacing:nth-of-type(3)')
-  }, 100)
+  reveal(aboutSection, aboutVisible, 0.2)
+  reveal(projectsSection, projectsVisible, 0.15)
+  reveal(skillsSection, skillsVisible, 0.15)
+  reveal(ctaSection, ctaVisible, 0.3)
 })
 </script>
 
 <style scoped>
-.scroll-indicator {
-  animation: bounce 2s infinite;
+/* ============================ HERO ============================ */
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #f8fafc;
+  /* Bleed the dark hero up behind the transparent fixed app-bar so the
+     nav's light-on-dark text is readable at the top of the page.
+     64px is Vuetify 3's default app-bar height at all breakpoints. */
+  margin-top: -64px;
+  padding-top: 64px;
 }
 
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 70% at 75% 20%, rgba(37, 99, 235, 0.45) 0%, transparent 60%),
+    radial-gradient(50% 60% at 10% 90%, rgba(59, 130, 246, 0.3) 0%, transparent 55%),
+    linear-gradient(150deg, #0b1220 0%, #0f172a 45%, #111c33 100%);
 }
 
-.fade-in {
+/* Subtle film grain for depth */
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 64px;
+}
+
+/* ---- Hero copy ---- */
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: #cbd5e1;
+  margin-bottom: 22px;
   opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
+  transform: translateY(16px);
+  transition: all 0.6s var(--ease-out) 0.1s;
 }
 
-.fade-in.visible {
+.hero__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+  animation: pulse 2.4s infinite;
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  margin: 0 0 20px;
+}
+
+.hero__line {
+  display: block;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: all 0.7s var(--ease-out);
+}
+
+.hero__line--accent {
+  color: transparent;
+  background: linear-gradient(120deg, #60a5fa 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-weight: 500;
+  color: #e2e8f0;
+  margin: 0 0 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s var(--ease-out) 0.35s;
+}
+
+.hero__prompt {
+  color: #60a5fa;
+  margin-right: 6px;
+}
+
+.hero__desc {
+  max-width: 520px;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  margin: 0 0 36px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s var(--ease-out) 0.45s;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s var(--ease-out) 0.55s;
+}
+
+.hero__btn-ghost {
+  color: #f8fafc;
+  border-color: rgba(248, 250, 252, 0.3);
+}
+
+.hero__socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s var(--ease-out) 0.65s;
+}
+
+.hero__social {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: #cbd5e1;
+  border: 1px solid rgba(248, 250, 252, 0.15);
+  transition: all 0.25s var(--ease-out);
+}
+
+.hero__social:hover {
+  color: #f8fafc;
+  border-color: #60a5fa;
+  transform: translateY(-3px);
+}
+
+/* Staggered entrance once .hero--in is set */
+.hero--in .hero__eyebrow,
+.hero--in .hero__role,
+.hero--in .hero__desc,
+.hero--in .hero__actions,
+.hero--in .hero__socials {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hero--in .hero__line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero--in .hero__line:nth-child(1) {
+  transition-delay: 0.15s;
+}
+
+.hero--in .hero__line:nth-child(2) {
+  transition-delay: 0.28s;
+}
+
+/* ---- Hero visual ---- */
+.hero__visual {
+  position: relative;
+  width: min(380px, 100%);
+  aspect-ratio: 4 / 5;
+  margin-inline: auto;
+}
+
+.hero__portrait {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  border: 1px solid rgba(248, 250, 252, 0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+.hero__frame {
+  position: absolute;
+  inset: 0;
+  transform: translate(20px, 20px);
+  border: 1.5px solid rgba(96, 165, 250, 0.5);
+  border-radius: var(--border-radius-xl);
+}
+
+.tech-badge {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  animation: float 6s ease-in-out infinite;
+}
+
+.tech-badge:nth-child(odd) {
+  animation-delay: 1.5s;
+}
+
+/* ---- Scroll indicator ---- */
+.hero__scroll {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #cbd5e1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  animation: bounce 2.2s infinite;
+}
+
+/* ============================ SECTIONS ============================ */
+.section-spacing--tinted {
+  background-color: rgb(var(--v-theme-surface-variant));
+}
+
+.section-head {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  color: rgb(var(--v-theme-primary));
+  position: relative;
+  z-index: 1;
+}
+
+.lead-paragraph {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 20px;
+}
+
+.body-paragraph {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgb(var(--v-theme-secondary));
+  margin-bottom: 8px;
+}
+
+/* ============================ CTA ============================ */
+.cta-card {
+  position: relative;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  padding: clamp(40px, 6vw, 72px);
+  text-align: center;
+}
+
+.cta-card__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 120% at 80% 0%, rgba(37, 99, 235, 0.55) 0%, transparent 60%),
+    linear-gradient(135deg, #0b1220 0%, #0f172a 60%, #111c33 100%);
+}
+
+.cta-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  margin-bottom: 16px;
+}
+
+.cta-card__desc {
+  max-width: 520px;
+  margin: 0 auto 12px;
+  color: #cbd5e1;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width: 960px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 56px;
+    text-align: center;
+    padding-top: 80px;
+  }
+
+  .hero__eyebrow,
+  .hero__actions,
+  .hero__socials {
+    justify-content: center;
+  }
+
+  .hero__desc {
+    margin-inline: auto;
+  }
+
+  .hero__visual {
+    width: min(300px, 80%);
+    order: -1;
+  }
+
+  /* Keep floating badges from overflowing on small screens */
+  .tech-badge {
+    font-size: 0.72rem;
+    padding: 6px 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__frame {
+    transform: translate(12px, 12px);
+  }
 }
 </style>

@@ -31,7 +31,7 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      const vImg = wrapper.find('.project-image')
+      const vImg = wrapper.find('.pcard__img')
       expect(vImg.exists()).toBe(true)
 
       // For v-img component, check the props instead of attributes
@@ -122,9 +122,6 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      // Should contain viewport indicators
-      expect(wrapper.text()).toContain('Supports:')
-
       // Check for viewport icons based on project.viewport
       const icons = wrapper.findAll('.v-icon')
       const viewportIcons = icons.filter((icon) =>
@@ -147,8 +144,8 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      // Test default behavior: should show "View Details" button (default showDetailsLink: true)
-      expect(wrapper.text()).toContain('View Details')
+      // Test default behavior: should show "View details" button (default showDetailsLink: true)
+      expect(wrapper.text()).toContain('View details')
 
       // Test default maxTechDisplay: verify technologies are displayed
       mockProject.technologies.forEach((category) => {
@@ -223,8 +220,8 @@ describe('ProjectCard', () => {
         },
       })
 
-      // Should not show "View Details" button when showDetailsLink is false
-      expect(wrapper.text()).not.toContain('View Details')
+      // Should not show "View details" button when showDetailsLink is false
+      expect(wrapper.text()).not.toContain('View details')
     })
   })
 
@@ -378,7 +375,7 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      await wrapper.find('.project-card').trigger('click')
+      await wrapper.find('.pcard').trigger('click')
       expect(mockRouter.push).toHaveBeenCalledWith(`/projects/${mockProject.id}`)
     })
 
@@ -390,27 +387,27 @@ describe('ProjectCard', () => {
         },
       })
 
-      await wrapper.find('.project-card').trigger('click')
+      await wrapper.find('.pcard').trigger('click')
       expect(mockRouter.push).not.toHaveBeenCalled()
     })
   })
 
   describe('User Interactions', () => {
-    it('should navigate when "View Details" button is clicked', async () => {
+    it('should navigate when "View details" button is clicked', async () => {
       const wrapper = mountComponent(ProjectCard, {
         props: { project: mockProject },
       })
 
-      // Find the View Details button by looking for button with the text
+      // Find the View details button by looking for button with the text
       const buttons = wrapper.findAll('button')
-      const detailsButton = buttons.find((button) => button.text().includes('View Details'))
+      const detailsButton = buttons.find((button) => button.text().includes('View details'))
 
       if (detailsButton) {
         await detailsButton.trigger('click')
         expect(mockRouter.push).toHaveBeenCalledWith(`/projects/${mockProject.id}`)
       } else {
-        // Alternative: test by clicking the card since View Details might not have a specific selector
-        await wrapper.find('.project-card').trigger('click')
+        // Alternative: test by clicking the card since View details might not have a specific selector
+        await wrapper.find('.pcard').trigger('click')
         expect(mockRouter.push).toHaveBeenCalledWith(`/projects/${mockProject.id}`)
       }
     })
@@ -444,7 +441,9 @@ describe('ProjectCard', () => {
         props: { project: completedProject },
       })
 
-      expect(wrapper.text()).toContain('Live Demo')
+      // Live link is an icon-only overlay button pointing at liveUrl
+      const liveLink = wrapper.find(`a[href="${completedProject.liveUrl}"]`)
+      expect(liveLink.exists()).toBe(true)
     })
 
     it('should not show live demo button for in-progress projects', () => {
@@ -458,7 +457,8 @@ describe('ProjectCard', () => {
         props: { project: inProgressProject },
       })
 
-      expect(wrapper.text()).not.toContain('Live Demo')
+      const liveLink = wrapper.find(`a[href="${inProgressProject.liveUrl}"]`)
+      expect(liveLink.exists()).toBe(false)
     })
 
     it('should show github button when githubUrl is provided', () => {
@@ -481,7 +481,7 @@ describe('ProjectCard', () => {
       expect(githubLinks.length).toBe(0)
     })
 
-    it('should show View Details button when showDetailsLink is true', () => {
+    it('should show View details button when showDetailsLink is true', () => {
       const wrapper = mountComponent(ProjectCard, {
         props: {
           project: mockProject,
@@ -489,10 +489,10 @@ describe('ProjectCard', () => {
         },
       })
 
-      expect(wrapper.text()).toContain('View Details')
+      expect(wrapper.text()).toContain('View details')
     })
 
-    it('should not show View Details button when showDetailsLink is false', () => {
+    it('should not show View details button when showDetailsLink is false', () => {
       const wrapper = mountComponent(ProjectCard, {
         props: {
           project: mockProject,
@@ -500,7 +500,7 @@ describe('ProjectCard', () => {
         },
       })
 
-      expect(wrapper.text()).not.toContain('View Details')
+      expect(wrapper.text()).not.toContain('View details')
     })
   })
 

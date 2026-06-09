@@ -195,11 +195,11 @@ describe('AppNavigation', () => {
   }
 
   describe('Rendering', () => {
-    it('should render app bar with title', () => {
+    it('should render app bar with brand mark', () => {
       const wrapper = mountAppNavigation()
 
       expect(wrapper.find('.v-app-bar').exists()).toBe(true)
-      expect(wrapper.text()).toContain('James Littlefield')
+      expect(wrapper.text()).toContain('JL')
     })
 
     it('should render theme toggle button', () => {
@@ -234,7 +234,8 @@ describe('AppNavigation', () => {
 
       const wrapper = mountAppNavigation()
 
-      const desktopNav = wrapper.find('.d-flex')
+      // The desktop link row is a <nav class="... ga-1"> rendered only when !mobile
+      const desktopNav = wrapper.find('nav.ga-1')
       expect(desktopNav.exists()).toBe(false)
     })
   })
@@ -335,11 +336,12 @@ describe('AppNavigation', () => {
       expect((wrapper.vm as any).drawer).toBe(false)
     })
 
-    it('should have theme toggle in mobile drawer', () => {
+    it('should have a theme toggle in the mobile app bar', () => {
       const wrapper = mountAppNavigation()
 
-      const drawer = wrapper.find('.v-navigation-drawer')
-      expect(drawer.text()).toContain('Dark Mode') // Shows "Dark Mode" when in light theme
+      // Theme toggle now lives in the app bar (not the drawer) on mobile too
+      const themeButton = wrapper.find('[title*="Switch to"]')
+      expect(themeButton.exists()).toBe(true)
     })
   })
 
@@ -387,7 +389,7 @@ describe('AppNavigation', () => {
       expect(themeButton.exists()).toBe(true)
 
       // Navigation should still be present
-      expect(wrapper.text()).toContain('James Littlefield')
+      expect(wrapper.text()).toContain('JL')
     })
   })
 
@@ -411,11 +413,12 @@ describe('AppNavigation', () => {
     it('should have router links with correct paths', () => {
       const wrapper = mountAppNavigation()
 
-      const links = wrapper.findAll('a[to], .v-btn[to]')
+      // router-link is stubbed to render <a :href="to">, so check href
+      const links = wrapper.findAll('a.router-link')
       const expectedPaths = ['/', '/about', '/experience', '/projects', '/contact']
 
       expectedPaths.forEach((path) => {
-        const linkExists = links.some((link) => link.attributes('to') === path)
+        const linkExists = links.some((link) => link.attributes('href') === path)
         expect(linkExists).toBe(true)
       })
     })
@@ -450,7 +453,9 @@ describe('AppNavigation', () => {
 
       mountAppNavigation()
 
-      expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function))
+      expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), {
+        passive: true,
+      })
     })
 
     it('should remove scroll listener on unmount', () => {
