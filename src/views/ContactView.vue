@@ -1,123 +1,119 @@
 <template>
   <div class="contact-page">
     <v-container>
+      <!-- Header -->
+      <div class="section-head mb-12">
+        <p class="eyebrow mb-2">Contact</p>
+        <h1 class="page-title">Let's work together</h1>
+        <div class="accent-rule is-visible"></div>
+        <p class="page-subtitle">
+          Get in touch about collaborations, ideas, or just to say hello — I read every message.
+        </p>
+      </div>
+
       <v-row>
-        <v-col cols="12">
-          <div class="text-center mb-8">
-            <h1 class="text-h2 font-weight-bold mb-4">Contact Me</h1>
-            <p class="text-h6" style="opacity: 0.8">
-              Get in touch for opportunities and collaborations
+        <!-- Contact Info -->
+        <v-col cols="12" md="5">
+          <div class="contact-info">
+            <p class="contact-info__lead">
+              Always up for a good conversation — tell me what you're building and let's talk.
             </p>
+
+            <a href="mailto:jameslittlefield3@gmail.com" class="contact-row">
+              <span class="contact-row__icon"><v-icon size="20">mdi-email-outline</v-icon></span>
+              <span>
+                <span class="contact-row__label">Email</span>
+                <span class="contact-row__value">jameslittlefield3@gmail.com</span>
+              </span>
+            </a>
+
+            <div class="contact-row">
+              <span class="contact-row__icon"
+                ><v-icon size="20">mdi-map-marker-outline</v-icon></span
+              >
+              <span>
+                <span class="contact-row__label">Location</span>
+                <span class="contact-row__value">Atlanta, GA</span>
+              </span>
+            </div>
+
+            <div class="contact-socials">
+              <a
+                href="https://www.linkedin.com/in/james-littlefield-93037713b/"
+                target="_blank"
+                rel="noopener"
+                class="contact-social"
+                aria-label="LinkedIn"
+              >
+                <v-icon>mdi-linkedin</v-icon>
+              </a>
+              <a
+                href="https://github.com/musicteachj"
+                target="_blank"
+                rel="noopener"
+                class="contact-social"
+                aria-label="GitHub"
+              >
+                <v-icon>mdi-github</v-icon>
+              </a>
+            </div>
           </div>
         </v-col>
 
-        <v-col cols="12" md="8" offset-md="2">
-          <v-card elevation="8" class="pa-8">
-            <v-row>
-              <!-- Contact Info -->
-              <v-col cols="12" md="6">
-                <h3 class="text-h5 mb-4">Let's work together!</h3>
-                <p class="text-body-1 mb-6">
-                  I'm always interested in new opportunities and exciting projects. Feel free to
-                  reach out if you'd like to discuss potential collaborations.
-                </p>
-
-                <div class="contact-info">
-                  <div class="d-flex align-center mb-4">
-                    <v-icon color="primary" class="mr-4">mdi-email</v-icon>
-                    <span class="text-body-1">jameslittlefield3@gmail.com</span>
-                  </div>
-                  <div class="d-flex align-center mb-6">
-                    <v-icon color="primary" class="mr-4">mdi-map-marker</v-icon>
-                    <span class="text-body-1">Atlanta, Ga</span>
-                  </div>
-                </div>
-
-                <!-- Social Links -->
-                <div class="d-flex ga-3">
-                  <v-btn
-                    href="https://www.linkedin.com/in/james-littlefield-93037713b/"
-                    target="_blank"
-                    icon="mdi-linkedin"
-                    color="primary"
-                    variant="outlined"
-                  ></v-btn>
-                  <v-btn
-                    href="https://github.com/musicteachj"
-                    target="_blank"
-                    icon="mdi-github"
-                    color="primary"
-                    variant="outlined"
-                  ></v-btn>
-                </div>
-              </v-col>
-
-              <!-- Contact Form -->
-              <v-col cols="12" md="6">
-                <v-form ref="formRef" @submit.prevent="submitForm" v-model="formValid">
+        <!-- Contact Form -->
+        <v-col cols="12" md="7">
+          <v-card class="contact-card">
+            <v-form ref="formRef" @submit.prevent="submitForm" v-model="formValid">
+              <v-row dense>
+                <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="form.name"
                     label="Name"
-                    variant="outlined"
                     required
                     :rules="nameRules"
-                    class="mb-3"
                   ></v-text-field>
-
+                </v-col>
+                <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="form.email"
                     label="Email"
                     type="email"
-                    variant="outlined"
                     required
                     :rules="emailRules"
-                    class="mb-3"
                   ></v-text-field>
+                </v-col>
+              </v-row>
 
-                  <v-text-field
-                    v-model="form.subject"
-                    label="Subject"
-                    variant="outlined"
-                    required
-                    :rules="subjectRules"
-                    class="mb-3"
-                  ></v-text-field>
+              <v-text-field
+                v-model="form.subject"
+                label="Subject"
+                required
+                :rules="subjectRules"
+                class="mb-1"
+              ></v-text-field>
 
-                  <v-textarea
-                    v-model="form.message"
-                    label="Message"
-                    variant="outlined"
-                    rows="6"
-                    required
-                    :rules="messageRules"
-                    class="mb-4"
-                  ></v-textarea>
+              <v-textarea
+                v-model="form.message"
+                label="Message"
+                rows="6"
+                required
+                :rules="messageRules"
+                class="mb-3"
+              ></v-textarea>
 
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    size="large"
-                    block
-                    :loading="submitting"
-                    :disabled="!formValid"
-                  >
-                    Send Message
-                  </v-btn>
-                </v-form>
-              </v-col>
-            </v-row>
-
-            <!-- Back Button -->
-            <div class="text-center mt-8">
               <v-btn
-                to="/"
-                :color="isDark ? 'primary' : 'secondary'"
-                variant="outlined"
-                prepend-icon="mdi-arrow-left"
+                type="submit"
+                color="accent"
+                size="large"
+                block
+                class="text-none"
+                :loading="submitting"
+                :disabled="!formValid"
+                prepend-icon="mdi-send-outline"
               >
-                Back to Home
+                Send message
               </v-btn>
-            </div>
+            </v-form>
           </v-card>
         </v-col>
       </v-row>
@@ -129,14 +125,8 @@
 import { ref } from 'vue'
 import { useSnackbarStore } from '@/stores/snackbar'
 import type { ContactForm } from '@/types'
-import { computed } from 'vue'
-import { useTheme } from 'vuetify'
 
 import emailjs from 'emailjs-com'
-
-const theme = useTheme()
-
-const isDark = computed(() => theme.global.name.value === 'dark')
 
 const snackbar = useSnackbarStore()
 
@@ -221,7 +211,114 @@ const resetForm = (): void => {
 
 <style scoped>
 .contact-page {
-  padding: 80px 0;
+  padding: var(--section-py) 0;
   min-height: 100vh;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 16px;
+}
+
+.page-subtitle {
+  margin-top: 18px;
+  font-size: 1.05rem;
+  color: rgb(var(--v-theme-secondary));
+  max-width: 520px;
+}
+
+/* Contact info column */
+.contact-info__lead {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: rgb(var(--v-theme-secondary));
+  margin-bottom: 32px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.contact-row__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  color: rgb(var(--v-theme-accent));
+  background: rgba(var(--v-theme-accent), 0.1);
+  transition: transform 0.22s var(--ease-out);
+}
+
+.contact-row:hover .contact-row__icon {
+  transform: translateY(-2px);
+}
+
+.contact-row__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-theme-on-surface-muted, #64748b);
+}
+
+.contact-row__value {
+  display: block;
+  font-size: 1rem;
+  color: rgb(var(--v-theme-primary));
+}
+
+.contact-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.contact-social {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  color: rgb(var(--v-theme-secondary));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.25));
+  transition: all 0.22s var(--ease-out);
+}
+
+.contact-social:hover {
+  color: rgb(var(--v-theme-accent));
+  border-color: rgb(var(--v-theme-accent));
+  transform: translateY(-3px);
+}
+
+/* Form card */
+.contact-card {
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.25));
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-light);
+}
+
+@media (max-width: 960px) {
+  .contact-page {
+    padding: var(--section-py-mobile) 0;
+  }
+
+  .contact-card {
+    margin-top: 12px;
+  }
 }
 </style>

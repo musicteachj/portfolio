@@ -2,109 +2,86 @@
   <div class="experience-page">
     <v-container>
       <!-- Page Header -->
-      <v-row>
-        <v-col cols="12">
-          <div class="text-center mb-12">
-            <h1 class="text-h2 font-weight-bold mb-4">Work Experience</h1>
-            <p class="text-h6" style="opacity: 0.8">
-              My professional journey and career highlights
-            </p>
-          </div>
-        </v-col>
-      </v-row>
+      <div class="section-head mb-12">
+        <p class="eyebrow mb-2">Career</p>
+        <h1 class="page-title">Work experience</h1>
+        <div class="accent-rule is-visible"></div>
+        <p class="page-subtitle">A timeline of roles, impact, and the stacks behind them.</p>
+      </div>
 
       <!-- Experience Timeline -->
       <v-row>
-        <v-col cols="12" md="10" offset-md="1">
-          <v-timeline side="end" class="experience-timeline">
+        <v-col cols="12" md="11" offset-md="1">
+          <v-timeline side="end" align="start" truncate-line="both" class="exp-timeline">
             <v-timeline-item
               v-for="(job, index) in experience"
               :key="index"
-              :dot-color="job.current ? 'primary' : 'grey-lighten-1'"
-              size="large"
-              class="mb-8"
+              dot-color="accent"
+              size="small"
+              class="mb-10"
             >
-              <!-- Timeline Date -->
+              <!-- Date pill -->
               <template v-slot:opposite>
-                <div class="text-h6 font-weight-medium text-primary">
-                  {{ job.period }}
-                </div>
-                <div v-if="job.location" class="text-body-2" style="opacity: 0.7">
-                  <v-icon size="small" class="mr-1">mdi-map-marker</v-icon>
-                  {{ job.location }}
+                <div class="exp-date">
+                  <span class="exp-date__pill">{{ job.period }}</span>
+                  <span v-if="job.location" class="exp-date__loc">
+                    <v-icon size="x-small" class="mr-1">mdi-map-marker-outline</v-icon>
+                    {{ job.location }}
+                  </span>
                 </div>
               </template>
 
-              <!-- Job Details Card -->
-              <v-card elevation="8" class="experience-card">
-                <v-card-title class="d-flex align-center">
-                  <div class="flex-grow-1">
-                    <h3 class="text-h5">{{ job.title }}</h3>
-                    <div class="text-h6 text-primary font-weight-medium">
-                      {{ job.company }}
+              <!-- Job card -->
+              <v-card class="exp-card">
+                <div class="exp-card__header">
+                  <div>
+                    <h3 class="exp-card__company">{{ job.company }}</h3>
+                    <div class="exp-card__role">{{ job.title }}</div>
+                    <div class="exp-date exp-date--inline">
+                      <span class="exp-date__pill">{{ job.period }}</span>
                     </div>
                   </div>
-                  <v-chip v-if="job.current" color="success" size="small" prepend-icon="mdi-circle">
+                  <span v-if="job.current" class="exp-current">
+                    <span class="exp-current__dot"></span>
                     Current
-                  </v-chip>
-                </v-card-title>
+                  </span>
+                </div>
 
-                <v-card-text>
-                  <!-- Job Description -->
-                  <p v-if="job.description" class="text-body-1 mb-4">
-                    {{ job.description }}
-                  </p>
+                <p v-if="job.description" class="exp-card__desc">{{ job.description }}</p>
 
-                  <!-- Key Achievements -->
-                  <div class="mb-4">
-                    <h4 class="text-h6 mb-3">Key Achievements</h4>
-                    <div class="achievements-list">
-                      <div
-                        v-for="achievement in job.achievements"
-                        :key="achievement"
-                        class="d-flex align-start mb-3"
-                      >
-                        <v-icon color="success" size="small" class="mt-1 mr-3 flex-shrink-0">
-                          mdi-check-circle
-                        </v-icon>
-                        <span class="text-body-2 flex-grow-1">
-                          {{ achievement }}
-                        </span>
-                      </div>
-                    </div>
+                <!-- Achievements -->
+                <div class="exp-block">
+                  <h4 class="exp-block__label">Key Achievements</h4>
+                  <ul class="exp-achievements">
+                    <li v-for="achievement in job.achievements" :key="achievement">
+                      <v-icon size="x-small" class="exp-achievements__mark">mdi-chevron-right</v-icon>
+                      <span>{{ achievement }}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Technologies -->
+                <div v-if="job.technologies?.length" class="exp-block">
+                  <h4 class="exp-block__label">Technologies &amp; Tools</h4>
+                  <div class="exp-tech">
+                    <span v-for="tech in job.technologies" :key="tech" class="tech-tag">
+                      {{ tech }}
+                    </span>
                   </div>
+                </div>
 
-                  <!-- Technologies Used -->
-                  <div v-if="job.technologies?.length">
-                    <h4 class="text-h6 mb-3">Technologies & Tools</h4>
-                    <div class="d-flex flex-wrap ga-2">
-                      <v-chip
-                        v-for="tech in job.technologies"
-                        :key="tech"
-                        size="small"
-                        color="primary"
-                        variant="outlined"
-                      >
-                        {{ tech }}
-                      </v-chip>
-                    </div>
+                <!-- Highlights -->
+                <div v-if="job.highlights?.length" class="exp-block">
+                  <h4 class="exp-block__label">Notable Projects</h4>
+                  <div
+                    v-for="highlight in job.highlights"
+                    :key="highlight.name"
+                    class="exp-highlight"
+                  >
+                    <div class="exp-highlight__name">{{ highlight.name }}</div>
+                    <div class="exp-highlight__desc">{{ highlight.description }}</div>
                   </div>
-
-                  <!-- Projects/Highlights -->
-                  <div v-if="job.highlights?.length" class="mt-4">
-                    <h4 class="text-h6 mb-4">Notable Projects</h4>
-                    <div>
-                      <div v-for="highlight in job.highlights" :key="highlight.name" class="mb-4">
-                        <div class="font-weight-bold text-body-1 text-primary mb-1">
-                          {{ highlight.name }}
-                        </div>
-                        <div class="text-body-2 pl-0">
-                          {{ highlight.description }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </v-card-text>
+                </div>
               </v-card>
             </v-timeline-item>
           </v-timeline>
@@ -112,44 +89,44 @@
       </v-row>
 
       <!-- Skills Summary -->
-      <v-row class="mt-12">
-        <v-col cols="12">
-          <h2 class="text-h3 font-weight-bold text-center mb-8">Skills Developed</h2>
-        </v-col>
-        <Skills />
-      </v-row>
+      <div class="section-head mt-16 mb-10">
+        <p class="eyebrow mb-2">Toolkit</p>
+        <h2 class="page-title page-title--sm">Skills developed</h2>
+        <div class="accent-rule is-visible"></div>
+      </div>
+      <Skills />
 
-      <!-- Download Resume CTA -->
-      <v-row class="mt-12">
-        <v-col cols="12" class="text-center">
-          <v-card elevation="12" class="pa-8" color="primary" theme="dark">
-            <h2 class="text-h4 font-weight-bold mb-4">Want More Details?</h2>
-            <p class="text-h6 mb-6" style="opacity: 0.9">
-              Download my complete resume for additional information
-            </p>
-            <div class="d-flex justify-center flex-wrap ga-4">
-              <v-btn
-                color="white"
-                variant="flat"
-                size="large"
-                @click="downloadResume"
-                prepend-icon="mdi-download"
-              >
-                Download Resume
-              </v-btn>
-              <v-btn
-                to="/contact"
-                color="white"
-                variant="outlined"
-                size="large"
-                prepend-icon="mdi-email"
-              >
-                Contact Me
-              </v-btn>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
+      <!-- Contact CTA -->
+      <div class="cta-card mt-16">
+        <div class="cta-card__bg" aria-hidden="true"></div>
+        <div class="cta-card__content">
+          <p class="eyebrow mb-3" style="color: #93c5fd">Get in touch</p>
+          <h2 class="cta-card__title">Want to know more?</h2>
+          <p class="cta-card__desc">Happy to walk through any of this in more detail.</p>
+          <div class="d-flex justify-center flex-wrap ga-4 mt-2">
+            <!-- Résumé download — restore when back in the market / needed again
+            <v-btn
+              color="accent"
+              size="large"
+              class="text-none px-6"
+              @click="downloadResume"
+              prepend-icon="mdi-download"
+            >
+              Download résumé
+            </v-btn>
+            -->
+            <v-btn
+              to="/contact"
+              color="accent"
+              size="large"
+              class="text-none px-6"
+              prepend-icon="mdi-email-outline"
+            >
+              Contact me
+            </v-btn>
+          </div>
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
@@ -169,11 +146,52 @@ const experience = ref<
   })[]
 >([
   {
+    id: 0,
+    title: 'Senior Software Engineer',
+    company: 'Surface Design Solutions',
+    period: 'Jan 2026 - Present',
+    current: true,
+    location: 'Atlanta, GA / Remote',
+    description:
+      'Senior Software Engineer at a physics-informed AI SaaS company for manufacturing, working across full-stack engineering and go-to-market. Leading UI/UX design and full-stack frontend development for a ground-up rebuild of the platform targeting materials science and surface engineering workflows.',
+    achievements: [
+      'Leading UI/UX design and full-stack frontend development for a ground-up rebuild of a physics-informed AI SaaS platform',
+      'Architecting the complete frontend for the 2.0 application, owning all design decisions from component architecture to user experience',
+      'Translating complex scientific concepts into intuitive interfaces for technical and non-technical users alike',
+      'Collaborating directly with PhD co-founders to align product direction with deep-tech research capabilities',
+      'Contributing across the organization beyond engineering — including brand identity, public web presence, and digital marketing initiatives',
+      'Owning LinkedIn content strategy, campaign production, and SEO execution alongside product development',
+    ],
+    technologies: [
+      'Vue 3',
+      'Vite',
+      'PrimeVue',
+      'Tailwind CSS',
+      'TypeScript',
+      'Claude',
+      'Django',
+      'Python',
+      'Agentic Coding',
+    ],
+    highlights: [
+      {
+        name: 'Surface 2.0 Platform',
+        description:
+          'Ground-up rebuild of the physics-informed AI SaaS application — full frontend architecture and UX translating advanced surface science into accessible, production-grade software.',
+      },
+      {
+        name: 'Commercial Layer & Go-to-Market',
+        description:
+          "Building the company's commercial layer as a founding-stage contributor: brand identity, public web presence, content strategy, and SEO.",
+      },
+    ],
+  },
+  {
     id: 1,
     title: 'Senior Full Stack Engineer',
     company: 'KollaCode / IBM',
-    period: 'Sept 2022 - Present',
-    current: true,
+    period: 'Sept 2022 - Oct 2025',
+    current: false,
     location: 'Atlanta, GA / Remote',
     description:
       "Full stack engineer developing enterprise applications for IBM's global partner ecosystem and internal tools. Lead front-end architecture and modernization initiatives while contributing to backend API development and database optimization.",
@@ -434,71 +452,300 @@ const downloadResume = (): void => {
 
 <style scoped>
 .experience-page {
-  padding: 80px 0;
+  padding: var(--section-py) 0;
   min-height: 100vh;
 }
 
-.experience-timeline {
-  position: relative;
+/* Page header */
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 16px;
 }
 
-.experience-card {
+.page-title--sm {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.page-subtitle {
+  margin-top: 18px;
+  font-size: 1.05rem;
+  color: rgb(var(--v-theme-secondary));
+}
+
+/* Date pill */
+.exp-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.exp-date__pill {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: rgb(var(--v-theme-accent));
+  border: 1px solid rgba(var(--v-theme-accent), 0.4);
+  white-space: nowrap;
+}
+
+.exp-date__loc {
+  font-size: 0.8rem;
+  color: var(--v-theme-on-surface-muted, #64748b);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Inline date only shown on mobile when opposite is hidden */
+.exp-date--inline {
+  display: none;
+  margin-top: 10px;
+}
+
+/* Job card */
+.exp-card {
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.25));
+  border-radius: var(--border-radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-light);
   transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
 }
 
-.experience-card:hover {
+.exp-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: var(--shadow-medium);
+  border-color: rgba(var(--v-theme-accent), 0.4);
 }
 
-/* Custom timeline styling */
+.exp-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.exp-card__company {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: rgb(var(--v-theme-primary));
+  line-height: 1.2;
+}
+
+.exp-card__role {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgb(var(--v-theme-accent));
+  margin-top: 2px;
+}
+
+.exp-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: rgb(var(--v-theme-success));
+  background: rgba(var(--v-theme-success), 0.12);
+}
+
+.exp-current__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-success));
+  animation: pulse 2.4s infinite;
+}
+
+.exp-card__desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgb(var(--v-theme-secondary));
+  margin-bottom: 22px;
+}
+
+/* Blocks */
+.exp-block {
+  margin-bottom: 22px;
+}
+
+.exp-block:last-child {
+  margin-bottom: 0;
+}
+
+.exp-block__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v-theme-on-surface-muted, #64748b);
+  margin-bottom: 14px;
+}
+
+/* Achievements */
+.exp-achievements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.exp-achievements li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgb(var(--v-theme-secondary));
+}
+
+.exp-achievements__mark {
+  color: rgb(var(--v-theme-accent));
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* Tech */
+.exp-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: rgb(var(--v-theme-secondary));
+  background: rgb(var(--v-theme-surface-variant));
+  border: 1px solid var(--v-theme-border, rgba(148, 163, 184, 0.2));
+}
+
+/* Highlights */
+.exp-highlight {
+  padding-left: 14px;
+  border-left: 2px solid rgba(var(--v-theme-accent), 0.3);
+  margin-bottom: 16px;
+}
+
+.exp-highlight:last-child {
+  margin-bottom: 0;
+}
+
+.exp-highlight__name {
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: rgb(var(--v-theme-primary));
+  margin-bottom: 4px;
+}
+
+.exp-highlight__desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgb(var(--v-theme-secondary));
+}
+
+/* CTA card (shared visual with HomeView) */
+.cta-card {
+  position: relative;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  padding: clamp(40px, 6vw, 64px);
+  text-align: center;
+}
+
+.cta-card__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 120% at 80% 0%, rgba(37, 99, 235, 0.55) 0%, transparent 60%),
+    linear-gradient(135deg, #0b1220 0%, #0f172a 60%, #111c33 100%);
+}
+
+.cta-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  margin-bottom: 14px;
+}
+
+.cta-card__desc {
+  max-width: 480px;
+  margin: 0 auto;
+  color: #cbd5e1;
+  font-size: 1.05rem;
+}
+
+.cta-card__ghost {
+  color: #f8fafc;
+  border-color: rgba(248, 250, 252, 0.3);
+}
+
+/* Timeline overrides — accent dot with glow, subtle line */
+:deep(.v-timeline-divider__dot) {
+  box-shadow: 0 0 0 5px rgba(var(--v-theme-accent), 0.15);
+}
+
+:deep(.v-timeline-divider__inner-dot) {
+  background: rgb(var(--v-theme-accent)) !important;
+}
+
+:deep(.v-timeline-divider__line) {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--v-theme-accent), 0.5),
+    rgba(var(--v-theme-accent), 0.12)
+  );
+  width: 1px;
+}
+
 :deep(.v-timeline-item__body) {
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 :deep(.v-timeline-item__opposite) {
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 @media (max-width: 960px) {
   .experience-page {
-    padding: 60px 0;
+    padding: var(--section-py-mobile) 0;
   }
 
   :deep(.v-timeline-item__opposite) {
     display: none;
   }
-}
 
-/* Fix text truncation in achievements */
-.achievement-text {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: unset !important;
-  line-height: 1.4 !important;
-}
-
-/* Alternative styling for the div version */
-.achievements-list {
-  padding-left: 0;
-}
-
-.achievements-list .d-flex {
-  align-items: flex-start;
-}
-
-/* Ensure proper spacing and wrapping */
-:deep(.v-list-item-title) {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: unset !important;
-  line-height: 1.4;
-}
-
-/* Optional: Add some padding for better readability */
-:deep(.v-list-item__content) {
-  padding-right: 8px;
+  .exp-date--inline {
+    display: block;
+  }
 }
 </style>

@@ -30,42 +30,29 @@ const snackbarStore = useSnackbarStore()
 </script>
 
 <style>
-/* Global styles */
-html {
-  scroll-behavior: smooth;
-}
-
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #4a7bc8 100%);
-  color: white;
-  min-height: 100vh;
-}
-
+/* App-level shared classes. Tokens + scrollbar live in assets/main.css. */
 .section-spacing {
-  padding: 80px 0;
+  padding: var(--section-py) 0;
 }
 
-.project-card {
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
-}
-
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+@media (max-width: 960px) {
+  .section-spacing {
+    padding: var(--section-py-mobile) 0;
+  }
 }
 
 .skill-chip {
   margin: 4px;
 }
 
+/* Scroll-reveal classes used by views via IntersectionObserver.
+   Aliased to the .reveal token behavior in main.css. */
 .fade-in {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(28px);
   transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
 }
 
 .fade-in.visible {
@@ -73,21 +60,10 @@ html {
   transform: translateY(0);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1976d2;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #1565c0;
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>
