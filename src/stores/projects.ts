@@ -7,7 +7,7 @@ import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
 import EmployeeManagementPic from '../assets/images/Employee.png'
 import CrapsGamePic from '../assets/images/Craps.png'
 import DocQuizPipelinePic from '../assets/images/CommandLineParser.png'
-import SmartResumePic from '../assets/images/SmartResume.svg'
+import SmartResumePic from '../assets/images/SmartResume.png'
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
