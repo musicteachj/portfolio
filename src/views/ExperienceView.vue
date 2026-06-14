@@ -153,7 +153,7 @@ const experience = ref<
     current: true,
     location: 'Atlanta, GA / Remote',
     description:
-      'Senior Software Engineer at a physics-informed AI SaaS company for manufacturing. I lead UI/UX and full-stack frontend development on a ground-up rebuild, work with the PhD co-founders to turn deep-tech AI research into usable product, and build largely through agentic tooling like Claude Code. I also own the go-to-market side: brand, web presence, and SEO.',
+      'Senior Software Engineer at a physics-informed AI SaaS company for manufacturing. I lead UI/UX and full-stack frontend development on a ground-up rebuild, work with the PhD co-founders to turn deep-tech AI research into usable product, and build largely through agentic tooling like Claude Code. I also create the marketing and social content we post and contribute to brand, web presence, and SEO.',
     achievements: [
       'Leading UI/UX design and full-stack frontend development for a ground-up rebuild of a physics-informed AI SaaS platform',
       'Working with PhD co-founders to translate deep-tech AI research into accessible product',
@@ -161,7 +161,7 @@ const experience = ref<
       'Architecting the complete frontend for the 2.0 application, owning all design decisions from component architecture to user experience',
       'Translating complex scientific concepts into intuitive interfaces for technical and non-technical users alike',
       'Contributing across the organization beyond engineering — including brand identity, public web presence, and digital marketing initiatives',
-      'Owning LinkedIn content strategy, campaign production, and SEO execution alongside product development',
+      'Creating the LinkedIn content and campaign assets we publish, and supporting SEO, alongside product development',
     ],
     technologies: [
       'Vue 3',
@@ -183,7 +183,7 @@ const experience = ref<
       {
         name: 'Commercial Layer & Go-to-Market',
         description:
-          "Building the company's commercial layer as a founding-stage contributor: brand identity, public web presence, content strategy, and SEO.",
+          "Producing the marketing and social content for the company's commercial layer, plus contributing to brand, web presence, and SEO, alongside the founding team.",
       },
     ],
   },
