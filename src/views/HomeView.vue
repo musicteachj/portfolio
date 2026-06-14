@@ -118,20 +118,19 @@
               <p class="body-paragraph">
                 Right now I'm at Surface Design Solutions, a physics-informed AI SaaS for
                 manufacturing. I lead the frontend rebuild and work with our PhD co-founders to turn
-                deep-tech research into software people can actually use, and I own the brand,
-                content, and SEO side too.
+                deep-tech research into software people can actually use. I also create the marketing
+                and social content we publish, and pitch in on brand and SEO.
               </p>
               <p class="body-paragraph">
                 Before that I spent four-plus years on IBM's global applications: framework
                 migrations, internationalization across 11 languages, and AI compliance tooling that
-                cut hundreds of hours of manual support. I've also run content and marketing for
+                cut hundreds of hours of manual support. I've also produced content and marketing for
                 early-stage teams, so I'm comfortable on both sides of a product.
               </p>
               <p class="body-paragraph">
                 These days I build mostly through agentic tools like Claude Code. I spend my time on
                 architecture and the decisions that matter while AI handles more of the
-                implementation. What keeps me hooked is how much AI changes what a small team can
-                actually ship.
+                implementation.
               </p>
               <v-btn
                 to="/about"

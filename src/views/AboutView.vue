@@ -42,14 +42,14 @@
             It's a physics-informed AI SaaS for materials science, and I lead the frontend on a
             ground-up rebuild. A lot of the job is sitting with our PhD co-founders and figuring out
             how to turn genuinely hard research into something people can use without a doctorate. I
-            also own the brand, the website, and the marketing, since we're small enough that those
-            jobs land on whoever can do them.
+            also create the marketing and social content we put out, and pitch in on brand, website,
+            and SEO, since we're small enough that everyone works beyond their core role.
           </p>
           <p class="body-paragraph">
-            I build most of this through agentic tools now, mainly Claude Code. I spend less time
-            typing and more time on architecture and the decisions that shape a product. AI products
-            are where I want to keep going: the integration, the workflows, and the distance between
-            a model that works in a demo and one that holds up in front of real users.
+            I build most of this through agentic tools now, mainly Claude Code, which keeps my time
+            on architecture and the decisions that shape a product. On the AI side, the work is
+            integration and workflows: connecting models to real product surfaces and making them
+            reliable enough for real users.
           </p>
         </v-col>
       </v-row>
