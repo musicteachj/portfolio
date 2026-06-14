@@ -215,7 +215,7 @@ describe('Skills Store', () => {
         const initialSkillsCount = firstSkill.skills.length
 
         // Use type assertion to test reactivity with dynamic data
-        firstSkill.skills.push('TypeScript' as any)
+        ;(firstSkill.skills as string[]).push('TypeScript')
 
         expect(firstSkill.skills.length).toBe(initialSkillsCount + 1)
         expect(firstSkill.skills[firstSkill.skills.length - 1]).toBe('TypeScript')

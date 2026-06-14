@@ -107,8 +107,9 @@ describe('Skills Component', () => {
       const initialText = wrapper.text()
       expect(initialText).not.toContain('Postman')
 
-      // Tools & Others (index 5) accepts any string
-      skillsStore.skillsList[5].skills.push('Postman')
+      // Tools & Others accepts any string
+      const toolsCategory = skillsStore.skillsList.find((c) => c.category === 'Tools & Others')!
+      ;(toolsCategory.skills as string[]).push('Postman')
       await wrapper.vm.$nextTick()
 
       expect(wrapper.text()).toContain('Postman')

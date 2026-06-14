@@ -6,7 +6,7 @@
         <p class="eyebrow mb-2">About</p>
         <h1 class="page-title">A bit about me</h1>
         <div class="accent-rule is-visible"></div>
-        <p class="page-subtitle">Background, journey, and what I do when I'm away from the keyboard.</p>
+        <p class="page-subtitle">Where I've worked, how I got into AI products, and what I'm into outside of it.</p>
       </div>
 
       <!-- My Story -->
@@ -14,45 +14,42 @@
         <v-col cols="12" md="10" lg="9">
           <h2 class="block-title">My story</h2>
           <p class="lead-paragraph">
-            My journey into software development began in an unexpected place: the innovative world
-            of vertical farming at 80 Acres Farms.
+            I got my start in software writing apps for an indoor farm, which isn't where most
+            engineers begin.
           </p>
           <p class="body-paragraph">
-            Starting as a Software Engineer in 2018, I discovered my passion for building technology
-            that solves real-world problems — creating a comprehensive MRP system for indoor
-            agriculture using Vue.js, Node.js, and PostgreSQL to manage the entire crop lifecycle
-            from seeding to delivery. Over three years I designed an industry-standard packaging
-            barcode system, built conveyor-belt applications with QR Code scanning, led the Vuetify
-            UI migration from v1.5 to v2.3 across a monolithic legacy app, mentored junior
-            developers, and contributed to the company's growth from Series A to Series B.
+            That was 80 Acres Farms, back in 2018. I joined as a junior and helped build the system
+            that tracked crops from seeding to delivery, using Vue, Node, and PostgreSQL. Over three
+            years I built the barcode setup for packaging, wrote the conveyor-belt scanning apps, led
+            a big Vuetify UI migration across a legacy monolith, and started mentoring the developers
+            who came in after me. The company went from Series A to Series B while I was there.
           </p>
           <p class="body-paragraph">
-            In 2021, I joined KollaCode as a Full Stack Engineer, expanding into enterprise-scale
-            applications serving IBM's global ecosystem. I built and maintained CTEBA — IBM's
-            worldwide event management platform — led full-stack development of the EDIT application
-            v2 with XLSX upload and AG Grid bulk editing, and wrote complex Cloudant DB queries
-            backing Express.js APIs, all under strict IBM security standards including PII
-            encryption, OIDC authentication, and audit logging.
+            In 2021 I moved to KollaCode and started working on IBM's global applications. I built
+            and maintained CTEBA, IBM's worldwide event platform, led the rebuild of their EDIT app
+            with bulk spreadsheet editing, and wrote the Cloudant queries behind a lot of the APIs.
+            All of it had to clear IBM's security bar: PII encryption, OIDC, audit logging.
           </p>
           <p class="body-paragraph">
-            Promoted to Senior Full Stack Engineer in 2023, I led development on mission-critical IBM
-            applications serving thousands of users worldwide — implementing automated CRON-based
-            email tracking, leading the IBM Partner Plus Awards application with i18n for 11
-            languages, architecting the IBM Amenities application with dual workflows and currency
-            conversion, and integrating AI-based compliance tools that eliminated hundreds of manual
-            support hours.
+            They promoted me to Senior in 2023, and I led work on apps used by thousands of people
+            worldwide. The Partner Plus Awards app shipped in 11 languages, and I built the Amenities
+            app with currency conversion and two separate workflows. The one I point to most is the
+            AI compliance tooling I integrated, which took hundreds of hours of manual support work
+            off the table. That was the first time AI made an obvious dent in something I built.
           </p>
           <p class="body-paragraph">
-            After wrapping up at KollaCode in October 2025, I joined Surface Design Solutions in
-            January 2026 as a Senior Software Engineer. There I lead UI/UX design and full-stack
-            frontend development for a ground-up rebuild of a physics-informed AI SaaS platform for
-            materials science — working directly with PhD co-founders to translate deep-tech research
-            into accessible software, while also driving brand, web presence, and digital marketing
-            as part of a founding-stage team. Increasingly, I build through agentic tools like Claude
-            Code — focusing on architecture, technical direction, and decision-making while AI
-            accelerates the implementation. These days I'm just as comfortable owning product
-            architecture as I am running content strategy and SEO — bridging technical execution and
-            audience growth.
+            I wrapped up at IBM in late 2025 and joined Surface Design Solutions in January 2026.
+            It's a physics-informed AI SaaS for materials science, and I lead the frontend on a
+            ground-up rebuild. A lot of the job is sitting with our PhD co-founders and figuring out
+            how to turn genuinely hard research into something people can use without a doctorate. I
+            also own the brand, the website, and the marketing, since we're small enough that those
+            jobs land on whoever can do them.
+          </p>
+          <p class="body-paragraph">
+            I build most of this through agentic tools now, mainly Claude Code. I spend less time
+            typing and more time on architecture and the decisions that shape a product. AI products
+            are where I want to keep going: the integration, the workflows, and the distance between
+            a model that works in a demo and one that holds up in front of real users.
           </p>
         </v-col>
       </v-row>
@@ -72,11 +69,10 @@
         <v-col cols="12" md="10" lg="9">
           <h2 class="block-title">Beyond code</h2>
           <p class="body-paragraph">
-            When I'm not developing, you'll find me enjoying live music — especially blues and jazz.
-            I play guitar and piano when I get the chance, which is a perfect creative outlet and
-            helps me think through complex technical challenges. I'm also passionate about emerging
-            tech and AI tooling, and outside of all that I enjoy experimenting with new cocktail
-            recipes and the craft of mixology.
+            Outside of work I'm usually around live music, mostly blues and jazz, and I play guitar
+            and piano when I get the time. It's a good way to step away from a screen and let a
+            problem sort itself out. I also keep up with new AI tools for the fun of it, not just for
+            work, and I'm into mixing cocktails at home.
           </p>
           <div class="interest-pills">
             <span v-for="interest in interests" :key="interest.label" class="interest-pill">
@@ -112,8 +108,10 @@ interface Interest {
 }
 
 const highlights: Highlight[] = [
-  { icon: 'mdi-briefcase-outline', text: '8+ years architecting enterprise-grade applications' },
-  { icon: 'mdi-robot-outline', text: 'Integrated AI tools saving hundreds of support hours' },
+  { icon: 'mdi-robot-outline', text: 'Shipped Claude-powered product features and AI compliance automation' },
+  { icon: 'mdi-robot-happy-outline', text: 'Build through agentic tooling like Claude Code, focused on architecture and direction' },
+  { icon: 'mdi-flask-outline', text: 'Translate physics-informed AI research into usable products' },
+  { icon: 'mdi-briefcase-outline', text: '8+ years building enterprise-grade applications' },
   { icon: 'mdi-cloud-outline', text: 'Deployed production apps to AWS (ECS, Route 53, CloudFront)' },
   { icon: 'mdi-earth', text: 'Built internationalization supporting 11+ languages' },
   { icon: 'mdi-rocket-launch-outline', text: 'Led multiple Vue 2 → Vue 3 migration projects' },

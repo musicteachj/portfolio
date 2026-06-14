@@ -63,6 +63,14 @@ export interface SocialLink {
   color?: string
 }
 
+export type AITechnology =
+  | 'Claude / LLM Integration'
+  | 'Agentic Development'
+  | 'Claude Code'
+  | 'Claude Design'
+  | 'Cursor AI'
+  | 'Prompt Engineering'
+  | 'AI Product Design'
 export type ProgrammingLanguage = 'JavaScript ES6+' | 'TypeScript' | 'Python' | 'SQL'
 export type FrontendTechnology =
   | 'Vue.js'
@@ -85,18 +93,24 @@ export type FrontendTechnology =
   | 'Sass'
   | 'Bootstrap'
   | 'Carbon-vue'
+  | 'PrimeVue'
+  | 'AG Grid'
+  | 'D3'
   | 'Styled-Components'
   | 'Tailwind'
   | 'React Router'
   | 'React Hook Form'
   | 'TanStack Query'
   | 'Axios'
+  | 'Chart.js'
 export type BackendTechnology =
   | 'Node.js'
   | 'Express.js'
   | 'REST APIs'
   | 'GraphQL'
   | 'FastAPI'
+  | 'OAuth'
+  | 'OIDC'
   | 'Pydantic'
   | 'Motor'
   | 'Passport.js'
@@ -127,6 +141,13 @@ export type CloudTechnology =
   | 'RDS'
   | 'Secrets Manager'
 export type Tool = string
+
+export interface AISkill {
+  category: 'AI & Agentic Development'
+  icon: 'mdi-robot-outline'
+  color: 'blue'
+  skills: AITechnology[]
+}
 
 export interface ProgrammingSkill {
   category: 'Programming Languages'
@@ -171,6 +192,7 @@ export interface ToolSkill {
 }
 
 export type Skill =
+  | AISkill
   | ProgrammingSkill
   | FrontendSkill
   | BackendSkill
@@ -178,11 +200,4 @@ export type Skill =
   | CloudSkill
   | ToolSkill
 
-export type SkillsList = [
-  ProgrammingSkill,
-  FrontendSkill,
-  BackendSkill,
-  DatabaseSkill,
-  CloudSkill,
-  ToolSkill,
-]
+export type SkillsList = Skill[]

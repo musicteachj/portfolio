@@ -20,13 +20,13 @@
             </h1>
 
             <p class="hero__role">
-              <span class="hero__prompt">$</span> Senior Software Engineer
+              <span class="hero__prompt">$</span> Senior Software Engineer · AI Products
             </p>
 
             <p class="hero__desc">
-              I build enterprise web applications and the growth engines around them — full-stack
-              engineering, AI integration, and go-to-market. {{ yearsOfExperience }}+ years turning
-              complex problems into clean, scalable products.
+              I build AI-powered products — pairing LLM integration and agentic development with the
+              full-stack engineering and go-to-market to ship them. {{ yearsOfExperience }}+ years
+              turning complex problems into clean, scalable products.
             </p>
 
             <div class="hero__actions">
@@ -104,34 +104,34 @@
           <div class="section-head">
             <span class="section-number">01</span>
             <p class="eyebrow mb-2">About</p>
-            <h2 class="section-title">Building digital experiences that matter</h2>
+            <h2 class="section-title">Building AI-powered products that matter</h2>
             <div class="accent-rule" :class="{ 'is-visible': aboutVisible }"></div>
           </div>
 
           <v-row>
             <v-col cols="12" md="10" lg="8">
               <p class="lead-paragraph">
-                Senior Software Engineer and growth generalist with {{ yearsOfExperience }}+ years
-                building enterprise web applications.
+                I'm a Senior Software Engineer who builds AI-powered products, with
+                {{ yearsOfExperience }}+ years across enterprise web apps and the go-to-market that
+                gets them used.
               </p>
               <p class="body-paragraph">
-                Currently at Surface Design Solutions, a physics-informed AI SaaS company for
-                manufacturing, where I work across full-stack engineering and go-to-market — owning
-                LinkedIn content strategy, campaign production, and SEO execution alongside product
-                development.
+                Right now I'm at Surface Design Solutions, a physics-informed AI SaaS for
+                manufacturing. I lead the frontend rebuild and work with our PhD co-founders to turn
+                deep-tech research into software people can actually use, and I own the brand,
+                content, and SEO side too.
               </p>
               <p class="body-paragraph">
-                My engineering background spans framework migrations, internationalization for global
-                applications, AI integration, and AWS production deployments. I've also led content
-                operations and marketing strategy at the early-stage level, bridging the gap between
-                technical execution and audience growth.
+                Before that I spent four-plus years on IBM's global applications: framework
+                migrations, internationalization across 11 languages, and AI compliance tooling that
+                cut hundreds of hours of manual support. I've also run content and marketing for
+                early-stage teams, so I'm comfortable on both sides of a product.
               </p>
               <p class="body-paragraph">
-                These days I work increasingly through agentic tools like Claude Code — leaning into
-                architecture, technical direction, and decision-making while AI handles more of the
-                implementation. I take strong ownership of what I build, collaborate across functions
-                naturally, and stay genuinely curious about how emerging AI tools create real
-                business leverage.
+                These days I build mostly through agentic tools like Claude Code. I spend my time on
+                architecture and the decisions that matter while AI handles more of the
+                implementation. What keeps me hooked is how much AI changes what a small team can
+                actually ship.
               </p>
               <v-btn
                 to="/about"
