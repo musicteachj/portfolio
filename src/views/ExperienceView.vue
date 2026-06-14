@@ -153,12 +153,13 @@ const experience = ref<
     current: true,
     location: 'Atlanta, GA / Remote',
     description:
-      'Senior Software Engineer at a physics-informed AI SaaS company for manufacturing, working across full-stack engineering and go-to-market. Leading UI/UX design and full-stack frontend development for a ground-up rebuild of the platform targeting materials science and surface engineering workflows.',
+      'Senior Software Engineer at a physics-informed AI SaaS company for manufacturing. I lead UI/UX and full-stack frontend development on a ground-up rebuild, work with the PhD co-founders to turn deep-tech AI research into usable product, and build largely through agentic tooling like Claude Code. I also own the go-to-market side: brand, web presence, and SEO.',
     achievements: [
       'Leading UI/UX design and full-stack frontend development for a ground-up rebuild of a physics-informed AI SaaS platform',
+      'Working with PhD co-founders to translate deep-tech AI research into accessible product',
+      'Building through agentic tooling like Claude Code, focusing on architecture and technical direction while AI handles more of the implementation',
       'Architecting the complete frontend for the 2.0 application, owning all design decisions from component architecture to user experience',
       'Translating complex scientific concepts into intuitive interfaces for technical and non-technical users alike',
-      'Collaborating directly with PhD co-founders to align product direction with deep-tech research capabilities',
       'Contributing across the organization beyond engineering — including brand identity, public web presence, and digital marketing initiatives',
       'Owning LinkedIn content strategy, campaign production, and SEO execution alongside product development',
     ],
@@ -196,6 +197,7 @@ const experience = ref<
     description:
       "Full stack engineer developing enterprise applications for IBM's global partner ecosystem and internal tools. Lead front-end architecture and modernization initiatives while contributing to backend API development and database optimization.",
     achievements: [
+      'Integrated AI-based compliance tooling that removed hundreds of hours of manual support work',
       'Led development of IBM Partner Plus Awards application serving global partner ecosystem with nomination and voting capabilities',
       'Solely responsible for internationalization implementation, making applications accessible in 11 languages using vue-i18n',
       'Spearheaded migration of multiple applications from Vue 2/CLI/Vuetify 2 to Vue 3/Vite/Vuetify 3 stack',
@@ -226,11 +228,17 @@ const experience = ref<
       'REST APIs',
       'Cloudant DB',
       'NoSQL',
+      'AI Integration',
       'CI/CD',
       'Jira',
       'Git/Github',
     ],
     highlights: [
+      {
+        name: 'AI Compliance Tooling',
+        description:
+          'Integrated AI-based compliance tools into IBM workflows, taking hundreds of hours of manual support work off the table.',
+      },
       {
         name: 'IBM Partner Plus Awards Platform',
         description:
