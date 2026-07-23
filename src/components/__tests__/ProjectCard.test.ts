@@ -56,11 +56,10 @@ describe('ProjectCard', () => {
         props: { project: mockProject },
       })
 
-      // Check that technologies from skill categories are displayed
-      mockProject.technologies.forEach((category) => {
-        category.skills.forEach((skill) => {
-          expect(wrapper.text()).toContain(skill)
-        })
+      // Only the first maxTechDisplay (default 3) skills render as chips
+      const allSkills = mockProject.technologies.flatMap((category) => category.skills)
+      allSkills.slice(0, 3).forEach((skill) => {
+        expect(wrapper.text()).toContain(skill)
       })
     })
 
@@ -147,12 +146,14 @@ describe('ProjectCard', () => {
       // Test default behavior: should show "View details" button (default showDetailsLink: true)
       expect(wrapper.text()).toContain('View details')
 
-      // Test default maxTechDisplay: verify technologies are displayed
-      mockProject.technologies.forEach((category) => {
-        category.skills.forEach((skill) => {
-          expect(wrapper.text()).toContain(skill)
-        })
+      // Default maxTechDisplay is 3: the first three skills render, the rest collapse into "+N"
+      const allSkills = mockProject.technologies.flatMap((category) => category.skills)
+      allSkills.slice(0, 3).forEach((skill) => {
+        expect(wrapper.text()).toContain(skill)
       })
+      if (allSkills.length > 3) {
+        expect(wrapper.text()).toContain(`+${allSkills.length - 3}`)
+      }
     })
 
     it('should respect custom maxTechDisplay prop', () => {
