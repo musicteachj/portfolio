@@ -102,7 +102,6 @@
       <v-container>
         <div ref="aboutSection" class="fade-in" :class="{ visible: aboutVisible }">
           <div class="section-head">
-            <span class="section-number">01</span>
             <p class="eyebrow mb-2">About</p>
             <h2 class="section-title">Building AI-powered products that matter</h2>
             <div class="accent-rule" :class="{ 'is-visible': aboutVisible }"></div>
@@ -152,7 +151,6 @@
       <v-container>
         <div ref="projectsSection" class="fade-in" :class="{ visible: projectsVisible }">
           <div class="section-head">
-            <span class="section-number">02</span>
             <p class="eyebrow mb-2">Selected Work</p>
             <h2 class="section-title">Featured projects</h2>
             <div class="accent-rule" :class="{ 'is-visible': projectsVisible }"></div>
@@ -167,7 +165,7 @@
               lg="4"
             >
               <div
-                class="fade-in"
+                class="fade-in h-100"
                 :class="{ visible: projectsVisible }"
                 :style="{ 'transition-delay': `${0.1 + index * 0.1}s` }"
               >
@@ -196,7 +194,6 @@
       <v-container>
         <div ref="skillsSection" class="fade-in" :class="{ visible: skillsVisible }">
           <div class="section-head">
-            <span class="section-number">03</span>
             <p class="eyebrow mb-2">Toolkit</p>
             <h2 class="section-title">Technical skills</h2>
             <div class="accent-rule" :class="{ 'is-visible': skillsVisible }"></div>

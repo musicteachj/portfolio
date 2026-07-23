@@ -71,6 +71,8 @@ export type AITechnology =
   | 'Cursor AI'
   | 'Prompt Engineering'
   | 'AI Product Design'
+  | 'RAG (Retrieval-Augmented Generation)'
+  | 'Tool Use / Function Calling'
 export type ProgrammingLanguage = 'JavaScript ES6+' | 'TypeScript' | 'Python' | 'SQL'
 export type FrontendTechnology =
   | 'Vue.js'
@@ -86,6 +88,7 @@ export type FrontendTechnology =
   | 'Pinia'
   | 'React.js'
   | 'React 18'
+  | 'React 19'
   | 'React Native'
   | 'React DOM'
   | 'HTML'
@@ -101,6 +104,8 @@ export type FrontendTechnology =
   | 'React Router'
   | 'React Hook Form'
   | 'TanStack Query'
+  | 'Zustand'
+  | 'shadcn/ui'
   | 'Axios'
   | 'Chart.js'
 export type BackendTechnology =
@@ -117,6 +122,8 @@ export type BackendTechnology =
   | 'bcrypt'
   | 'Puppeteer'
   | 'Python CLI'
+  | 'Django'
+  | 'Django REST Framework'
 export type Database =
   | 'PostgreSQL'
   | 'MongoDB'
@@ -125,6 +132,8 @@ export type Database =
   | 'Prisma'
   | 'JSONB content structure'
   | 'Browser localStorage'
+  | 'Chroma'
+  | 'Qdrant'
 export type CloudTechnology =
   | 'Docker'
   | 'CI/CD'

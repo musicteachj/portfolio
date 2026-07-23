@@ -108,22 +108,6 @@ body {
   color: rgb(var(--v-theme-accent));
 }
 
-/* Decorative oversized section number */
-.section-number {
-  position: absolute;
-  top: -0.35em;
-  right: 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(5rem, 14vw, 11rem);
-  line-height: 1;
-  color: rgb(var(--v-theme-on-surface));
-  opacity: 0.04;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-
 /* Animated accent rule beneath section headings */
 .accent-rule {
   height: 3px;

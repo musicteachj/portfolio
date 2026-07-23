@@ -53,7 +53,7 @@
         <div class="detail-image mb-12">
           <v-img
             :src="project.image"
-            height="440"
+            :aspect-ratio="1.85"
             cover
             :alt="`${project.title} preview`"
             loading="lazy"

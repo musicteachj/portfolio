@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pcard d-flex flex-column" @click="goToProject">
+  <v-card class="pcard d-flex flex-column" :class="{ 'pcard--ai': isAiProject }" @click="goToProject">
     <span class="pcard__accent" aria-hidden="true"></span>
 
     <!-- Media -->
@@ -7,7 +7,7 @@
       <v-img
         :src="project.image"
         :alt="project.title"
-        height="220"
+        :aspect-ratio="1.85"
         cover
         class="pcard__img"
         loading="lazy"
@@ -21,6 +21,18 @@
 
       <v-chip :color="statusColor" size="x-small" variant="flat" class="pcard__status">
         {{ project.status }}
+      </v-chip>
+
+      <v-chip
+        v-if="isAiProject"
+        color="accent"
+        size="x-small"
+        variant="flat"
+        prepend-icon="mdi-creation"
+        class="pcard__ai"
+        title="AI-powered project"
+      >
+        AI
       </v-chip>
 
       <!-- Hover overlay -->
@@ -101,10 +113,14 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   showDetailsLink: true,
-  maxTechDisplay: 4,
+  maxTechDisplay: 3,
 })
 
 const router = useRouter()
+
+const isAiProject = computed(() =>
+  props.project.technologies.some((category) => category.category === 'AI & Agentic Development'),
+)
 
 const allTechnologies = computed(() =>
   props.project.technologies.flatMap((category) => category.skills),
@@ -172,6 +188,11 @@ const goToProject = (): void => {
   border-color: rgb(var(--v-theme-accent));
 }
 
+/* AI projects read as distinct even before hover */
+.pcard--ai {
+  border-color: rgba(var(--v-theme-accent), 0.45);
+}
+
 /* Left accent bar slides in on hover */
 .pcard__accent {
   position: absolute;
@@ -212,6 +233,17 @@ const goToProject = (): void => {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   text-transform: capitalize;
+}
+
+.pcard__ai {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .pcard__overlay {
