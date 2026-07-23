@@ -2,15 +2,17 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Project, ProjectCategory } from '@/types'
 
-import PortfolioPic from '../assets/images/Portfolio2.png'
+// import PortfolioPic from '../assets/images/Portfolio2.png' // hidden from UI (kept for future use)
 import BarcodeCrudPic from '../assets/images/BarcodeCrud.png'
 import EmployeeManagementPic from '../assets/images/Employee.png'
-import CrapsGamePic from '../assets/images/Craps.png'
-import DocQuizPipelinePic from '../assets/images/CommandLineParser.png'
+// import CrapsGamePic from '../assets/images/Craps.png' // hidden from UI (kept for future use)
+// import DocQuizPipelinePic from '../assets/images/CommandLineParser.png' // hidden from UI (kept for future use)
 import SmartResumePic from '../assets/images/SmartResume.png'
+import FolioPic from '../assets/images/Folio.png'
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([
+    /* Portfolio Website — hidden from UI (kept for future use)
     {
       id: 1,
       title: 'Portfolio Website',
@@ -83,6 +85,7 @@ export const useProjectsStore = defineStore('projects', () => {
       ],
       viewport: ['desktop', 'mobile', 'tablet'],
     },
+    */
     {
       id: 2,
       title: 'Barcode Gen',
@@ -174,11 +177,21 @@ export const useProjectsStore = defineStore('projects', () => {
       id: 3,
       title: 'Employee Management System',
       description:
-        'Full‑stack employee management system to create/search/update records, assign managers, visualize org charts, run bulk updates, and schedule/conduct reviews with real‑time analytics on headcount, departments, salaries, and trends.',
+        'Full‑stack HR console for employee records, org charts, bulk updates, and performance reviews, plus a Workforce Insights Assistant: a Claude chatbot that answers questions straight from live employee and analytics data. Vue 3 frontend, FastAPI backend, JWT auth built from scratch.',
       longDescription:
-        'Employee Management System is a full-stack web application for centralizing and streamlining HR operations that lets you create, update, search, and organize employee records; assign managers; visualize the org chart; perform bulk updates; and manage performance reviews end-to-end (scheduling, conducting, tracking, and monitoring overdue reviews), with an interactive analytics dashboard that surfaces key insights like department and status distributions, job levels, salaries, and hiring/performance trends via rich charts. The frontend is built with Vue 3, Vuetify, Pinia, and Chart.js, while the backend uses FastAPI with async MongoDB (Motor), featuring JWT authentication, environment-based configuration, and Vite-powered local development with SPA serving in production. The application is deployed on AWS using ECS Fargate for serverless container orchestration, ECR for Docker image registry, Application Load Balancer for HTTPS routing with host-based rules, Route 53 for DNS management, AWS Secrets Manager for secure credential storage (MongoDB and JWT secrets), and CloudWatch Logs for monitoring, with the database hosted on MongoDB Atlas for managed, scalable data persistence. The entire stack is containerized using multi-stage Docker builds and deployed via a GitHub Actions CI/CD pipeline, enabling automated builds and deployments on every push to main.',
+        'Employee Management System is a full-stack web application for centralizing and streamlining HR operations that lets you create, update, search, and organize employee records; assign managers; visualize the org chart; perform bulk updates; and manage performance reviews end-to-end (scheduling, conducting, tracking, and monitoring overdue reviews), with an interactive analytics dashboard that surfaces key insights like department and status distributions, job levels, salaries, and hiring/performance trends via rich charts. Its standout feature is the Workforce Insights Assistant, a Claude-powered chatbot that answers HR questions through an agentic tool-use loop: the model calls real backend functions like search_employees, get_workforce_analytics, get_overdue_reviews, and get_direct_reports, so every answer is grounded in live data rather than guessed, and responses stream token by token over SSE. Privacy guards keep sensitive fields such as salaries, SSNs, and personal contact details out of individual results. The frontend is built with Vue 3, Vuetify, Pinia, and Chart.js, while the backend uses FastAPI with async MongoDB (Motor) and the Anthropic SDK, featuring JWT authentication, environment-based configuration, and Vite-powered local development with SPA serving in production. The application is deployed on AWS using ECS Fargate for serverless container orchestration, ECR for Docker image registry, Application Load Balancer for HTTPS routing with host-based rules, Route 53 for DNS management, AWS Secrets Manager for secure credential storage (MongoDB and JWT secrets), and CloudWatch Logs for monitoring, with the database hosted on MongoDB Atlas for managed, scalable data persistence. The entire stack is containerized using multi-stage Docker builds and deployed via a GitHub Actions CI/CD pipeline, enabling automated builds and deployments on every push to main.',
       image: EmployeeManagementPic,
       technologies: [
+        {
+          category: 'AI & Agentic Development',
+          icon: 'mdi-robot-outline',
+          color: 'blue',
+          skills: [
+            'Claude / LLM Integration',
+            'Tool Use / Function Calling',
+            'Agentic Development',
+          ],
+        },
         {
           category: 'Programming Languages',
           icon: 'mdi-code-json',
@@ -231,6 +244,13 @@ export const useProjectsStore = defineStore('projects', () => {
             'PIP',
             'Zod',
             'XLSX',
+            'Anthropic SDK',
+            'SSE Streaming',
+            'marked',
+            'DOMPurify',
+            'dayjs',
+            'pandas',
+            'numpy',
             'UI/UX Design',
             'Responsive Design',
           ],
@@ -243,6 +263,10 @@ export const useProjectsStore = defineStore('projects', () => {
       year: 2025,
       status: 'completed',
       features: [
+        'Workforce Insights Assistant: a Claude chatbot answering HR questions from live data',
+        'Agentic tool-use loop calling real backend functions (search, analytics, reviews, reports)',
+        'Grounded, no-hallucination answers streamed token-by-token over SSE',
+        'Privacy guards keep salaries, SSNs, and contact details out of chatbot results',
         'JWT authentication built from scratch (no external auth libraries)',
         'Full-stack TypeScript + Python with type-safe validation',
         'Interactive analytics dashboard with 8 real-time chart visualizations',
@@ -261,6 +285,7 @@ export const useProjectsStore = defineStore('projects', () => {
       ],
       viewport: ['desktop', 'tablet'],
     },
+    /* Craps Game & DocQuiz Pipeline (Command Line Parser) — hidden from UI (kept for future use)
     {
       id: 4,
       title: 'Craps Game',
@@ -409,32 +434,41 @@ export const useProjectsStore = defineStore('projects', () => {
       ],
       viewport: ['desktop', 'tablet', 'mobile'],
     },
+    */
     {
       id: 6,
-      title: 'Smart Resume Builder - AI',
+      title: 'Smart Resume Builder',
       description:
-        'An AI-powered resume builder built with React that helps users create professional resumes with intelligent content improvements. Users can create multiple resumes, get AI suggestions to enhance their bullet points, preview their resume in real time, and export to PDF',
+        'An AI-powered resume builder: a React 19 front end with a split-screen editor and live, print-accurate preview, backed by a Django REST API. Claude sharpens bullet points, writes summaries, and tailors a resume to a job description with an ATS match score and missing-keyword suggestions. One-click PDF export and multi-resume management.',
       longDescription:
-        'Smart Resume Builder is a full-stack, AI-assisted resume platform built with a React 18 + TypeScript frontend (Vite, Tailwind, React Router, React Hook Form with Zod validation, TanStack Query, Axios) and a Node.js 18/Express backend wired through Prisma to PostgreSQL. Users register via secure email/password JWT auth (with Google OAuth planned), manage multiple resumes, and edit them in a split-screen form/live preview experience that auto-saves sections for personal info, work history, education, skills, and projects. A one-click Puppeteer-powered export reproduces the preview as a polished PDF, while a Claude-powered "Improve with AI" flow (post-MVP) suggests stronger bullet points and enforces configurable daily/monthly usage limits. The project runs in a pnpm monorepo, shares typed schemas, and ships through Docker/Docker Compose into AWS ECS/RDS with secrets in AWS Secrets Manager and CI/CD via GitHub Actions',
+        'Smart Resume Builder is a full-stack, AI-assisted resume platform. The front end is React 19 + TypeScript (Vite, Tailwind, shadcn/ui, Zustand for client state, TanStack Query for server state, React Hook Form with Zod validation), and the back end is Python 3.12 / Django 5.2 with Django REST Framework, SimpleJWT auth, and PostgreSQL 15. Users register with email and password, manage multiple resumes from a dashboard, and edit them in a split-screen form and live preview that autosaves each section: personal info, work history, education, skills, and projects. Claude drives the AI assist, rewriting bullet points, generating professional summaries, and tailoring a resume to a pasted job description, returning an ATS match score plus the keywords the resume is missing; per-user daily and monthly usage limits keep costs in check. Existing resumes can be imported by parsing uploaded .docx (mammoth) and PDF (pdfjs) files, sections reordered by drag and drop (dnd-kit), and the finished document exported to a clean, ATS-safe PDF that matches the on-screen preview. The API is OpenAPI-documented with drf-spectacular and consumed through a fully typed client generated by orval. Everything is containerized with Docker and deploys to AWS ECS/RDS with secrets in AWS Secrets Manager and CI/CD via GitHub Actions.',
       image: SmartResumePic,
       technologies: [
+        {
+          category: 'AI & Agentic Development',
+          icon: 'mdi-robot-outline',
+          color: 'blue',
+          skills: ['Claude / LLM Integration', 'Prompt Engineering', 'AI Product Design'],
+        },
         {
           category: 'Programming Languages',
           icon: 'mdi-code-json',
           color: 'blue',
-          skills: ['JavaScript ES6+', 'TypeScript', 'SQL'],
+          skills: ['JavaScript ES6+', 'TypeScript', 'Python', 'SQL'],
         },
         {
           category: 'Frontend Technologies',
           icon: 'mdi-monitor',
           color: 'green',
           skills: [
-            'React 18',
+            'React 19',
             'Tailwind',
+            'shadcn/ui',
             'CSS',
             'React Router',
             'React Hook Form',
             'TanStack Query',
+            'Zustand',
             'Axios',
           ],
         },
@@ -442,13 +476,13 @@ export const useProjectsStore = defineStore('projects', () => {
           category: 'Backend Technologies',
           icon: 'mdi-server',
           color: 'orange',
-          skills: ['Node.js', 'Express.js', 'Passport.js', 'bcrypt', 'Puppeteer'],
+          skills: ['Django', 'Django REST Framework', 'REST APIs'],
         },
         {
           category: 'Databases & Storage',
           icon: 'mdi-database-outline',
           color: 'red',
-          skills: ['PostgreSQL', 'Prisma', 'JSONB content structure'],
+          skills: ['PostgreSQL'],
         },
         {
           category: 'Cloud & DevOps',
@@ -472,16 +506,22 @@ export const useProjectsStore = defineStore('projects', () => {
           color: 'brown',
           skills: [
             'Vite',
-            'PNPM',
             'Zod',
-            'JWT',
-            'Jest Unit Tests',
-            'Passport.js',
-            'Google OAuth',
+            'SimpleJWT',
+            'drf-spectacular',
+            'orval',
+            'Anthropic SDK',
+            'mammoth',
+            'pdfjs',
+            'dnd-kit',
+            'Gunicorn',
+            'WhiteNoise',
+            'Vitest',
+            'pytest',
             'UI/UX Design',
             'Responsive Design',
             'Cursor AI',
-            'Claude AI',
+            'Claude Code',
             'Agentic Programming',
           ],
         },
@@ -490,21 +530,129 @@ export const useProjectsStore = defineStore('projects', () => {
       githubUrl: 'https://github.com/musicteachj/smart-resume-builder',
       featured: true,
       category: 'Full Stack',
-      year: 2025,
+      year: 2026,
       status: 'in-progress',
       features: [
-        'React 18 + TypeScript frontend built with Vite and Tailwind for responsive UI',
-        'React Hook Form with Zod validation powering the split-screen resume editor',
-        'TanStack Query + Axios for authenticated data fetching and optimistic updates',
-        'JWT-secured email/password auth pipeline with bcrypt hashing and Passport.js',
-        'Multi-resume dashboard backed by Prisma ORM and PostgreSQL 15',
-        'Auto-save and real-time preview of personal info, experience, education, skills, and projects',
-        'Claude-powered AI bullet improvements with daily/monthly usage enforcement',
-        'Puppeteer-driven PDF export that renders the React template server-side for pixel-perfect output',
-        'Shared TypeScript schemas and resume templates published via pnpm workspaces',
-        'Dockerized services deployed to AWS ECS/RDS with GitHub Actions CI/CD and AWS Secrets Manager',
-        'Google OAuth + account linking support (post-MVP) through passport-google-oauth20',
-        'AI usage telemetry stored in Prisma models for per-user analytics and cost controls',
+        'React 19 + TypeScript front end with a split-screen editor and live, print-accurate preview',
+        'Django REST Framework API (Python 3.12) with SimpleJWT auth and PostgreSQL 15',
+        'Claude rewrites bullet points and generates professional summaries',
+        'Job-description tailoring with an ATS match score and missing-keyword suggestions',
+        'Per-user daily and monthly AI usage limits for cost control',
+        'Resume import by parsing uploaded .docx (mammoth) and PDF (pdfjs) files',
+        'Drag-and-drop section reordering with dnd-kit',
+        'One-click ATS-safe PDF export that matches the on-screen preview',
+        'Zustand for client state, TanStack Query for server state, React Hook Form + Zod validation',
+        'OpenAPI schema via drf-spectacular consumed through an orval-generated typed client',
+        'Multi-resume dashboard with autosaving sections',
+        'Dockerized services deployed to AWS ECS/RDS with GitHub Actions CI/CD and Secrets Manager',
+      ],
+      viewport: ['desktop', 'tablet'],
+    },
+    {
+      id: 7,
+      title: 'Folio',
+      description:
+        'A RAG-powered brand content studio. Feed it a brand’s voice guides, best past posts, pillars, and personas; it retrieves the relevant context at generation time so Claude writes on-brand LinkedIn posts and designs matching 1080×1350 image cards where the preview is identical to the exported PNG.',
+      longDescription:
+        'Folio helps a company sound like itself on LinkedIn. You give it the brand’s raw material (voice and tone guides, strong past posts, content pillars, audience personas, competitor notes) and it embeds and indexes that corpus per workspace. When you write a post, Folio retrieves the pieces of brand context that actually matter for the request and feeds them to Claude, so the copy comes out on-brand instead of generic; retrieval is the whole point, and it is what separates this from a plain prompt-and-response tool. It produces two publish-ready outputs: LinkedIn text posts and designed 1080×1350 image cards exported as pixel-accurate PNGs, with the on-screen preview guaranteed identical to the export. Card copy uses a two-pass approach, streaming natural draft copy into a live preview and then making a strict tool-use call for the structured fields (eyebrow, headline, body, CTA, hashtag) that drive the locked design. Folio is genuinely multi-brand: you manage workspaces in the app, edit each brand’s palette, fonts, logo, and voice, and can let it learn a brand automatically by uploading a logo or brand-guideline image, from which a Claude vision tool-use call proposes named colors, fonts, and a voice to review and apply. You can upload your own brand fonts with full parity across card previews, PNG export, and PDFs, and save named card presets to reuse a look in one click. Visitors can jump straight into a seeded demo brand, "Verdure Materials," to feel the retrieval-driven quality immediately, with destructive actions locked down. The front end is React 19 + TypeScript (Vite, Tailwind, shadcn/ui, Zustand, TanStack Query, React Hook Form with Zod); the back end is FastAPI with async MongoDB (Motor) and Pydantic v2, streaming over SSE. Generation runs on Claude; embeddings use OpenAI text-embedding-3-small; chunking is hand-rolled with langchain-text-splitters against a swappable vector store (Chroma locally, Qdrant in production). Cards render to PNG with Satori and resvg, documents to PDF with ReportLab, and images come from a server-proxied Unsplash integration or direct upload.',
+      image: FolioPic,
+      technologies: [
+        {
+          category: 'AI & Agentic Development',
+          icon: 'mdi-robot-outline',
+          color: 'blue',
+          skills: [
+            'RAG (Retrieval-Augmented Generation)',
+            'Claude / LLM Integration',
+            'Tool Use / Function Calling',
+            'AI Product Design',
+          ],
+        },
+        {
+          category: 'Programming Languages',
+          icon: 'mdi-code-json',
+          color: 'blue',
+          skills: ['TypeScript', 'JavaScript ES6+', 'Python'],
+        },
+        {
+          category: 'Frontend Technologies',
+          icon: 'mdi-monitor',
+          color: 'green',
+          skills: [
+            'React 19',
+            'Tailwind',
+            'shadcn/ui',
+            'CSS',
+            'React Router',
+            'React Hook Form',
+            'TanStack Query',
+            'Zustand',
+            'Axios',
+          ],
+        },
+        {
+          category: 'Backend Technologies',
+          icon: 'mdi-server',
+          color: 'orange',
+          skills: ['FastAPI', 'Pydantic', 'Motor'],
+        },
+        {
+          category: 'Databases & Storage',
+          icon: 'mdi-database-outline',
+          color: 'red',
+          skills: ['MongoDB', 'Chroma', 'Qdrant', 'NoSQL'],
+        },
+        {
+          category: 'Cloud & DevOps',
+          icon: 'mdi-cloud-outline',
+          color: 'purple',
+          skills: ['Docker', 'CI/CD', 'GitHub Actions', 'Git/GitHub'],
+        },
+        {
+          category: 'Tools & Others',
+          icon: 'mdi-tools',
+          color: 'brown',
+          skills: [
+            'Vite',
+            'Zod',
+            'JWT',
+            'Anthropic SDK',
+            'OpenAI Embeddings',
+            'langchain-text-splitters',
+            'Satori',
+            'resvg',
+            'ReportLab',
+            'Unsplash API',
+            'SSE Streaming',
+            'Vitest',
+            'pytest',
+            'UI/UX Design',
+            'Responsive Design',
+            'Cursor AI',
+            'Claude Code',
+            'Agentic Programming',
+          ],
+        },
+      ],
+      liveUrl: '',
+      githubUrl: 'https://github.com/musicteachj/brand-content-studio',
+      featured: true,
+      category: 'Full Stack',
+      year: 2026,
+      status: 'in-progress',
+      features: [
+        'RAG pipeline retrieves per-workspace brand context at generation time for on-brand copy',
+        'Generates LinkedIn text posts and designed 1080×1350 image cards',
+        'Card preview is pixel-identical to the exported PNG (Satori + resvg)',
+        'Two-pass card copy: streamed draft, then a strict tool-use call for structured fields',
+        'Multi-brand workspaces with editable palette, fonts, logo, and voice',
+        'Brand auto-extraction from an uploaded logo or guideline via a Claude vision tool-use call',
+        'Custom brand-font upload with parity across previews, PNG export, and PDFs',
+        'Saved card presets to reuse a look in one click',
+        'Seeded "Verdure Materials" demo brand with destructive actions locked down',
+        'Claude generation streamed over SSE; OpenAI embeddings; swappable Chroma/Qdrant vector store',
+        'React 19 + FastAPI (async MongoDB via Motor, Pydantic v2)',
+        'PDF documents via ReportLab and server-proxied Unsplash images',
       ],
       viewport: ['desktop', 'tablet'],
     },
