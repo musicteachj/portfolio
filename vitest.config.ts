@@ -1,33 +1,35 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vuetify from 'vite-plugin-vuetify'
-import { fileURLToPath, URL } from 'node:url'
+import { defineVitestProject } from '@nuxt/test-utils/config'
+import { defineConfig } from 'vitest/config'
+
+// Loading the Nuxt project boots the full module stack (and forces ssr: false), which prints
+// SEO module warnings. Skip it when only the output project is requested.
+const outputOnly = process.argv.some(
+  (arg, i, args) => args[i - 1] === '--project' && arg === 'output',
+)
+
+const output = {
+  test: {
+    name: 'output',
+    environment: 'node',
+    include: ['tests/output/**/*.test.ts'],
+  },
+}
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    vuetify({
-      autoImport: true,
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
   test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    css: true,
-    deps: {
-      inline: ['vuetify'],
-    },
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/test/', '**/*.d.ts', 'dist/', 'coverage/'],
-    },
+    passWithNoTests: true,
+    projects: outputOnly
+      ? [output]
+      : [
+          await defineVitestProject({
+            test: {
+              name: 'unit',
+              environment: 'nuxt',
+              include: ['tests/unit/**/*.test.ts'],
+              passWithNoTests: true,
+            },
+          }),
+          output,
+        ],
   },
 })

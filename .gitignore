@@ -33,3 +33,15 @@ coverage
 .env
 .env.local
 .env.*.local
+
+# Brainstorming mockups (local only)
+.superpowers/
+
+# Nuxt
+.nuxt/
+.output/
+.data/
+
+# Playwright
+playwright-report/
+test-results/
