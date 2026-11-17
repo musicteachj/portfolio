@@ -51,7 +51,6 @@ test('ipx files hold the formats they claim', () => {
     const widths: number[] = []
     for (const [url, desc] of candidates) {
       const rel = decodeURIComponent(url!).replace(/^\//, '')
-      console.log(`ipx ${type} ${desc}: ${rel}`)
       expect(exists(rel)).toBe(true)
       const buf = readFileSync(join(OUTPUT_DIR, rel))
       if (type === 'image/avif') {

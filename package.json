@@ -12,8 +12,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "nuxt typecheck",
-    "test": "vitest run --project unit",
-    "test:output": "vitest run --project output",
+    "test": "vitest run",
+    "test:output": "vitest run --config vitest.output.config.ts",
     "test:e2e": "playwright test",
     "postinstall": "nuxt prepare"
   },
@@ -25,6 +25,7 @@
     "nuxt": "^4.6.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/test-utils": "^4.4.0",
     "@playwright/test": "^1.65.1",

@@ -1,35 +1,27 @@
 import { defineVitestProject } from '@nuxt/test-utils/config'
 import { defineConfig } from 'vitest/config'
 
-// Loading the Nuxt project boots the full module stack (and forces ssr: false), which prints
-// SEO module warnings. Skip it when only the output project is requested.
-const outputOnly = process.argv.some(
-  (arg, i, args) => args[i - 1] === '--project' && arg === 'output',
-)
-
-const output = {
-  test: {
-    name: 'output',
-    environment: 'node',
-    include: ['tests/output/**/*.test.ts'],
-  },
-}
-
 export default defineConfig({
   test: {
-    passWithNoTests: true,
-    projects: outputOnly
-      ? [output]
-      : [
-          await defineVitestProject({
-            test: {
-              name: 'unit',
-              environment: 'nuxt',
-              include: ['tests/unit/**/*.test.ts'],
-              passWithNoTests: true,
+    projects: [
+      await defineVitestProject({
+        test: {
+          name: 'unit',
+          environment: 'nuxt',
+          include: ['tests/nuxt/**/*.test.ts'],
+          environmentOptions: {
+            nuxt: {
+              // The Nuxt test environment forces ssr: false, which makes the SEO modules
+              // warn on every run. Test-only: production nuxt.config.ts is unchanged.
+              // Cast: the tooling tsconfig does not load the Nuxt module type augmentations.
+              overrides: { ogImage: { enabled: false }, site: { indexable: false } } as Record<
+                string,
+                unknown
+              >,
             },
-          }),
-          output,
-        ],
+          },
+        },
+      }),
+    ],
   },
 })

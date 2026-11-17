@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-17',
   modules: ['@nuxtjs/seo', '@nuxt/image', '@nuxt/fonts', '@nuxt/eslint'],
-  css: ['~/assets/css/tokens.css', '~/assets/css/base.css'],
+  css: ['~/assets/css/tokens.css', '~/assets/css/base.css', '~/assets/css/ui.css'],
   fonts: {
     families: [
       { name: 'Onest', weights: [400, 500, 600, 700], global: true },
@@ -14,9 +14,14 @@ export default defineNuxtConfig({
     defaults: { width: 1200, height: 630 },
   },
   image: {
-    // Viewport breakpoints for the generated `sizes` media queries (merged with the
-    // module defaults); srcset widths derive from them. Capped at the 1800px source.
-    screens: { xs: 480, sm: 768, md: 1160, lg: 1800 },
+    // Layout breakpoints (min-width). All six keys are set so the module defaults do not
+    // merge in. They drive the `sizes` media queries on project screenshots (see
+    // ProjectBlock); srcset widths derive from them, capped at the 1800px sources.
+    screens: { xs: 360, sm: 600, md: 900, lg: 1200, xl: 1440, '2xl': 1800 },
+  },
+  runtimeConfig: {
+    // Read by the footer so the server-rendered HTML and the client hydrate with the same value.
+    public: { buildYear: new Date().getFullYear() },
   },
   // The prerender crawl fails the build on any broken internal link.
   linkChecker: { failOnError: true },

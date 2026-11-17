@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "composite": false,
+    "esModuleInterop": true
+  },
+  "include": [
+    "tests/output/**/*.ts",
+    "tests/e2e/**/*.ts",
+    "scripts/**/*.mjs",
+    "vitest*.config.ts",
+    "playwright.config.ts"
+  ]
+}

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const names: Record<string, string> = { 'open-door': 'Open Door' }
+import { projectBySlug } from '~/data/projects'
 
 const route = useRoute()
-const name = names[String(route.params.slug)]
-if (!name) throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+const project = projectBySlug(String(route.params.slug))
+if (!project) throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 </script>
 
 <template>
-  <h1>{{ name }}</h1>
+  <h1>{{ project.name }}</h1>
 </template>

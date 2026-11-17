@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { projects } from '~/data/projects'
+
 // Fixed key: alias records keep their own path, so without it navigating between
 // the aliases would remount the page.
 definePageMeta({ alias: ['/projects', '/contact'], key: 'home' })
@@ -8,28 +10,40 @@ defineOgImage('Card', { title: 'James Littlefield', eyebrow: 'AI Engineer' })
 // The module emits a per-route canonical at low priority. Section URLs
 // (/projects, /contact) are aliases of this page, so pin the canonical to
 // the root. Unhead dedupes link[rel=canonical], so only this one renders.
+// The title is the full brand line, so the site title template is turned off.
 useHead({
-  link: [{ rel: 'canonical', href: 'https://jameslittlefield.net/', key: 'canonical' }],
+  title: 'James Littlefield, AI Engineer',
+  titleTemplate: '%s',
+  link: [{ rel: 'canonical', href: withSiteUrl('/'), key: 'canonical' }],
+})
+
+// Direct landing on a section URL: scroll there without moving focus. First load
+// only, so a Home remount (Back from a case study) leaves restore to the router,
+// and an explicit hash is left to the router too.
+const route = useRoute()
+const landing = useNuxtApp().isHydrating
+onMounted(() => {
+  if (!landing || route.hash) return
+  const id = sectionIdForPath(route.path)
+  if (id) scrollToSection(id)
 })
 </script>
 
 <template>
-  <div>
-    <h1>James Littlefield</h1>
-    <section id="projects" aria-labelledby="h-projects">
-      <h2 id="h-projects">Projects</h2>
-      <NuxtLink to="/projects/open-door">Open Door</NuxtLink>
-      <NuxtPicture
-        src="/images/projects/opendoor-cited-answer.png"
-        format="avif,webp"
-        width="1800"
-        height="1125"
-        sizes="xs:100vw sm:100vw md:50vw lg:50vw"
-        alt="Open Door chat answering a sick leave question with handbook citations."
-      />
-    </section>
-    <section id="contact" aria-labelledby="h-contact">
-      <h2 id="h-contact">Contact</h2>
-    </section>
-  </div>
+  <IntroHero />
+  <div id="projects" class="wrap projects-head"><h2 id="projects-h" tabindex="-1">Projects</h2></div>
+  <ProjectBlock
+    v-for="(p, i) in projects"
+    :key="p.slug"
+    :project="p"
+    :reversed="i % 2 === 1"
+    :eager="i === 0"
+  />
+  <CapabilitiesStrip />
+  <ContactSection />
 </template>
+
+<style scoped>
+.projects-head { border-top: 1px solid var(--line); padding-top: var(--s-7); }
+.projects-head h2 { font-size: var(--t-small); font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+</style>
