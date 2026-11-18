@@ -10,9 +10,12 @@ const fields = draft.value
 const errors = reactive<ContactFields>({ name: '', email: '', subject: '', message: '' })
 const honeypot = ref('')
 const submitted = ref(false)
-const sending = ref(false)
+// Sending and the result are app state too. A send keeps running after the form unmounts (the
+// reader opens a case study mid-send), and the remounted form must still read "Sending..." and
+// refuse a second send. The first mount's promise settles these shared values, even unmounted.
+const sending = useState('contact-sending', () => false)
+const status = useState('contact-status', () => ({ kind: '', text: '' }))
 const SENDING_MIN_MS = 600
-const status = reactive({ kind: '', text: '' })
 
 function fieldValue(id: string): string {
   return (document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? ''
@@ -51,15 +54,13 @@ function reset() {
   }
   honeypot.value = ''
   submitted.value = false
-  status.kind = 'ok'
-  status.text = "Message sent. I'll reply to your email."
+  status.value = { kind: 'ok', text: "Message sent. I'll reply to your email." }
 }
 
 async function onSubmit() {
   if (sending.value) return
   submitted.value = true
-  status.kind = ''
-  status.text = ''
+  status.value = { kind: '', text: '' }
   let firstInvalid: ContactFieldKey | undefined
   for (const key of CONTACT_FIELD_KEYS) {
     if (!check(key) && !firstInvalid) firstInvalid = key
@@ -89,8 +90,7 @@ async function onSubmit() {
   catch (error) {
     console.warn('Contact form send failed', error)
     await shown
-    status.kind = 'bad'
-    status.text = "Your message didn't send. Check your connection and try again, or email me directly."
+    status.value = { kind: 'bad', text: "Your message didn't send. Check your connection and try again, or email me directly." }
   }
   finally {
     sending.value = false

@@ -451,7 +451,7 @@ Build in 7 phases. Each phase ends at a working, reviewable state. Then work sto
    - `404.html` exists, has body text and is `noindex`.
    - No `.md` copies in the sitemap.
    - `og:image` PNGs are 1200x630.
-4. **Playwright e2e against `npx serve .output/public`:**
+4. **Playwright e2e against `scripts/serve-static.mjs .output/public`:**
    - Nav: Projects and Contact change the URL to `/projects` and `/contact` and scroll to the section. Loading `/contact` directly lands on the form. The URL bar never shows `#`.
    - Project-name links and Case study links reach each case study.
    - Video, Code and Live demo are disabled on all 4, and Tab skips them.

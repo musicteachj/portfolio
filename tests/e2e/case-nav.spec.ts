@@ -106,7 +106,7 @@ test('toc and direct hash land on the section heading', async ({ page }) => {
   await expect.poll(landed).toBe(true)
 })
 
-test('a direct landing on a case study hash jumps there', async ({ page }) => {
+test('a direct landing on a case study hash jumps there @cross-browser', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   // Record from the earliest point, before any of the page's own scripts or its fragment jump:
   // every scroll position, and the motion of every scripted scroll (the router's).

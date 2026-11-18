@@ -59,18 +59,26 @@ Every item below was handled in Phase 5, as noted. Only the résumé decision is
 - Give the Card OG template props real requirements, not defaults.
   - Done. `title` and `eyebrow` are required with no defaults, and `image` is optional. Each case study passes its hero screenshot, which shows uncropped beside the text on the 1200x630 card.
 
-## Phase 6 (Hosting, CI and docs)
+## Phase 6 (Hosting, CI and docs): done
+
+Every item below was handled in Phase 6, as noted. The one exception is the DESIGN.md motion item further down, which the DESIGN.md task marks.
 
 - `scripts/serve-static.mjs` should import and run `infra/cloudfront/viewer-request.js`, so e2e covers the 301 trailing-slash redirects and the real rewrites. Also tighten its root check to `startsWith(root + sep)`.
+  - Done. The static server runs the CloudFront function (which also collapses leading slashes, closing an open redirect), and its root check is tightened.
 - Every top-level path in `.output/public` needs a sync pass or an explicit exclusion:
   - Exclude `200.html` (an empty SPA shell that would be a soft 404).
   - `_payload.json` (per route) goes in the no-cache pass.
   - Also account for `_og/`, `__sitemap__/`, `__ai-ready/`, `llms-full.txt`, `.md` copies and `favicon.svg`.
   - Exclude `_og-static-fonts/` (unused Inter TTFs emitted by nuxt-og-image; the module has no option to drop them).
+  - Done. The sync passes are data in `infra/deploy/sync-passes.mjs`, and a coverage test (`tests/output/sync-coverage.test.ts`) fails if a top-level path has no pass or exclusion. `200.html` and `_og-static-fonts/` are excluded, and `_payload.json` and the Markdown copies are in the no-cache pass.
 - Add `npm run test:output` to the CI `build-and-test` job. The spec's list omits it.
+  - Done. The workflow's `build-and-test` job runs it, on pushes to main and dev and on every PR. Deploy runs only on a push to main and stops if the secrets are empty.
 - Set Playwright `reuseExistingServer: !process.env.CI`. Port 4173 is also Vite preview's default.
+  - Done in Phase 3 (the server now uses port 4317).
 - Add one `_ipx` AVIF URL to the post-launch curl checks (content type and the `&` in the key).
+  - Done in the runbook, `infra/cloudfront/README.md`, along with a query-encoding check.
 - The spec's Verification 4 says `npx serve`. The project uses `scripts/serve-static.mjs`.
+  - Done. The spec's Verification 4 wording is amended.
 
 ## Added by Phase 2 (for Phases 3 to 6)
 
@@ -163,10 +171,10 @@ Every item below was handled in Phase 5, as noted. Only the résumé decision is
 From Phase 3 and the Phase 4 final review, parked by ruling. Each needs a rare condition. Phase 5 built the other two later polish items: R2 (a direct landing on a case study hash now jumps) and M7 (the contact draft survives a visit to a case study). See "Facts learned in Phase 5".
 
 - **R1: Back/Forward within a page with no saved position glides.** For example, Back between two TOC jumps, or Forward into one. `$isHistoryNav()` can't tell these from a TOC click, because both arrive as popstate. The popstate `event.state` (null for a fresh native hash entry, set on traversal) can. It behaved this way before the Phase 3 fixes, it only affects glide versus jump, and readers with reduced motion already get jumps.
-- **M4: A stalled send shows "Sending..." indefinitely.** The SDK's `send` is a bare `fetch` with no timeout or signal. On a half-dead connection the button reads "Sending..." for minutes, the in-flight guard ignores every press of Send, and a reload (which loses the message) is the only way out. Racing `send` against a timeout of about 20 seconds would show the failure copy with the text kept, but a late success plus a retry could send a duplicate email. A related edge: `sending` and `status` are per mount while the draft is shared (`useState('contact-draft')`). Leaving Home mid-send and returning shows the sent text with Send enabled, which invites a duplicate send, and a late success clears anything typed after returning. One fix is to move `sending` and `status` into `useState` too.
+- **M4: A stalled send shows "Sending..." indefinitely.** The SDK's `send` is a bare `fetch` with no timeout or signal. On a half-dead connection the button reads "Sending..." for minutes, the in-flight guard ignores every press of Send, and a reload (which loses the message) is the only way out. Racing `send` against a timeout of about 20 seconds would show the failure copy with the text kept, but a late success plus a retry could send a duplicate email. Only this timeout part is still open. The related duplicate-send edge is closed (Phase 6): `sending` and `status` now live in `useState` (`contact-sending`, `contact-status`) next to the draft, so leaving Home mid-send and returning still shows "Sending..." and refuses a second send. The first mount's promise keeps running after unmount and settles the shared state, so a late success clears the draft and shows the result.
 - **R3: A reload, or a Back that isn't restored from the bfcache, on a case study hash URL lands at the hash, not the saved scroll offset.** The saved position is restored by the first `scrollBehavior` call, and the second call (Nuxt's landing replace) then scrolls to the hash. One fix is to skip the restore call's hash scroll when the first call had a saved position.
 - **M5: With site storage blocked, every send fails, and the copy blames the connection.** Accepted in Phase 5, so there is nothing to do. The SDK reads `localStorage` when its module loads, so a browser that throws `SecurityError` for blocked site data makes the lazy import reject. It needs a browser with site data blocked, the failure copy still offers to email directly, and the Email links work. (Posting to the EmailJS REST endpoint with our own `fetch` would avoid it, and would also allow an `AbortController` for M4, but it departs from the spec's `@emailjs/browser`.)
-- **Launch check: hash landings in Safari and Firefox.** Verify a direct landing on a case study hash (for example `/projects/folio#results`) in both. The e2e suite is Chromium only.
+- **Launch check: hash landings in Safari and Firefox.** Automated in Phase 6: the direct-landing hash test in `tests/e2e/case-nav.spec.ts` is tagged `@cross-browser`, and the Playwright `firefox` and `webkit` projects run only tagged tests. It passes in both, so no manual check is needed.
 - **Launch check: LinkedIn may keep a cached share image after a screenshot swap.** The `_og` image URLs are keyed by props, so changing a hero image can leave the old card cached. Re-scrape the page in LinkedIn's Post Inspector after changing a hero.
 
 ## Added by Phase 4 (for Phase 6)
@@ -176,13 +184,18 @@ The polish items Phase 4 parked are under "Launch prep" above.
 ### Phase 6 (Hosting, CI and docs)
 
 - **CI config:** the `build-and-test` job needs non-empty `NUXT_PUBLIC_EMAILJS_SERVICE_ID`, `NUXT_PUBLIC_EMAILJS_TEMPLATE_ID` and `NUXT_PUBLIC_EMAILJS_PUBLIC_KEY` at generate time. Dummy values are fine, because every e2e request to EmailJS is intercepted. The deploy job maps the real secrets.
+  - Done. The workflow sets dummy values for build-and-test and maps the real secrets in deploy.
 - **Docs:** James turns on the EmailJS domain allowlist (adding `localhost` only if he wants local sends) and a rate limit in the EmailJS dashboard.
+  - Done in `README.md`.
 - **Docs, EmailJS 412:** an HTTP 412 from EmailJS means its Gmail permission has expired, even when the dashboard still says "Connected as...". The fix is Email Services, the Gmail service, Disconnect, then Connect Account with "Send email on your behalf" checked, then Update Service. This happened on 2026-11-18, and the README should say so.
+  - Done in `README.md`.
 - **DESIGN.md motion:** besides the intro "settle", the contact form's Send button shows a small spinner (`.spinner` in `ContactForm.vue`) while a message sends. The sending state lasts at least 600ms, so a fast reply doesn't flash. James asked for this on 2026-11-18, and the spec's Motion line records it.
+  - Done. `DESIGN.md` now records both motions (the intro settle and the Send spinner), plus the smooth-scroll note.
 - **No-JS submit:** a send before the JS loads is a plain `POST /contact` (the form has `method="post"` and no action). `scripts/serve-static.mjs` ignores the method and returns the page with a 200, so e2e can't show what production does.
   - CloudFront allows only GET and HEAD by default, so it probably answers with a 403. The 403 → `/404.html` custom error response would then show "Page not found" with a 404, and the message is lost.
   - Allowing POST wouldn't help, because the S3 website endpoint serves only GET and HEAD.
   - After the error responses are swapped, check with `curl -i -X POST https://jameslittlefield.net/contact`. Then decide whether to accept that for the tiny no-JS audience or to return something better.
+  - Done as a runbook step: the post-launch checks in `infra/cloudfront/README.md` include `POST /contact`. The decision itself waits for the live result.
 
 ## Added by Phase 5 (for Phase 6)
 
@@ -200,6 +213,9 @@ The polish items Phase 4 parked are under "Launch prep" above.
 ### Phase 6 (Hosting, CI and docs)
 
 - **Keep CloudFront compression on.** Verified live on 2026-11-18: `/` and its JS bundle return `content-encoding: br` over HTTP/2. Without compression the Open Door Lighthouse performance score drops to about 0.91 to 0.94.
+  - Done. The runbook's post-launch curls check compression.
 - **Response headers:** consider a CloudFront response headers policy for CSP, HSTS and COOP. The live site sends none of them. Cache-control comes from the planned sync passes.
+  - Done. The runbook offers a response headers policy as an optional step, without a CSP. Cache-control comes from the sync passes.
 - **Lighthouse in CI:** `scripts/lighthouse.mjs` launches Playwright's Chromium (`chromium.executablePath()`), so a CI job that runs it must install that browser first (`npx playwright install chromium`). Its reports go to `.lighthouse/`, which is gitignored. Upload that folder as an artifact if CI runs it.
+  - Done by decision: Lighthouse stays a manual check and is not in CI.
 - `_og-static-fonts/` is already on the sync exclusion list above. Phase 5 confirmed nuxt-og-image has no option to drop it.

@@ -22,6 +22,13 @@ export default defineConfig({
           },
         },
       }),
+      {
+        test: {
+          name: 'infra',
+          environment: 'node',
+          include: ['tests/infra/**/*.test.ts'],
+        },
+      },
     ],
   },
 })

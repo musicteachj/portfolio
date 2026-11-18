@@ -312,6 +312,42 @@ test('a half-typed message survives a visit to a case study', async ({ page }) =
   await expectFieldsValue(page, false)
 })
 
+test('a send in flight survives a visit to a case study and blocks a second send', async ({ page }) => {
+  let release!: () => void
+  const gate = new Promise<void>((resolve) => { release = resolve })
+  let posts = 0
+  await page.route(EMAILJS, async (route: Route) => {
+    if (route.request().method() === 'OPTIONS') {
+      return route.fulfill({ status: 204, headers: { ...CORS, 'access-control-allow-headers': '*', 'access-control-allow-methods': 'POST, OPTIONS' } })
+    }
+    posts++
+    await gate
+    await route.fulfill({ status: 200, body: 'OK', headers: { ...CORS, 'content-type': 'text/plain' } })
+  })
+  await fillForm(page)
+  const submit = page.locator('#f-submit')
+  await submit.click()
+  await expect(submit).toHaveText('Sending...')
+  await expect.poll(() => posts).toBe(1)
+
+  await page.locator('#folio .proof').getByRole('link', { name: /Case study/ }).click()
+  await expect(page).toHaveURL('/projects/folio')
+  await page.goBack()
+  await expect(page).toHaveURL('/contact')
+
+  await expect(submit).toHaveText('Sending...')
+  await expect(submit).toHaveAttribute('aria-disabled', 'true')
+  await submit.click({ force: true })
+  await page.waitForTimeout(300)
+  expect(posts).toBe(1)
+
+  release()
+  await expect(page.locator('#f-status')).toHaveText(SUCCESS)
+  await expect(submit).toHaveText('Send message')
+  await expectFieldsValue(page, false)
+  expect(posts).toBe(1)
+})
+
 test('error state passes axe', async ({ page }) => {
   await page.locator('#f-submit').click()
   await expect(page.locator('#f-name-err')).toHaveText('Enter your name')

@@ -25,7 +25,7 @@ afterEach(() => {
   mounted?.unmount()
   mounted = undefined
   // The draft is app state and outlives a mount, so no test may start with another's.
-  clearNuxtState('contact-draft')
+  clearNuxtState(['contact-draft', 'contact-sending', 'contact-status'])
   sendMock.mockReset()
   vi.restoreAllMocks()
 })
@@ -106,6 +106,26 @@ it('a second submit while sending does nothing', async () => {
   await vi.waitFor(() => expect(w.find('#f-submit').text()).toBe('Send message'), { timeout: 2000 })
   expect(w.find('#f-submit').attributes('aria-disabled')).toBeUndefined()
   expect(w.find('#f-submit .spinner').exists()).toBe(false)
+})
+
+it('a send in flight survives a remount: still Sending..., and a submit sends nothing new', async () => {
+  let resolve!: () => void
+  sendMock.mockReturnValue(new Promise<void>((r) => { resolve = r }))
+  const first = await mountForm()
+  await fill(first, valid)
+  await first.find('form').trigger('submit')
+  expect(sendMock).toHaveBeenCalledTimes(1)
+  first.unmount()
+  const w = await mountForm()
+  expect(w.find('#f-submit').text()).toBe('Sending...')
+  expect(w.find('#f-submit').attributes('aria-disabled')).toBe('true')
+  await w.find('form').trigger('submit')
+  expect(sendMock).toHaveBeenCalledTimes(1)
+  // The first mount's promise settles the shared state, so the new mount shows the result.
+  resolve()
+  await vi.waitFor(() => expect(w.find('#f-status').classes()).toContain('ok'), { timeout: 2000 })
+  expect(w.find('#f-submit').text()).toBe('Send message')
+  for (const key of keys) expect((w.find(`#f-${key}`).element as HTMLInputElement).value).toBe('')
 })
 
 it('a fast reply still shows Sending... for at least 600ms', async () => {

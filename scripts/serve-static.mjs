@@ -1,11 +1,15 @@
 import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
-import { extname, join, normalize, resolve } from 'node:path'
+import { extname, join, normalize, resolve, sep } from 'node:path'
 import { promisify } from 'node:util'
 import { brotliCompress, constants, gzip } from 'node:zlib'
+import { loadViewerRequest } from './lib/cloudfront-function.mjs'
 
 const root = resolve(process.argv[2] ?? '.output/public')
 const port = Number(process.argv[3] ?? 4173)
+
+// The same CloudFront Function that runs in production decides redirects and rewrites.
+const viewerRequest = loadViewerRequest()
 
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -52,15 +56,29 @@ async function send(req, res, status, file, body) {
   res.end(out.body)
 }
 
-function candidate(pathname) {
-  if (pathname === '/') return 'index.html'
-  const clean = pathname.replace(/\/+$/, '')
-  return extname(clean) ? clean : `${clean}/index.html`
+// Builds the CloudFront event from the raw (still percent-encoded) path and query.
+function buildEvent(req) {
+  const raw = req.url ?? '/'
+  const q = raw.indexOf('?')
+  const uri = q === -1 ? raw : raw.slice(0, q)
+  const querystring = {}
+  if (q !== -1) {
+    for (const pair of raw.slice(q + 1).split('&')) {
+      if (!pair) continue
+      const eq = pair.indexOf('=')
+      const name = eq === -1 ? pair : pair.slice(0, eq)
+      const value = eq === -1 ? '' : pair.slice(eq + 1)
+      const entry = querystring[name]
+      if (!entry) querystring[name] = { value }
+      else (entry.multiValue ??= [{ value: entry.value }]).push({ value })
+    }
+  }
+  return { request: { method: req.method, uri, querystring, headers: {} } }
 }
 
 async function tryRead(rel) {
   const file = resolve(join(root, normalize(rel)))
-  if (!file.startsWith(root)) return null
+  if (file !== root && !file.startsWith(root + sep)) return null
   try {
     return { body: await readFile(file), file }
   } catch {
@@ -69,13 +87,19 @@ async function tryRead(rel) {
 }
 
 createServer(async (req, res) => {
-  let pathname
-  try {
-    pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname)
-  } catch {
-    pathname = '/__bad__'
+  const result = viewerRequest(buildEvent(req))
+  if (result.statusCode) {
+    res.writeHead(result.statusCode, { Location: result.headers.location.value })
+    res.end()
+    return
   }
-  const hit = await tryRead(candidate(pathname))
+  let rel
+  try {
+    rel = decodeURIComponent(result.uri)
+  } catch {
+    rel = '/__bad__'
+  }
+  const hit = await tryRead(rel)
   if (hit) {
     await send(req, res, 200, hit.file, hit.body)
     return
