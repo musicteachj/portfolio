@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Project } from '~/types/project'
 
-defineProps<{ stack: Project['stack'] }>()
+withDefaults(defineProps<{ stack: Project['stack']; variant?: 'home' | 'page' }>(), { variant: 'home' })
 </script>
 
 <template>
-  <dl class="stack">
+  <dl class="stack" :class="{ 'stack--page': variant === 'page' }">
     <div v-for="s in stack" :key="s.group">
       <dt>{{ s.group }}</dt>
       <dd>{{ s.items }}</dd>
@@ -19,7 +19,9 @@ defineProps<{ stack: Project['stack'] }>()
 .stack dt { font: 400 0.75rem/1.75 var(--font-mono); color: var(--ink-3); }
 .stack dd { color: var(--ink); min-width: 0; }
 @media (min-width: 600px) and (max-width: 899px) {
-  .stack { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s-6); border-top: 0; }
-  .stack div:first-child { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+  .stack:not(.stack--page) { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s-6); border-top: 0; }
+  .stack:not(.stack--page) div:first-child { grid-column: 1 / -1; border-top: 1px solid var(--line); }
 }
+.stack--page { margin-top: var(--s-4); max-width: 780px; }
+.stack--page div { padding: 10px 0; font-size: 0.9375rem; grid-template-columns: 6.5rem minmax(0, 1fr); }
 </style>

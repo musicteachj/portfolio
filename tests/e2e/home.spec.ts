@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import AxeBuilder from '@axe-core/playwright'
+import { expectNoSeriousAxe } from './helpers/axe'
 
 test('first Tab focuses the skip link and it moves focus to main', async ({ page }) => {
   await page.goto('/')
@@ -25,7 +25,7 @@ test('Tab reaches only the case study link inside each proof list', async ({ pag
   }
 })
 
-test('project names open each case study stub', async ({ page }) => {
+test('project names open each case study', async ({ page }) => {
   for (const [name, slug] of [
     ['Open Door', 'open-door'],
     ['Packwright', 'packwright'],
@@ -39,12 +39,23 @@ test('project names open each case study stub', async ({ page }) => {
   }
 })
 
+test('each Case study proof link opens its case study', async ({ page }) => {
+  for (const [id, name, slug] of [
+    ['opendoor', 'Open Door', 'open-door'],
+    ['packwright', 'Packwright', 'packwright'],
+    ['folio', 'Folio', 'folio'],
+    ['resumeiq', 'ResumeIQ', 'resumeiq'],
+  ] as const) {
+    await page.goto('/')
+    await page.locator(`#${id} .proof`).getByRole('link', { name: /Case study/ }).click()
+    await expect(page).toHaveURL(`/projects/${slug}`)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(name)
+  }
+})
+
 test('Home has no serious or critical axe violations', async ({ page }) => {
   await page.goto('/')
-  // Let the intro settle animation finish: axe reads mid-fade opacity as a contrast failure.
-  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished)))
-  const r = await new AxeBuilder({ page }).analyze()
-  expect(r.violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? ''))).toEqual([])
+  await expectNoSeriousAxe(page)
 })
 
 for (const w of [360, 390, 768, 1024, 1280, 1440]) {

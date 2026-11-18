@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import type { ProofItem } from '~/utils/proof'
 
-defineProps<{ items: ProofItem[]; label: string }>()
+withDefaults(
+  defineProps<{ items: ProofItem[]; label: string; variant?: 'home' | 'page'; projectName?: string }>(),
+  { variant: 'home', projectName: undefined },
+)
 
 const isExternal = (href: string) => /^https?:/.test(href)
 </script>
 
 <template>
-  <ul class="proof" :aria-label="label">
+  <ul class="proof" :class="{ 'proof--3': variant === 'page' }" :aria-label="label">
     <li v-for="item in items" :key="item.key">
       <template v-if="item.href">
-        <a v-if="isExternal(item.href)" :href="item.href">{{ item.label }} <span class="state">{{ item.sub }}</span></a>
-        <NuxtLink v-else :to="item.href">{{ item.label }} <span class="state">{{ item.sub }}</span></NuxtLink>
+        <a v-if="isExternal(item.href)" :href="item.href"><span v-if="item.key === 'case' && projectName" class="sr-only">{{ projectName }}</span> {{ item.label }} <span class="state">{{ item.sub }}</span></a>
+        <NuxtLink v-else :to="item.href"><span v-if="item.key === 'case' && projectName" class="sr-only">{{ projectName }}</span> {{ item.label }} <span class="state">{{ item.sub }}</span></NuxtLink>
       </template>
       <span v-else class="proof-off" role="link" aria-disabled="true">{{ item.label }} <span class="state">{{ item.sub }}</span></span>
     </li>
@@ -21,8 +24,11 @@ const isExternal = (href: string) => /^https?:/.test(href)
 <style scoped>
 /* 2x2 by default, one row of 4 when the .p-text container (see ProjectBlock) is wide enough. */
 .proof { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); margin-top: var(--s-5); }
-@container (min-width: 540px) { .proof { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@container (min-width: 540px) { .proof:not(.proof--3) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .proof li { min-width: 0; }
+/* Page variant: 3 columns, 1 column in a narrow container. The page supplies the container. */
+.proof--3 { margin-top: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@container (max-width: 420px) { .proof--3 { grid-template-columns: 1fr; } }
 .proof a {
   display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 5px;
   min-height: 58px; padding: 8px 14px; border-radius: var(--r-ctl); width: 100%;

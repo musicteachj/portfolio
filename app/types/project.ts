@@ -16,6 +16,9 @@ export interface Screenshot {
   dark?: boolean
 }
 
+/** A case study gallery item: the caption is required. */
+export type GalleryScreenshot = Screenshot & { caption: string }
+
 export interface ProjectLinks {
   code: { url: string; enabled: boolean }
   demo: { url?: string; enabled: boolean }
@@ -29,8 +32,46 @@ export interface ProjectLinks {
   }
 }
 
+export interface StepGroup {
+  title: string
+  steps: { title: string; text: string }[]
+}
+
+export type Architecture =
+  | { kind: 'steps'; groups: StepGroup[] }
+  /** Rendered by RequestFlow.vue (Open Door only). */
+  | { kind: 'flow'; ariaLabel: string }
+
+export interface ResultsData {
+  ariaLabel: string
+  /** Header cells; the first is the row-label column. */
+  columns: string[]
+  /** values.length === columns.length - 1 */
+  rows: { label: string; values: string[]; miss?: boolean }[]
+  note?: string
+}
+
+/** Rendered as "<b>title.</b> text"; title has no trailing period. */
+export interface Decision {
+  title: string
+  text: string
+}
+
+export interface CaseStudy {
+  overview: string
+  features: string[]
+  /** Inline code is marked with backticks, e.g. `search_handbook`. */
+  howAiWorks: { intro: string; points: string[] }
+  architecture: Architecture
+  results: ResultsData
+  decisions: Decision[]
+  gallery: GalleryScreenshot[]
+}
+
 export interface Project {
   slug: ProjectSlug
+  /** Home section id, kept from the mockup. */
+  anchorId: 'opendoor' | 'packwright' | 'folio' | 'resumeiq'
   name: string
   typeLabel: string
   /** Case study lede (v11 class="lede"). */
@@ -45,4 +86,5 @@ export interface Project {
   /** Browser-frame address label. */
   frameLabel: string
   links: ProjectLinks
+  caseStudy: CaseStudy
 }

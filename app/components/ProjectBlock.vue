@@ -3,14 +3,7 @@ import type { Project } from '~/types/project'
 
 const props = defineProps<{ project: Project; reversed: boolean; eager?: boolean }>()
 
-// Section ids keep the mockup's names; the slug-to-id map lives only here.
-const anchors: Record<Project['slug'], string> = {
-  'open-door': 'opendoor',
-  packwright: 'packwright',
-  folio: 'folio',
-  resumeiq: 'resumeiq',
-}
-const id = computed(() => anchors[props.project.slug])
+const id = computed(() => props.project.anchorId)
 const proof = computed(() => proofItems(props.project, 'home'))
 
 // Layout: 100vw below 900px, about 55vw from 900 to 1199px, 800px from 1200px. The image
@@ -30,7 +23,7 @@ const sizes = 'xs:100vw sm:100vw md:55vw lg:800px xl:800px 2xl:800px'
         <p class="p-over">{{ project.overview }}</p>
         <StackList :stack="project.stack" />
         <StatRow :stats="project.stats" />
-        <ProofLinks :items="proof" :label="`${project.name} links`" />
+        <ProofLinks :items="proof" :label="`${project.name} links`" :project-name="project.name" />
       </div>
       <div class="p-media">
         <MediaStage>

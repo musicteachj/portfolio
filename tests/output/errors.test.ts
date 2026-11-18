@@ -13,3 +13,16 @@ test('404.html has real content and is noindex', () => {
 test('unknown project slugs are not prerendered', () => {
   expect(exists('projects/does-not-exist/index.html')).toBe(false)
 })
+
+test('404 page links to the projects section', () => {
+  expect(html('404.html').querySelector('a[href="/projects"]')).not.toBeNull()
+})
+
+test('error page uses button actions', () => {
+  const root = html('404.html')
+  const links = root.querySelectorAll('main .actions a.btn')
+  expect(links.map((a) => a.getAttribute('href'))).toEqual(['/', '/projects'])
+  expect(links.map((a) => a.text.trim())).toEqual(['Go to the home page', 'See the projects'])
+  expect(links[0]?.classList.contains('btn--primary')).toBe(true)
+  expect(root.querySelector('main .error-page p')?.text.trim()).toBe("That page doesn't exist or has moved.")
+})

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-defineProps<{ label: string; dark?: boolean }>()
+withDefaults(defineProps<{ label: string; dark?: boolean; as?: 'figure' | 'div' }>(), { as: 'figure' })
 </script>
 
 <template>
-  <figure class="frame" :class="{ 'frame--dark': dark }">
+  <component :is="as" class="frame" :class="{ 'frame--dark': dark }">
     <div class="frame-bar" aria-hidden="true">
       <span class="frame-dots"><i /><i /><i /></span>
       <span class="frame-addr">{{ label }}</span>
       <span />
     </div>
     <slot />
-  </figure>
+  </component>
 </template>
 
 <style scoped>
@@ -24,4 +24,5 @@ defineProps<{ label: string; dark?: boolean }>()
 .frame--dark .frame-addr { background: #262623; color: #B9B9B0; }
 /* Screenshots are never cropped. The picture and img render in the slot, so reach them with :deep. */
 .frame :deep(img) { width: 100%; height: auto; display: block; }
+.frame :deep(video) { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: contain; background: #F4F5F7; }
 </style>

@@ -9,9 +9,11 @@ export function sectionIdForPath(path: string): string | undefined {
   return (SECTION_PATHS as Record<string, string>)[path]
 }
 
+// Explicit values, so the motion doesn't depend on CSS: 'auto' would follow html's
+// scroll-behavior from base.css (smooth, or auto under its reduced-motion rule).
 export function scrollBehaviorPref(): ScrollBehavior {
   if (import.meta.server) return 'auto'
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
 }
 
 export function focusSectionHeading(id: string) {

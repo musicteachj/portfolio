@@ -1,4 +1,4 @@
-# Carry-forward notes (Phases 1 and 2)
+# Carry-forward notes (Phases 1 to 3)
 
 Phase 1 ("Foundation and tracer bullet") is committed as `184d060`. These are the findings from its task reviews and its final whole-phase review that were deliberately left to later phases. The plan for each phase must account for the items listed under it.
 
@@ -33,7 +33,7 @@ Every item below was closed in Phase 2.
   - Bring tests under typecheck: `nuxt typecheck` only covers `app/**`, `nuxt.config.*` and `tests/nuxt/**`. Use `tests/nuxt/` or add a tests tsconfig.
 - Remove the tracer-only `console.log` and the wrapper `<div>` in `index.vue` once real components exist.
 
-## Phase 3 (Case studies and 404)
+## Phase 3 (Case studies and 404): done
 
 - In the unknown-slug e2e test, replace the `!/404/` console filter with a check that excludes only the document response.
 - Add a test that the 404 page links to `/projects`.
@@ -79,7 +79,7 @@ Every item below was closed in Phase 2.
   - `base.css` sets `html { scroll-behavior: smooth }`, so `'auto'` is smooth. Use `'instant'` when you mean instant.
 - **Playwright `reuseExistingServer: true`:** a stray server on port 4173 made a whole e2e run fail with ECONNREFUSED. Set it to `!process.env.CI` and consider a less common port. This was originally a Phase 6 item; do it early in Phase 3.
 
-### Phase 3 (Case studies and 404)
+### Phase 3 (Case studies and 404): done
 
 - **Expand `scrollBehavior`:**
   - Wait for `page:loading:end` before scrolling, the way Nuxt's default does, so async case study pages render first.
@@ -113,3 +113,40 @@ Every item below was closed in Phase 2.
 - **Portrait:** has no `format="avif,webp"`, and `james.jpg` has no size test.
 - **Email scan:** `check-seo` must scan every text file for `mailto:` and `jameslittlefield3@`, not just `index.html`.
 - **Lighthouse:** the intro "settle" animation holds text at opacity 0 for up to about 900ms. Check LCP.
+
+## Added by Phase 3 (for Phases 4 to 6)
+
+### Facts learned in Phase 3
+
+- **`scrollBehavior` now compares pages, not paths.** A route's page key is `meta.key` (Home's `/`, `/projects` and `/contact` share `'home'`), otherwise its path.
+  - Within one page (a section link on Home, the wordmark from `/contact`, a TOC link), the scroll follows the motion preference: a glide, or a jump under reduced motion.
+  - A page change waits for `page:loading:end` and then jumps (`'instant'`), including into a section URL or a hash.
+  - Back and Forward always jump, including Back out of a TOC jump (the router never saved a position for that entry, so it goes to the top).
+  - The router has already decoded `to.hash`. Don't decode it again.
+- **Focus on arrival:**
+  - A link into a case study focuses its h1 (`#case-title`).
+  - A link to a hash inside it (`#media`, `#video`) focuses the h2 of the section that holds the target instead. Every case study h2 has `tabindex="-1"` for this.
+  - The first load and Back/Forward keep the browser's own focus (`$isHistoryNav()` from `app/plugins/history-nav.client.ts`).
+- **`<NuxtRouteAnnouncer>` is client-only** (Nuxt registers it with `mode: 'client'`). It never appears in prerendered HTML, so test it after hydration. `error.vue` renders instead of `app.vue`, so it has its own.
+- **Gallery `sizes` depend on the image count**, because the auto-fit grid stretches one or two images across the row. Numeric keys (`640:50vw`, `1100:864px`) work in `@nuxt/image` sizes.
+  - `tests/e2e/case-studies.spec.ts` guards this at 1440 (DPR 1 and 2) and against over-fetch at 768.
+- **Video:** the description (needed for a silent video, WCAG 1.2.1) renders below the stage as `.video-note`, as in v11. The poster is optional.
+  - The data test fails if an enabled video has neither a description nor captions.
+- **Scroll test helpers:** `tests/e2e/helpers/scroll.ts` (`recordScrolls`, `scrollsBetween`, `waitForScrollIdle`) tell a glide from a jump.
+  - Scroll with `window.scrollTo({ behavior: 'instant' })` plus two animation frames, not `page.mouse.wheel`. A wheel resolves before Chromium applies it, and the pending scroll can cancel the next smooth scroll.
+
+### Phase 5 (SEO and performance)
+
+- **Lists:** add `role="list"` to lists styled `list-style: none` (project tabs, section TOC, plain lists, architecture steps, proof links). Safari drops their list semantics otherwise.
+- **Hero image:**
+  - The case study hero srcset declares a 2360w candidate above the 1800px source. Make the srcset honest.
+  - Consider a preload for the hero (likely LCP).
+  - Check the hero for over-fetch.
+- **Gallery:** sizes over-fetch slightly between 1100 and 1180px (the column is narrower than 864px there). Small; revisit only if Lighthouse flags it.
+
+### Later polish (any phase before launch)
+
+Both behaved this way before the Phase 3 fixes. They only affect glide versus jump, and readers with reduced motion already get jumps.
+
+- **Back/Forward within a page with no saved position glides.** For example, Back between two TOC jumps, or Forward into one. `$isHistoryNav()` can't tell these from a TOC click, because both arrive as popstate. The popstate `event.state` (null for a fresh native hash entry, set on traversal) can.
+- **A direct landing on a case study hash glides from the top under default motion** (for example `/projects/folio#results`). On prerendered pages, Nuxt calls `scrollBehavior` a second time with a `from` that isn't `START_LOCATION`, so the "first load jumps" path never runs. The browser's own jump to the hash also animates, because of `html { scroll-behavior: smooth }`. The step 2 comment in `router.options.ts` ("the browser has already jumped there") is wrong in practice.

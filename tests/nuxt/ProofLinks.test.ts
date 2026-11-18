@@ -35,3 +35,32 @@ it('enabled external items render plain anchors', async () => {
   expect(a.attributes('href')).toBe('https://github.com/musicteachj/open-door')
   expect(w.find('ul').attributes('aria-label')).toBe('Open Door links')
 })
+
+it('page variant uses the 3-column proof grid and omits case study', async () => {
+  const w = await mountSuspended(ProofLinks, {
+    props: { items: proofItems(projects[0]!, 'page'), label: 'Open Door links', variant: 'page', projectName: 'Open Door' },
+  })
+  expect(w.find('ul').classes()).toContain('proof--3')
+  expect(w.findAll('li')).toHaveLength(3)
+  expect(w.text()).not.toContain('Case study')
+})
+
+it('home variant has no proof--3 class', async () => {
+  const w = await mountSuspended(ProofLinks, {
+    props: { items: proofItems(projects[0]!, 'home'), label: 'Open Door links' },
+  })
+  expect(w.find('ul').classes()).not.toContain('proof--3')
+})
+
+it('case study link has a hidden project name', async () => {
+  const w = await mountSuspended(ProofLinks, {
+    props: { items: proofItems(projects[0]!, 'home'), label: 'Open Door links', projectName: 'Open Door' },
+  })
+  const a = w.find('a')
+  expect(a.find('.sr-only').text()).toBe('Open Door')
+  // The space sits outside the hidden name, so the link reads "Open Door Case study".
+  expect(a.element.textContent).toMatch(/^Open Door Case study/)
+  expect(a.text()).toContain('Case study')
+  expect(a.text()).toContain('read')
+  expect(a.attributes('aria-label')).toBeUndefined()
+})

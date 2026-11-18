@@ -2,7 +2,6 @@
 import { site } from '~/data/site'
 
 const route = useRoute()
-const router = useRouter()
 const links = [
   { to: '/projects', label: 'Projects' },
   { to: '/contact', label: 'Contact' },
@@ -11,48 +10,14 @@ const links = [
 // Section links are aliases of one page, so the router would mark both as the
 // current page. Mark only the section whose path is open, as a location.
 const current = (to: string) => (route.path === to ? 'location' : undefined)
-
-// Plain primary-button clicks only; modified clicks keep the browser's default (new tab, etc.).
-const isPlainClick = (e: MouseEvent) =>
-  !e.defaultPrevented && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey
-
-// The section paths and / are aliases of one record, so the router treats a move between
-// them as a duplicate navigation unless forced. Returns false if the push did not land.
-async function pushForced(path: string) {
-  try {
-    return !(await router.push({ path, force: true }))
-  } catch {
-    return false
-  }
-}
-
-async function go(e: MouseEvent, to: keyof typeof SECTION_PATHS) {
-  if (!isPlainClick(e)) return
-  e.preventDefault()
-  const id = SECTION_PATHS[to]
-  if (route.path === to) {
-    // Already here: the router does nothing, so scroll and focus directly.
-    scrollToSection(id, { focus: true })
-    return
-  }
-  // The router's scrollBehavior does the scroll; the handler only moves focus.
-  if (await pushForced(to)) focusSectionHeading(id)
-}
-
-async function home(e: MouseEvent) {
-  if (!isPlainClick(e)) return
-  e.preventDefault()
-  if (route.path === '/') window.scrollTo({ top: 0, behavior: scrollBehaviorPref() })
-  else await pushForced('/')
-}
 </script>
 
 <template>
   <header class="topbar">
     <div class="wrap">
-      <a class="wordmark" href="/" :aria-current="route.path === '/' ? 'page' : undefined" @click="home"><span class="wordmark-mark" aria-hidden="true"><span /></span>{{ site.name }}</a>
+      <SectionLink class="wordmark" to="/" :aria-current="route.path === '/' ? 'page' : undefined"><span class="wordmark-mark" aria-hidden="true"><span /></span>{{ site.name }}</SectionLink>
       <nav class="topnav" aria-label="Primary">
-        <a v-for="l in links" :key="l.to" :href="l.to" :aria-current="current(l.to)" @click="go($event, l.to)">{{ l.label }}</a>
+        <SectionLink v-for="l in links" :key="l.to" :to="l.to" :aria-current="current(l.to)">{{ l.label }}</SectionLink>
         <a :href="site.resumePath">Résumé</a>
       </nav>
     </div>

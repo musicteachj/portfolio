@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
+import { waitForHydration } from './helpers/hydration'
+import { recordScrolls, scrollsBetween, waitForScrollIdle } from './helpers/scroll'
 
 const inView = (page: Page, sel: string) =>
   page.locator(sel).evaluate((e) => {
@@ -28,9 +30,17 @@ test('direct load does not steal focus', async ({ page }) => {
 
 test('same-route nav click still scrolls', async ({ page }) => {
   await page.goto('/projects')
+  await waitForHydration(page)
   await expect.poll(() => inView(page, '#projects')).toBe(true)
-  await page.mouse.wheel(0, 20000)
-  await expect.poll(() => inView(page, '#projects')).toBe(false)
+  await waitForScrollIdle(page)
+  // Scroll away and let two frames pass, so the scroll is applied before the click starts
+  // its own. A wheel event resolves before Chromium applies it, and a pending scroll can
+  // cancel the click's smooth scroll.
+  await page.evaluate(async () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' })
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+  })
+  expect(await inView(page, '#projects')).toBe(false)
   await nav(page)
     .getByRole('link', { name: 'Projects' })
     .evaluate((a: HTMLElement) => a.click())
@@ -66,6 +76,46 @@ test('wordmark from /contact returns to / at the top', async ({ page }) => {
   await page.getByRole('link', { name: /James Littlefield/ }).first().evaluate((a: HTMLElement) => a.click())
   await expect(page).toHaveURL('/')
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50)
+})
+
+// /contact and / are one page, so the wordmark scrolls within it: a glide, or a jump under
+// reduced motion. Only a real page change always jumps.
+for (const reduced of [false, true]) {
+  test(`wordmark from /contact ${reduced ? 'jumps to the top under reduced motion' : 'glides to the top'}`, async ({
+    page,
+  }) => {
+    if (reduced) await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/contact')
+    await waitForHydration(page)
+    await expect.poll(() => inView(page, '#contact')).toBe(true)
+    await waitForScrollIdle(page)
+    const start = await page.evaluate(() => window.scrollY)
+    expect(start).toBeGreaterThan(1000)
+    await recordScrolls(page)
+    await page.getByRole('link', { name: /James Littlefield/ }).first().evaluate((a: HTMLElement) => a.click())
+    await expect(page).toHaveURL('/')
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+    const between = await scrollsBetween(page, 10, start - 10)
+    if (reduced) expect(between).toEqual([])
+    else expect(between.length).toBeGreaterThan(1)
+  })
+}
+
+test('header Projects from /contact glides on Home', async ({ page }) => {
+  await page.goto('/contact')
+  await waitForHydration(page)
+  await expect.poll(() => inView(page, '#contact')).toBe(true)
+  await waitForScrollIdle(page)
+  const start = await page.evaluate(() => window.scrollY)
+  await recordScrolls(page)
+  await nav(page)
+    .getByRole('link', { name: 'Projects' })
+    .evaluate((a: HTMLElement) => a.click())
+  await expect(page).toHaveURL('/projects')
+  await expect.poll(() => inView(page, '#projects')).toBe(true)
+  await waitForScrollIdle(page)
+  const end = await page.evaluate(() => window.scrollY)
+  expect((await scrollsBetween(page, end + 10, start - 10)).length).toBeGreaterThan(1)
 })
 
 test('wordmark from a scrolled /projects returns to / at the top', async ({ page }) => {

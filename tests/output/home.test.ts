@@ -25,14 +25,7 @@ test('footer shows the build year', () => {
   )
 })
 
-// Mirrors the slug-to-id map in app/components/ProjectBlock.vue.
-const anchors: Record<string, string> = {
-  'open-door': 'opendoor',
-  packwright: 'packwright',
-  folio: 'folio',
-  resumeiq: 'resumeiq',
-}
-const anchor = (p: { slug: string }) => anchors[p.slug]!
+const anchor = (p: { anchorId: string }) => p.anchorId
 
 test('every project block renders its real content', () => {
   const r = html('index.html')
