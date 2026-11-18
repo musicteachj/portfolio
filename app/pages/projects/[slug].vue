@@ -1,11 +1,33 @@
 <script setup lang="ts">
 import { projectBySlug } from '~/data/projects'
+import { site } from '~/data/site'
 
 const route = useRoute()
 const project = projectBySlug(String(route.params.slug))
 if (!project) throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
-useHead({ title: project.name })
+const { title, description } = projectSeo(project)
+useSeoMeta({ title, description, ogDescription: description })
+defineOgImage('Card', { title: project.name, eyebrow: project.typeLabel, image: project.hero.src })
+const siteUrl = useSiteConfig().url
+useSchemaOrg([
+  // nuxt-schema-org has no CreativeWork helper, so this is a plain node.
+  {
+    '@type': 'CreativeWork',
+    '@id': `${siteUrl}/projects/${project.slug}#creativework`,
+    name: project.name,
+    description,
+    image: `${siteUrl}${project.hero.src}`,
+    url: `${siteUrl}/projects/${project.slug}`,
+    author: { '@id': `${siteUrl}/#identity` },
+  },
+  defineBreadcrumb({
+    itemListElement: [
+      { name: site.name, item: `${siteUrl}/` },
+      { name: project.name, item: `/projects/${project.slug}` },
+    ],
+  }),
+])
 
 // After a link or tab click into a case study, move focus to its heading so keyboard and
 // screen reader users start at the new page. A link to a part of the page (#media, #video)

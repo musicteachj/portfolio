@@ -10,7 +10,7 @@ const emailHref = useEmailHref()
       <div>
         <h2 id="contact-h" tabindex="-1">Contact</h2>
         <p>Send a message here, or reach me directly.</p>
-        <ul class="direct">
+        <ul class="direct" role="list">
           <li><a :href="emailHref">Email</a></li>
           <li><a :href="site.linkedinUrl">LinkedIn</a></li>
           <li><a :href="site.githubUrl">GitHub</a></li>

@@ -67,3 +67,7 @@ it('no copy contains an em dash or an arrow', () => {
 it('resume ships at /resume.pdf', () => {
   expect(existsSync(repoPath('public/resume.pdf'))).toBe(true)
 })
+
+it('the portrait file has the size IntroHero declares', () => {
+  expect(imageSize(repoPath('public/images/james.jpg'))).toEqual({ width: 628, height: 640 })
+})

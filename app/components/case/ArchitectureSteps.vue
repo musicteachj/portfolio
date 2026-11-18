@@ -8,7 +8,7 @@ defineProps<{ groups: StepGroup[] }>()
   <div class="steps-wrap">
     <div v-for="g in groups" :key="g.title">
       <p class="steps-title">{{ g.title }}</p>
-      <ol class="steps">
+      <ol class="steps" role="list">
         <li v-for="s in g.steps" :key="s.title"><b>{{ s.title }}</b><template v-if="s.text">{{ s.text }}</template></li>
       </ol>
     </div>

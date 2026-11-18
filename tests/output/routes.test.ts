@@ -34,7 +34,7 @@ test('screenshot ships as avif and webp via ipx with dimensions', () => {
   const root = html('index.html')
   expect(root.querySelector('source[type="image/avif"]')).not.toBeNull()
   expect(root.querySelector('source[type="image/webp"]')).not.toBeNull()
-  const img = root.querySelector('picture img')!
+  const img = root.querySelector('.project picture img')!
   expect(img.getAttribute('width')).toBe('1800')
   expect(img.getAttribute('height')).toBe('1125')
 })
@@ -61,8 +61,13 @@ test('ipx files hold the formats they claim', () => {
       }
       widths.push(parseInt(desc!, 10))
     }
-    expect(Math.max(...widths)).toBeGreaterThanOrEqual(1160)
-    expect(Math.min(...widths)).toBeGreaterThanOrEqual(300)
-    expect(Math.max(...widths)).toBeLessThanOrEqual(1800)
+    if (s.closest('.project')) {
+      expect(Math.max(...widths)).toBeGreaterThanOrEqual(1100)
+      expect(Math.min(...widths)).toBeGreaterThanOrEqual(300)
+      expect(Math.max(...widths)).toBeLessThanOrEqual(1800)
+    } else {
+      // The portrait: never wider than its 628px source.
+      expect(Math.max(...widths)).toBeLessThanOrEqual(628)
+    }
   }
 })

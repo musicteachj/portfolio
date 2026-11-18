@@ -1,5 +1,6 @@
 import { afterEach, expect, it, vi } from 'vitest'
 import { mockNuxtImport, mountSuspended } from '@nuxt/test-utils/runtime'
+import { clearNuxtState } from '#imports'
 import ContactForm from '../../app/components/ContactForm.vue'
 import { flushPromises } from '@vue/test-utils'
 
@@ -23,6 +24,8 @@ async function fill(w: NonNullable<typeof mounted>, values: Record<string, strin
 afterEach(() => {
   mounted?.unmount()
   mounted = undefined
+  // The draft is app state and outlives a mount, so no test may start with another's.
+  clearNuxtState('contact-draft')
   sendMock.mockReset()
   vi.restoreAllMocks()
 })
@@ -117,6 +120,16 @@ it('a fast reply still shows Sending... for at least 600ms', async () => {
   await vi.waitFor(() => expect(w.find('#f-status').classes()).toContain('ok'), { timeout: 2000 })
   expect(Date.now() - start).toBeGreaterThanOrEqual(550)
   expect(w.find('#f-submit').text()).toBe('Send message')
+})
+
+it('the draft survives a remount, without the honeypot', async () => {
+  const first = await mountForm()
+  await fill(first, valid)
+  await first.find('#f-hp').setValue('http://spam.example')
+  first.unmount()
+  const w = await mountForm()
+  for (const key of keys) expect((w.find(`#f-${key}`).element as HTMLInputElement).value).toBe(valid[key])
+  expect((w.find('#f-hp').element as HTMLInputElement).value).toBe('')
 })
 
 it('a filled honeypot skips the send but shows success', async () => {

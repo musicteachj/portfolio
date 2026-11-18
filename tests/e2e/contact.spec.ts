@@ -290,6 +290,28 @@ test('a honeypot filled before hydration still blocks the send', async ({ page }
   expect(requests).toBe(0)
 })
 
+test('a half-typed message survives a visit to a case study', async ({ page }) => {
+  const caseStudyLink = page.locator('#folio .proof').getByRole('link', { name: /Case study/ })
+  const visitFolioAndReturn = async () => {
+    await caseStudyLink.click()
+    await expect(page).toHaveURL('/projects/folio')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Folio')
+    await page.goBack()
+    await expect(page).toHaveURL('/contact')
+  }
+  await fillForm(page)
+  await visitFolioAndReturn()
+  await expectFieldsValue(page, true)
+
+  // A successful send clears the draft, so a later visit starts with empty fields.
+  const bodies = await answer(page, 200, 'OK')
+  await page.locator('#f-submit').click()
+  await expect(page.locator('#f-status')).toHaveText(SUCCESS)
+  expect(bodies).toHaveLength(1)
+  await visitFolioAndReturn()
+  await expectFieldsValue(page, false)
+})
+
 test('error state passes axe', async ({ page }) => {
   await page.locator('#f-submit').click()
   await expect(page.locator('#f-name-err')).toHaveText('Enter your name')

@@ -6,7 +6,7 @@ defineProps<{ current: ProjectSlug }>()
 </script>
 
 <template>
-  <ol class="ptabs">
+  <ol class="ptabs" role="list">
     <li v-for="p in projects" :key="p.slug">
       <NuxtLink :to="`/projects/${p.slug}`" :aria-current="p.slug === current ? 'page' : undefined">{{ p.name }}</NuxtLink>
     </li>

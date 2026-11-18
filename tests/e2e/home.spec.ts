@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
+import { projects } from '../../app/data/projects'
 import { expectNoSeriousAxe } from './helpers/axe'
+import { picksFor, sharpEnough } from './helpers/images'
 
 test('first Tab focuses the skip link and it moves focus to main', async ({ page }) => {
   await page.goto('/')
@@ -67,6 +69,30 @@ for (const w of [360, 390, 768, 1024, 1280, 1440]) {
     ).toBeLessThanOrEqual(0)
   })
 }
+
+test('the LCP h1 stays visible at the start of the settle, unlike the other intro children', async ({ page }) => {
+  await page.goto('/')
+  // Pause each settle animation (finished ones stay listed with fill forwards) and rewind it to
+  // its first frame, so the computed opacity is the start of the settle whenever this runs.
+  // Vue scopes the keyframe name (settle-<hash>), so match the prefix.
+  const result = await page.evaluate(() => {
+    const first = (el: Element) => {
+      const settle = el
+        .getAnimations()
+        .find((a) => (a as CSSAnimation).animationName.startsWith('settle'))
+      if (!settle) return undefined
+      settle.pause()
+      settle.currentTime = 0
+      return getComputedStyle(el).opacity
+    }
+    return {
+      h1: first(document.querySelector('.intro > h1')!),
+      lede: first(document.querySelector('.intro > h1 ~ p')!),
+    }
+  })
+  expect(result.lede, 'control: the lede starts the settle at opacity 0').toBe('0')
+  expect(result.h1, 'the h1 must not start the settle at opacity 0').toBe('1')
+})
 
 test('reduced motion disables the intro animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -176,4 +202,42 @@ test('Back restores the saved offset instantly (no glide)', async ({ page }) => 
   await page.goBack()
   const y = await page.evaluate(() => (window as unknown as { __back: Promise<number> }).__back)
   expect(Math.abs(y - saved)).toBeLessThanOrEqual(50)
+})
+
+const honestyCases = [
+  { width: 1440, dpr: 1 },
+  { width: 1440, dpr: 2 },
+  { width: 390, dpr: 3 },
+  { width: 768, dpr: 2 },
+  { width: 820, dpr: 2 },
+  { width: 899, dpr: 2 },
+]
+for (const { width, dpr } of honestyCases) {
+  test.describe(`Home screenshots at ${width} @${dpr}x`, () => {
+    test.use({ viewport: { width, height: 900 }, deviceScaleFactor: dpr })
+    test('each picks a source sharp enough for its rendered size', async ({ page }) => {
+      await page.goto('/')
+      const picks = await picksFor(page.locator('.project img'))
+      expect(picks).toHaveLength(projects.length)
+      projects.forEach((p, i) => {
+        const pick = picks[i]!
+        const { got, need } = sharpEnough(pick, dpr, p.hero.width)
+        expect(got, `${pick.url} for ${Math.round(pick.css)} css px`).toBeGreaterThanOrEqual(need)
+        if (width === 1440 && dpr === 1) {
+          expect(got, `${pick.url} for ${Math.round(pick.css)} css px`).toBeLessThanOrEqual(1.6 * pick.css)
+        }
+      })
+    })
+  })
+}
+
+test('every unstyled list in main keeps its list role', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const bad = await page.evaluate(() =>
+    [...document.querySelectorAll('main ul, main ol')]
+      .filter((l) => getComputedStyle(l).listStyleType === 'none' && l.getAttribute('role') !== 'list')
+      .map((l) => l.className || l.tagName),
+  )
+  expect(bad).toEqual([])
 })

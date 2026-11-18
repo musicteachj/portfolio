@@ -89,3 +89,19 @@ test('galleries: every image lazy, avif and webp, captioned', () => {
     }
   }
 })
+
+test('hero srcsets never ask for more than the source width and the hero is preloaded', () => {
+  for (const p of projects) {
+    const r = page(p.slug)
+    const sets = r.querySelectorAll('.cs-hero source, .cs-hero img').map((e) => e.getAttribute('srcset')!)
+    expect(sets.length, p.slug).toBeGreaterThanOrEqual(3)
+    for (const set of sets) {
+      const widths = set.split(',').map((c) => parseInt(c.trim().split(/\s+/)[1]!, 10))
+      expect(Math.max(...widths), `${p.slug} ${set}`).toBeLessThanOrEqual(p.hero.width)
+    }
+    const link = r.querySelector('link[rel="preload"][as="image"]')
+    expect(link, p.slug).not.toBeNull()
+    expect(link!.getAttribute('imagesrcset'), p.slug).toContain('f_avif')
+    expect(link!.getAttribute('imagesizes'), p.slug).toBeTruthy()
+  }
+})

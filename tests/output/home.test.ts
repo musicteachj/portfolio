@@ -1,5 +1,7 @@
 import { expect, test } from 'vitest'
 import { projects } from '../../app/data/projects'
+import { imageSize } from '../helpers/image-size'
+import { repoPath } from '../helpers/paths'
 import { exists, html, read } from './helpers'
 
 test('header nav uses clean section URLs and the stable résumé path', () => {
@@ -41,6 +43,8 @@ test('every project block renders its real content', () => {
   }
 })
 
+const HOME_SIZES = '(max-width: 599px) 90vw, (max-width: 799px) 100vw, (max-width: 899px) 100vw, (max-width: 1199px) 40vw, 560px'
+
 test('project screenshots are avif and webp, wide enough for 2x tablets, never tiny', () => {
   const pictures = html('index.html').querySelectorAll('.project picture')
   expect(pictures).toHaveLength(4)
@@ -60,7 +64,7 @@ test('project screenshots are avif and webp, wide enough for 2x tablets, never t
       expect(Math.max(...widths)).toBeGreaterThanOrEqual(1600)
       expect(Math.min(...widths)).toBeGreaterThanOrEqual(300)
       const sizes = s.getAttribute('sizes')!
-      expect(sizes).toContain('100vw')
+      expect(sizes).toBe(HOME_SIZES)
       for (const entry of sizes.split(',')) expect(entry.trim()).toMatch(/\d(vw|px)$/)
     }
   }
@@ -147,4 +151,18 @@ test('wordmark has no aria-current on section URLs', () => {
   for (const f of ['projects/index.html', 'contact/index.html']) {
     expect(html(f).querySelector('a.wordmark')?.getAttribute('aria-current') ?? null, f).toBeNull()
   }
+})
+
+test('portrait is a picture with avif and webp sources and keeps its declared size', () => {
+  const pic = html('index.html').querySelector('.portrait-stage picture')!
+  expect(pic).not.toBeNull()
+  const types = pic.querySelectorAll('source').map((s) => s.getAttribute('type'))
+  expect(types).toContain('image/avif')
+  expect(types).toContain('image/webp')
+  const img = pic.querySelector('img')!
+  const size = imageSize(repoPath('public/images/james.jpg'))
+  expect(Number(img.getAttribute('width'))).toBe(size.width)
+  expect(Number(img.getAttribute('height'))).toBe(size.height)
+  expect(img.getAttribute('loading')).not.toBe('lazy')
+  expect(img.getAttribute('fetchpriority')).toBe('high')
 })

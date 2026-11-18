@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { projects } from '~/data/projects'
+import { site } from '~/data/site'
 
 // Fixed key: alias records keep their own path, so without it navigating between
 // the aliases would remount the page.
 definePageMeta({ alias: ['/projects', '/contact'], key: 'home' })
 
-defineOgImage('Card', { title: 'James Littlefield', eyebrow: 'AI Engineer' })
+defineOgImage('Card', { title: site.name, eyebrow: site.role })
 
 // The module emits a per-route canonical at low priority. Section URLs
 // (/projects, /contact) are aliases of this page, so pin the canonical to
@@ -16,6 +17,8 @@ useHead({
   titleTemplate: '%s',
   link: [{ rel: 'canonical', href: withSiteUrl('/'), key: 'canonical' }],
 })
+
+useSeoMeta({ description: site.lede, ogDescription: site.lede })
 
 // Direct landing on a section URL: scroll there without moving focus. First load
 // only, so a Home remount (Back from a case study) leaves restore to the router,

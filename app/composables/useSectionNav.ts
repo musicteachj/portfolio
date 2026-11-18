@@ -10,7 +10,8 @@ export function sectionIdForPath(path: string): string | undefined {
 }
 
 // Explicit values, so the motion doesn't depend on CSS: 'auto' would follow html's
-// scroll-behavior from base.css (smooth, or auto under its reduced-motion rule).
+// scroll-behavior, which is set by `html.smooth-scroll` (added after hydration, and off
+// under reduced motion).
 export function scrollBehaviorPref(): ScrollBehavior {
   if (import.meta.server) return 'auto'
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'

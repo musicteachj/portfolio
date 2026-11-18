@@ -2,7 +2,11 @@
 const config = useRuntimeConfig().public.emailjs
 const nuxtApp = useNuxtApp()
 
-const fields = reactive<ContactFields>({ name: '', email: '', subject: '', message: '' })
+// The draft lives in app state, not in the component: Home unmounts when the reader opens a
+// case study, so a half-typed message would otherwise be gone after Back. A successful send
+// clears it (reset). The honeypot below stays local, so it is never kept.
+const draft = useState<ContactFields>('contact-draft', () => ({ name: '', email: '', subject: '', message: '' }))
+const fields = draft.value
 const errors = reactive<ContactFields>({ name: '', email: '', subject: '', message: '' })
 const honeypot = ref('')
 const submitted = ref(false)
@@ -18,7 +22,8 @@ function fieldValue(id: string): string {
 // the server-rendered form before the page hydrated. So copy the fields into the state first.
 // Copy the honeypot as well, so a bot that fills it early is still caught. The fields use
 // v-model, not :value, because Vue's dev build reports a bound :value that differs from the
-// server HTML as a hydration mismatch.
+// server HTML as a hydration mismatch. Only while hydrating: a later mount (Back from a case
+// study) renders the kept draft, which this must not overwrite.
 onBeforeMount(() => {
   if (!nuxtApp.isHydrating) return
   for (const key of CONTACT_FIELD_KEYS) fields[key] = fieldValue(`f-${key}`)

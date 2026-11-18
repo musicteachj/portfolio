@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { projects } from '../../app/data/projects'
 import { expectNoSeriousAxe } from './helpers/axe'
+import { picksFor, sharpEnough } from './helpers/images'
 
 const slugs = ['open-door', 'packwright', 'folio', 'resumeiq']
 
@@ -116,3 +117,38 @@ for (const dpr of [1, 2]) {
     }
   })
 }
+
+for (const { width, dpr } of [
+  { width: 1440, dpr: 1 },
+  { width: 1440, dpr: 2 },
+  { width: 390, dpr: 3 },
+]) {
+  test.describe(`case study hero at ${width} @${dpr}x`, () => {
+    test.use({ viewport: { width, height: 900 }, deviceScaleFactor: dpr })
+    for (const p of projects) {
+      test(`${p.slug} hero picks a source sharp enough for its rendered size`, async ({ page }) => {
+        await page.goto(`/projects/${p.slug}`)
+        const [pick] = await picksFor(page.locator('.cs-hero img'))
+        expect(pick).toBeDefined()
+        const { got, need } = sharpEnough(pick!, dpr, p.hero.width)
+        expect(got, `${pick!.url} for ${Math.round(pick!.css)} css px`).toBeGreaterThanOrEqual(need)
+        if (width === 1440 && dpr === 1) {
+          expect(got, `${pick!.url} for ${Math.round(pick!.css)} css px`).toBeLessThanOrEqual(1.6 * pick!.css)
+        }
+      })
+    }
+  })
+}
+
+test('every unstyled list in main keeps its list role on a case study', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  for (const slug of slugs) {
+    await page.goto(`/projects/${slug}`)
+    const bad = await page.evaluate(() =>
+      [...document.querySelectorAll('main ul, main ol')]
+        .filter((l) => getComputedStyle(l).listStyleType === 'none' && l.getAttribute('role') !== 'list')
+        .map((l) => l.className || l.tagName),
+    )
+    expect(bad, slug).toEqual([])
+  }
+})

@@ -9,9 +9,19 @@ type Position = { left?: number; top: number; behavior?: ScrollBehavior }
 // a page that throws into the error page), so the scroll still happens and never hangs.
 const RENDER_TIMEOUT_MS = 500
 
+// Set by the first call that isn't part of the landing (see `landing` below).
+let landed = false
+
 export default <RouterConfig>{
   scrollBehavior(to, from, saved) {
-    const first = from === START_LOCATION
+    const nuxtApp = useNuxtApp()
+    // The first load: Nuxt passes START_LOCATION, and any call while the app hydrates counts.
+    const first = from === START_LOCATION || nuxtApp.isHydrating
+    // The landing: the first load, plus Nuxt's last step of it on a prerendered page whose URL
+    // has a hash or query. Just after hydration, Nuxt replaces the route with the URL the page
+    // loaded at, so `to` and `from` are the same location (and it isn't Back/Forward).
+    const landing = first || (!landed && to.fullPath === from.fullPath && !nuxtApp.$isHistoryNav())
+    if (!landing) landed = true
     // One page: the same path, or two of Home's URLs (/, /projects, /contact share a key).
     const samePage = !first && pageKey(to) === pageKey(from)
     // The page is already in place on the first load (server-rendered) and when the page
@@ -26,8 +36,10 @@ export default <RouterConfig>{
     //    smooth scrolling from base.css.
     if (saved) return when(() => ({ ...saved, behavior: 'instant' }))
     // 2. An explicit hash (skip link, TOC, #packwright) wins over the section path.
-    //    On the first load the browser has already jumped there, so don't glide.
-    if (to.hash) return when(() => hashPosition(to.hash, motion))
+    //    A direct landing jumps, so a shared deep link opens at its section: base.css
+    //    keeps the browser's own jump to the hash instant until the app has hydrated,
+    //    and this jump puts the section at its scroll margin.
+    if (to.hash) return when(() => hashPosition(to.hash, landing ? 'instant' : motion))
     // 3. A section URL (/projects, /contact) scrolls to its section. A direct landing
     //    follows the motion preference, as a click within Home does.
     const id = sectionIdForPath(to.path)
@@ -40,7 +52,7 @@ export default <RouterConfig>{
     //    goes back. A history move jumps, like every other Back.
     if (to.path === from.path) {
       if (!from.hash) return false
-      return { left: 0, top: 0, behavior: useNuxtApp().$isHistoryNav() ? 'instant' : motion }
+      return { left: 0, top: 0, behavior: nuxtApp.$isHistoryNav() ? 'instant' : motion }
     }
     // 6. Anything else opens at the top: a glide within Home (the wordmark from
     //    /contact), a jump to a new page once it has rendered.

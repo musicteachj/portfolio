@@ -106,6 +106,64 @@ test('toc and direct hash land on the section heading', async ({ page }) => {
   await expect.poll(landed).toBe(true)
 })
 
+test('a direct landing on a case study hash jumps there', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  // Record from the earliest point, before any of the page's own scripts or its fragment jump:
+  // every scroll position, and the motion of every scripted scroll (the router's).
+  await page.addInitScript(() => {
+    const w = window as unknown as { __scrolls: number[]; __asked: string[] }
+    w.__scrolls = []
+    w.__asked = []
+    addEventListener('scroll', () => w.__scrolls.push(Math.round(window.scrollY)), { passive: true })
+    const scrollTo = window.scrollTo.bind(window) as (...args: unknown[]) => void
+    window.scrollTo = ((...args: unknown[]) => {
+      const opts = args[0]
+      w.__asked.push(typeof opts === 'object' && opts ? ((opts as ScrollToOptions).behavior ?? 'auto') : 'auto')
+      scrollTo(...args)
+    }) as typeof window.scrollTo
+  })
+  // Where #results sits at its scroll margin, and whether the page is there now.
+  const place = () =>
+    page.locator('#results').evaluate((s) => {
+      const margin = parseFloat(getComputedStyle(s).scrollMarginTop)
+      const top = s.getBoundingClientRect().top
+      return { margin, target: Math.round(top + window.scrollY - margin), landed: Math.abs(top - margin) <= 1 }
+    })
+  await page.goto('/projects/folio#results')
+  await waitForHydration(page)
+  // Nuxt puts the hash back on the route just after hydration, and scrolls for it once more.
+  await expect.poll(() => routerHash(page)).toBe('#results')
+  await expect.poll(async () => (await place()).landed).toBe(true)
+  await waitForScrollIdle(page)
+  const { margin, target, landed } = await place()
+  expect(margin).toBeGreaterThan(0)
+  expect(landed).toBe(true)
+  // A jump: nothing recorded between the top of the page and the target.
+  expect(await scrollsBetween(page, 10, target - 10)).toEqual([])
+  // Including the router's own scrolls, which would glide wherever the page happened to be.
+  const asked = await page.evaluate(() => (window as unknown as { __asked: string[] }).__asked)
+  expect(asked.filter((b) => b !== 'instant')).toEqual([])
+})
+
+// After hydration a TOC link moves within the page, so it follows the motion preference.
+for (const reduced of [false, true]) {
+  test(`a TOC click ${reduced ? 'jumps to its section under reduced motion' : 'glides to its section'}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    if (reduced) await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/projects/folio')
+    await waitForHydration(page)
+    await recordScrolls(page)
+    await page.locator('.toc a[href="#results"]').click()
+    await expect(page).toHaveURL('/projects/folio#results')
+    await expect.poll(() => routerHash(page)).toBe('#results')
+    await expect.poll(() => scrollY(page)).toBeGreaterThan(1000)
+    await waitForScrollIdle(page)
+    const between = await scrollsBetween(page, 10, (await scrollY(page)) - 10)
+    if (reduced) expect(between).toEqual([])
+    else expect(between.length).toBeGreaterThan(1)
+  })
+}
+
 test('Back out of a TOC jump returns to the top of the case study', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/projects/folio')

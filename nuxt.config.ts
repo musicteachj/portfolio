@@ -1,3 +1,5 @@
+import { site } from './app/data/site'
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-17',
   modules: ['@nuxtjs/seo', '@nuxt/image', '@nuxt/fonts', '@nuxt/eslint'],
@@ -37,6 +39,33 @@ export default defineNuxtConfig({
     name: 'James Littlefield',
     trailingSlash: false,
   },
+  sitemap: {
+    // /projects and /contact are aliases of Home (canonical /), so they stay out.
+    exclude: ['/projects', '/contact'],
+  },
+  robots: {
+    groups: [
+      { userAgent: ['GPTBot', 'ClaudeBot', 'PerplexityBot'], allow: ['/'] },
+    ],
+  },
+  aiReady: {
+    // Static hosting cannot vary responses by header, and the per-page Markdown copies
+    // are enough. The Markdown index of the sitemap would list the alias routes.
+    contentNegotiation: false,
+    botNegotiation: false,
+    sitemapMd: false,
+  },
+  schemaOrg: {
+    // The Person node (@id https://jameslittlefield.net/#identity). No email, on purpose.
+    identity: {
+      type: 'Person',
+      name: site.name,
+      jobTitle: site.role,
+      url: 'https://jameslittlefield.net/',
+      image: '/images/james.jpg',
+      sameAs: [site.githubUrl, site.linkedinUrl],
+    },
+  },
   experimental: {
     // Renders app/error.vue into 404.html during generate.
     prerenderErrorPages: [404],
@@ -47,11 +76,23 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    prerender: { crawlLinks: true, routes: ['/', '/projects', '/contact', '/projects/open-door'] },
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', '/projects', '/contact', '/projects/open-door'],
+      // nuxt-ai-ready has no route-level exclusion. These aliases of Home must not get a
+      // Markdown copy, a llms.txt entry or an llms-full.txt section.
+      ignore: ['/projects.md', '/contact.md'],
+    },
     hooks: {
       // @nuxtjs/robots adds its own noindex tag to /404.html on top of the one the
       // app renders, so 404.html ends up with two. Collapse them to one.
       'prerender:generate': (route) => {
+        // /projects and /contact are aliases of Home, so their pages drop the link to a
+        // Markdown copy that is not built (see prerender.ignore above).
+        if (route.route === '/projects' || route.route === '/contact') {
+          route.contents = route.contents?.replace(/<link rel="alternate" type="text\/markdown"[^>]*>/g, '')
+          return
+        }
         if (route.route !== '/404.html' || !route.contents) return
         const tag = '<meta name="robots" content="noindex, nofollow">'
         route.contents = route.contents

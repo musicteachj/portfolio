@@ -1,6 +1,8 @@
 import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
 import { extname, join, normalize, resolve } from 'node:path'
+import { promisify } from 'node:util'
+import { brotliCompress, constants, gzip } from 'node:zlib'
 
 const root = resolve(process.argv[2] ?? '.output/public')
 const port = Number(process.argv[3] ?? 4173)
@@ -21,6 +23,33 @@ const types = {
   '.pdf': 'application/pdf',
   '.mp4': 'video/mp4',
   '.vtt': 'text/vtt; charset=utf-8',
+}
+
+// Like CloudFront in production: text responses of 1,000 bytes or more go out Brotli or
+// gzip compressed when the browser accepts it. Lighthouse sizes its throttled network
+// estimates on the transferred bytes, so an uncompressed local server skews them.
+const compressible = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt', '.xml'])
+const brotli = promisify(brotliCompress)
+const gzipAsync = promisify(gzip)
+
+async function encode(req, file, body) {
+  if (!compressible.has(extname(file)) || body.length < 1000) return { body }
+  const accepted = String(req.headers['accept-encoding'] ?? '')
+  if (/\bbr\b/.test(accepted)) {
+    const params = { [constants.BROTLI_PARAM_QUALITY]: 5, [constants.BROTLI_PARAM_SIZE_HINT]: body.length }
+    return { body: await brotli(body, { params }), encoding: 'br' }
+  }
+  if (/\bgzip\b/.test(accepted)) return { body: await gzipAsync(body), encoding: 'gzip' }
+  return { body }
+}
+
+async function send(req, res, status, file, body) {
+  const out = await encode(req, file, body)
+  const headers = { 'Content-Type': types[extname(file)] ?? 'application/octet-stream' }
+  if (compressible.has(extname(file))) headers.Vary = 'Accept-Encoding'
+  if (out.encoding) headers['Content-Encoding'] = out.encoding
+  res.writeHead(status, headers)
+  res.end(out.body)
 }
 
 function candidate(pathname) {
@@ -48,14 +77,12 @@ createServer(async (req, res) => {
   }
   const hit = await tryRead(candidate(pathname))
   if (hit) {
-    res.writeHead(200, { 'Content-Type': types[extname(hit.file)] ?? 'application/octet-stream' })
-    res.end(hit.body)
+    await send(req, res, 200, hit.file, hit.body)
     return
   }
   const notFound = await tryRead('404.html')
   if (notFound) {
-    res.writeHead(404, { 'Content-Type': types['.html'] })
-    res.end(notFound.body)
+    await send(req, res, 404, notFound.file, notFound.body)
     return
   }
   res.writeHead(404, { 'Content-Type': types['.txt'] })

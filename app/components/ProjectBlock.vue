@@ -6,10 +6,14 @@ const props = defineProps<{ project: Project; reversed: boolean; eager?: boolean
 const id = computed(() => props.project.anchorId)
 const proof = computed(() => proofItems(props.project, 'home'))
 
-// Layout: 100vw below 900px, about 55vw from 900 to 1199px, 800px from 1200px. The image
-// is about 590px wide at most; 800 adds a 1600w candidate so 2x tablets (up to 899px) stay sharp.
+// Measured in Chromium (no scrollbar), rendered image width: 0.84 to 0.87 of the viewport below
+// 900px (302px at 360, 332 at 390, 779 at 899); 0.40 of it from 900 to 1199px (358 at 900,
+// 479 at 1199); 547 to 555px from 1200px. Each entry sits just above that: 90vw below 600px,
+// 100vw from 600px, 100vw again from 800px, 40vw, 560px. The 800 entry only adds a 1600w
+// candidate (the source width) so 2x tablets at 768 to 899px get a source that covers what they
+// need (1.03x to 1.21x); the 1200w candidate alone fell short by up to 23 percent.
 // Every entry is prefixed; an unprefixed entry makes the module emit 1w/2w candidates.
-const sizes = 'xs:100vw sm:100vw md:55vw lg:800px xl:800px 2xl:800px'
+const sizes = 'xs:90vw sm:100vw 800:100vw md:40vw lg:560px'
 </script>
 
 <template>

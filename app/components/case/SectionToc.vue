@@ -4,7 +4,7 @@ defineProps<{ sections: { id: string; title: string }[]; label: string }>()
 
 <template>
   <nav class="toc" :aria-label="label">
-    <ol>
+    <ol role="list">
       <li v-for="s in sections" :key="s.id"><a :href="`#${s.id}`">{{ s.title }}</a></li>
     </ol>
   </nav>

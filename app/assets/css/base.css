@@ -5,6 +5,11 @@
 }
 html {
   -webkit-text-size-adjust: 100%;
+}
+/* In-page links glide. The class is added once the app has hydrated
+   (plugins/smooth-scroll.client.ts), so the browser's own jump to a URL's #hash on a
+   direct landing stays instant, and without JS anchor links simply jump. */
+html.smooth-scroll {
   scroll-behavior: smooth;
 }
 body {
@@ -103,7 +108,7 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html.smooth-scroll {
     scroll-behavior: auto;
   }
   *,

@@ -10,7 +10,7 @@ const isExternal = (href: string) => /^https?:/.test(href)
 </script>
 
 <template>
-  <ul class="proof" :class="{ 'proof--3': variant === 'page' }" :aria-label="label">
+  <ul class="proof" role="list" :class="{ 'proof--3': variant === 'page' }" :aria-label="label">
     <li v-for="item in items" :key="item.key">
       <template v-if="item.href">
         <a v-if="isExternal(item.href)" :href="item.href"><span v-if="item.key === 'case' && projectName" class="sr-only">{{ projectName }}</span> {{ item.label }} <span class="state">{{ item.sub }}</span></a>

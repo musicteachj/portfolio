@@ -6,7 +6,7 @@ import { site } from '~/data/site'
   <section class="caps" aria-labelledby="caps-h">
     <div class="wrap">
       <h2 id="caps-h">{{ site.capabilitiesHeading }}</h2>
-      <ul>
+      <ul role="list">
         <li v-for="c in site.capabilities" :key="c">{{ c }}</li>
       </ul>
     </div>

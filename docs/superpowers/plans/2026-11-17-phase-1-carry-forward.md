@@ -1,4 +1,4 @@
-# Carry-forward notes (Phases 1 to 4)
+# Carry-forward notes (Phases 1 to 5)
 
 Phase 1 ("Foundation and tracer bullet") is committed as `184d060`. These are the findings from its task reviews and its final whole-phase review that were deliberately left to later phases. The plan for each phase must account for the items listed under it.
 
@@ -39,15 +39,25 @@ Every item below was closed in Phase 2.
 - Add a test that the 404 page links to `/projects`.
 - Height rounding: IPX's 1800w file is 1798x1125. That's fine, but don't assert exact IPX dimensions.
 
-## Phase 5 (SEO and performance)
+## Phase 5 (SEO and performance): done
 
-- Keep `/projects` and `/contact` out of `sitemap.xml`. The sitemap currently lists them.
+Every item below was handled in Phase 5, as noted. Only the résumé decision is still open.
+
+- Keep `/projects` and `/contact` out of `sitemap.xml`.
+  - Done with `sitemap.exclude`. The `sitemap` check in `scripts/check-seo.ts` requires exactly the 5 indexable URLs.
 - `nuxt-ai-ready` emits `llms.txt`, `llms-full.txt` and `.md` copies of each page (including `projects.md` and `contact.md`, each with its own `canonical_url`), plus a generate warning about Markdown negotiation. Decide how the alias pages appear there, or exclude them.
+  - Excluded. The module has no route-level switch, so `nitro.prerender.ignore` skips `/projects.md` and `/contact.md`, which also keeps them out of `llms.txt` and `llms-full.txt`. The `prerender:generate` hook drops the Markdown `alternate` link from the two alias pages.
+  - `contentNegotiation`, `botNegotiation` and `sitemapMd` are off, because static hosting can't negotiate. That removed the warning. The module now prints its own note that negotiation is off, which is expected.
 - Drop `_og-static-fonts/` (unused Inter TTFs, about 134 KB) if the module allows. Otherwise exclude it in the Phase 6 sync.
+  - nuxt-og-image copies them on every build and has no option to stop it, so the Phase 6 sync excludes them (see the Phase 6 list below).
 - Make `check-seo` read binary files correctly (Buffers or `/usr/bin/grep -a`).
+  - Done. Its output reader returns every file as a Buffer, and the email scan searches the bytes.
 - **Open decision for James:** the résumé PDF contains his email address. It must either be the documented exception to "the email appears nowhere in the output", or be replaced with a résumé without it.
+  - Still open, for the Phase 5 review. Until James decides, `resume.pdf` is the only entry in `EMAIL_ALLOWED` in `scripts/check-seo.ts`. Replacing the PDF is a file swap plus deleting that entry.
 - The 1800w `<img>` fallback is a PNG. Consider a smaller or different fallback.
+  - Ruled: the legacy `<img>` fallback stays PNG. Only browsers without AVIF and WebP fetch it, and Lighthouse's Chrome never does. Revisit only if Lighthouse flags it.
 - Give the Card OG template props real requirements, not defaults.
+  - Done. `title` and `eyebrow` are required with no defaults, and `image` is optional. Each case study passes its hero screenshot, which shows uncropped beside the text on the 1200x630 card.
 
 ## Phase 6 (Hosting, CI and docs)
 
@@ -56,6 +66,7 @@ Every item below was closed in Phase 2.
   - Exclude `200.html` (an empty SPA shell that would be a soft 404).
   - `_payload.json` (per route) goes in the no-cache pass.
   - Also account for `_og/`, `__sitemap__/`, `__ai-ready/`, `llms-full.txt`, `.md` copies and `favicon.svg`.
+  - Exclude `_og-static-fonts/` (unused Inter TTFs emitted by nuxt-og-image; the module has no option to drop them).
 - Add `npm run test:output` to the CI `build-and-test` job. The spec's list omits it.
 - Set Playwright `reuseExistingServer: !process.env.CI`. Port 4173 is also Vite preview's default.
 - Add one `_ipx` AVIF URL to the post-launch curl checks (content type and the `&` in the key).
@@ -76,7 +87,7 @@ Every item below was closed in Phase 2.
   2. A hash wins over a section path.
   3. A section path scrolls to that section.
   4. Otherwise the page goes to the top.
-  - `base.css` sets `html { scroll-behavior: smooth }`, so `'auto'` is smooth. Use `'instant'` when you mean instant.
+  - `base.css` sets `html { scroll-behavior: smooth }`, so `'auto'` is smooth. Use `'instant'` when you mean instant. (Since Phase 5 the rule is on `html.smooth-scroll`, added after hydration. See "Facts learned in Phase 5".)
 - **Playwright `reuseExistingServer: true`:** a stray server on port 4173 made a whole e2e run fail with ECONNREFUSED. Set it to `!process.env.CI` and consider a less common port. This was originally a Phase 6 item; do it early in Phase 3.
 
 ### Phase 3 (Case studies and 404): done
@@ -105,15 +116,17 @@ Every item below was closed in Phase 2.
 - **Email links:** done. Both Email links switch to `mailto:` after hydration (`useEmailHref`), and `tests/e2e/contact.spec.ts` pins it.
 - **No JS:** done. The form has `method="post"` and no action, so field values never land in a URL.
 
-### Phase 5 (SEO and performance)
+### Phase 5 (SEO and performance): done
 
 - **Image sizes:**
-  - Tighten the loose `toContain('100vw')` check to the exact `sizes` string.
-  - Screenshot `sizes` is 800px from 1200px up, about 45% over-fetch on desktop (accepted for now; revisit).
-- **Portrait:** has no `format="avif,webp"`, and `james.jpg` has no size test.
-- **Email scan:** `check-seo` must scan every file for the address and non-JS text output (HTML, JSON, Markdown, XML, TXT) for `mailto:`. `tests/output/privacy.test.ts` already does both, so `check-seo` can reuse that logic.
-- **Résumé PDF:** `public/resume.pdf` still contains the email address. It is the single named exception in `tests/output/privacy.test.ts`, pending James's decision (keep the exception or replace the PDF).
-- **Lighthouse:** the intro "settle" animation holds text at opacity 0 for up to about 900ms. Check LCP.
+  - Tighten the loose `toContain('100vw')` check to the exact `sizes` string. Done in `tests/output/home.test.ts`.
+  - Screenshot `sizes` is 800px from 1200px up, about 45% over-fetch on desktop. Done: the `ProjectBlock` `sizes` follow the measured widths (`xs:90vw sm:100vw 800:100vw md:40vw lg:560px`). e2e "srcset honesty" tests on Home and the case study hero check the chosen file at 1440 (DPR 1 and 2) and 390 (DPR 3), and Home also at 768, 820 and 899 (DPR 2), which the `800:100vw` entry covers with a 1600w candidate.
+- **Portrait:** has no `format="avif,webp"`, and `james.jpg` has no size test. Done: it's a `NuxtPicture` with AVIF and WebP, and `tests/nuxt/data.test.ts` checks the file's declared size.
+- **Email scan:** `check-seo` must scan every file for the address and non-JS text output (HTML, JSON, Markdown, XML, TXT) for `mailto:`. Done: the `email-address` check in `scripts/check-seo.ts` does both. `tests/output/privacy.test.ts` keeps only the test that the EmailJS SDK loads on demand.
+- **Résumé PDF:** `public/resume.pdf` still contains the email address. It is the single named exception (now `EMAIL_ALLOWED` in `scripts/check-seo.ts`), pending James's decision at the Phase 5 review (keep the exception or replace the PDF).
+- **Lighthouse:** the intro "settle" animation holds text at opacity 0 for up to about 900ms. Check LCP. Done: the name (`h1#hero-name`, the element Lighthouse reports for LCP) starts at full opacity and keeps the 8px rise. The rest of the intro keeps v11's settle.
+  - `npm run lighthouse` (mobile, simulated throttling) scores Home 1.00 in all four categories, and Open Door 0.99 / 1.00 / 1.00 / 1.00 (performance, accessibility, best practices, SEO).
+  - Local runs compress like CloudFront does (`scripts/serve-static.mjs`). Without compression Open Door's performance drops to about 0.91 to 0.94.
 
 ## Added by Phase 3 (for Phases 4 to 6)
 
@@ -136,31 +149,29 @@ Every item below was closed in Phase 2.
 - **Scroll test helpers:** `tests/e2e/helpers/scroll.ts` (`recordScrolls`, `scrollsBetween`, `waitForScrollIdle`) tell a glide from a jump.
   - Scroll with `window.scrollTo({ behavior: 'instant' })` plus two animation frames, not `page.mouse.wheel`. A wheel resolves before Chromium applies it, and the pending scroll can cancel the next smooth scroll.
 
-### Phase 5 (SEO and performance)
+### Phase 5 (SEO and performance): done
 
-- **Lists:** add `role="list"` to lists styled `list-style: none` (project tabs, section TOC, plain lists, architecture steps, proof links). Safari drops their list semantics otherwise.
+- **Lists:** add `role="list"` to lists styled `list-style: none` (project tabs, section TOC, plain lists, architecture steps, proof links). Safari drops their list semantics otherwise. Done on those, plus the capabilities strip and the contact links. The feature list keeps its bullets. An e2e test checks every `list-style: none` list in `main` on Home and a case study.
 - **Hero image:**
-  - The case study hero srcset declares a 2360w candidate above the 1800px source. Make the srcset honest.
-  - Consider a preload for the hero (likely LCP).
-  - Check the hero for over-fetch.
-- **Gallery:** sizes over-fetch slightly between 1100 and 1180px (the column is narrower than 864px there). Small; revisit only if Lighthouse flags it.
+  - The case study hero srcset declares a 2360w candidate above the 1800px source. Make the srcset honest. Done: `densities="1"` and `sizes` of `xs:90vw sm:90vw md:90vw lg:1042px 2400:<source width>px`, so no candidate is wider than the source (Folio's is 1600px, the others 1800px).
+  - Consider a preload for the hero (likely LCP). Done: the `preload` prop with `fetchPriority: 'high'`.
+  - Check the hero for over-fetch. Done: the srcset honesty e2e tests cover the hero (at least 0.95x the need at 1440 and 390, at most 1.6x at 1440 DPR 1).
+- **Gallery:** sizes over-fetch slightly between 1100 and 1180px (the column is narrower than 864px there). Ruled: the slight over-fetch in that band stays. Lighthouse didn't flag it.
 
-### Later polish (any phase before launch)
+### Launch prep
 
-From Phase 3. Both behaved this way before the Phase 3 fixes. They only affect glide versus jump, and readers with reduced motion already get jumps.
+From Phase 3 and the Phase 4 final review, parked by ruling. Each needs a rare condition. Phase 5 built the other two later polish items: R2 (a direct landing on a case study hash now jumps) and M7 (the contact draft survives a visit to a case study). See "Facts learned in Phase 5".
 
-- **Back/Forward within a page with no saved position glides.** For example, Back between two TOC jumps, or Forward into one. `$isHistoryNav()` can't tell these from a TOC click, because both arrive as popstate. The popstate `event.state` (null for a fresh native hash entry, set on traversal) can.
-- **A direct landing on a case study hash glides from the top under default motion** (for example `/projects/folio#results`). On prerendered pages, Nuxt calls `scrollBehavior` a second time with a `from` that isn't `START_LOCATION`, so the "first load jumps" path never runs. The browser's own jump to the hash also animates, because of `html { scroll-behavior: smooth }`. The step 2 comment in `router.options.ts` ("the browser has already jumped there") is wrong in practice.
-
-From the Phase 4 final review (items M4, M5 and M7), parked by ruling. Each needs a rare condition.
-
-- **A stalled send shows "Sending..." indefinitely.** The SDK's `send` is a bare `fetch` with no timeout or signal. On a half-dead connection the button reads "Sending..." for minutes, the in-flight guard ignores every press of Send, and a reload (which loses the message) is the only way out. Racing `send` against a timeout of about 20 seconds would show the failure copy with the text kept, but a late success plus a retry could send a duplicate email.
-- **With site storage blocked, every send fails, and the copy blames the connection.** The SDK reads `localStorage` when its module loads, so a browser that throws `SecurityError` for blocked site data makes the lazy import reject. The failure copy still offers to email directly, and the Email links work. The options are to accept it, or to post to the EmailJS REST endpoint with our own `fetch` (which would also allow an `AbortController` for the stall above). The second departs from the spec's `@emailjs/browser`, so it is James's call.
-- **A half-typed message is lost after visiting a case study and pressing Back.** Home unmounts when you leave it, so the fields come back empty. A send still pending when you leave completes, but its confirmation is never shown. This predates Phase 4. Keeping `fields` in `useState('contact-draft')` would keep the draft across client navigation.
+- **R1: Back/Forward within a page with no saved position glides.** For example, Back between two TOC jumps, or Forward into one. `$isHistoryNav()` can't tell these from a TOC click, because both arrive as popstate. The popstate `event.state` (null for a fresh native hash entry, set on traversal) can. It behaved this way before the Phase 3 fixes, it only affects glide versus jump, and readers with reduced motion already get jumps.
+- **M4: A stalled send shows "Sending..." indefinitely.** The SDK's `send` is a bare `fetch` with no timeout or signal. On a half-dead connection the button reads "Sending..." for minutes, the in-flight guard ignores every press of Send, and a reload (which loses the message) is the only way out. Racing `send` against a timeout of about 20 seconds would show the failure copy with the text kept, but a late success plus a retry could send a duplicate email. A related edge: `sending` and `status` are per mount while the draft is shared (`useState('contact-draft')`). Leaving Home mid-send and returning shows the sent text with Send enabled, which invites a duplicate send, and a late success clears anything typed after returning. One fix is to move `sending` and `status` into `useState` too.
+- **R3: A reload, or a Back that isn't restored from the bfcache, on a case study hash URL lands at the hash, not the saved scroll offset.** The saved position is restored by the first `scrollBehavior` call, and the second call (Nuxt's landing replace) then scrolls to the hash. One fix is to skip the restore call's hash scroll when the first call had a saved position.
+- **M5: With site storage blocked, every send fails, and the copy blames the connection.** Accepted in Phase 5, so there is nothing to do. The SDK reads `localStorage` when its module loads, so a browser that throws `SecurityError` for blocked site data makes the lazy import reject. It needs a browser with site data blocked, the failure copy still offers to email directly, and the Email links work. (Posting to the EmailJS REST endpoint with our own `fetch` would avoid it, and would also allow an `AbortController` for M4, but it departs from the spec's `@emailjs/browser`.)
+- **Launch check: hash landings in Safari and Firefox.** Verify a direct landing on a case study hash (for example `/projects/folio#results`) in both. The e2e suite is Chromium only.
+- **Launch check: LinkedIn may keep a cached share image after a screenshot swap.** The `_og` image URLs are keyed by props, so changing a hero image can leave the old card cached. Re-scrape the page in LinkedIn's Post Inspector after changing a hero.
 
 ## Added by Phase 4 (for Phase 6)
 
-The polish items Phase 4 parked are under "Later polish" above.
+The polish items Phase 4 parked are under "Launch prep" above.
 
 ### Phase 6 (Hosting, CI and docs)
 
@@ -172,3 +183,23 @@ The polish items Phase 4 parked are under "Later polish" above.
   - CloudFront allows only GET and HEAD by default, so it probably answers with a 403. The 403 → `/404.html` custom error response would then show "Page not found" with a 404, and the message is lost.
   - Allowing POST wouldn't help, because the S3 website endpoint serves only GET and HEAD.
   - After the error responses are swapped, check with `curl -i -X POST https://jameslittlefield.net/contact`. Then decide whether to accept that for the tiny no-JS audience or to return something better.
+
+## Added by Phase 5 (for Phase 6)
+
+### Facts learned in Phase 5
+
+- **SEO gate:** `npm run check-seo` runs 16 checks on `.output/public` (titles, descriptions, canonicals, robots meta, share images, structured data, sitemap, robots.txt, llms files, the email scan and more). `tests/output/check-seo.test.ts` runs the same checks, so `npm run test:output` covers them. Regenerate first.
+- **Smooth scrolling starts after hydration.** `base.css` sets `scroll-behavior: smooth` on `html.smooth-scroll`, and `app/plugins/smooth-scroll.client.ts` adds that class on `app:suspense:resolve`.
+  - Before that, and without JS, anchor links jump. So the browser's own jump to a `#hash` on a direct landing is instant, while TOC and skip links glide after hydration (and jump under reduced motion).
+- **`scrollBehavior` knows the landing.** On a prerendered page loaded with a hash or query, Nuxt calls `scrollBehavior` once more just after hydration: it replaces the route with the URL the page loaded at, so `to` and `from` are the same location.
+  - `router.options.ts` treats that call, the first call and any call while hydrating as the landing. A hash landing jumps, so a shared deep link opens at its section.
+  - A test in `tests/e2e/case-nav.spec.ts` records every scroll from page start, and the motion the router asks for.
+- **Contact draft:** the four fields live in `useState('contact-draft')`, so a half-typed message survives a visit to a case study and Back. A successful send clears it, and the honeypot stays local, so it is never kept.
+  - State outlives a mount in the Nuxt test environment, so `tests/nuxt/ContactForm.test.ts` clears the draft after each test (`clearNuxtState`).
+
+### Phase 6 (Hosting, CI and docs)
+
+- **Keep CloudFront compression on.** Verified live on 2026-11-18: `/` and its JS bundle return `content-encoding: br` over HTTP/2. Without compression the Open Door Lighthouse performance score drops to about 0.91 to 0.94.
+- **Response headers:** consider a CloudFront response headers policy for CSP, HSTS and COOP. The live site sends none of them. Cache-control comes from the planned sync passes.
+- **Lighthouse in CI:** `scripts/lighthouse.mjs` launches Playwright's Chromium (`chromium.executablePath()`), so a CI job that runs it must install that browser first (`npx playwright install chromium`). Its reports go to `.lighthouse/`, which is gitignored. Upload that folder as an artifact if CI runs it.
+- `_og-static-fonts/` is already on the sync exclusion list above. Phase 5 confirmed nuxt-og-image has no option to drop it.

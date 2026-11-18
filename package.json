@@ -15,6 +15,8 @@
     "test": "vitest run",
     "test:output": "vitest run --config vitest.output.config.ts",
     "test:e2e": "playwright test",
+    "check-seo": "node scripts/check-seo.ts",
+    "lighthouse": "node scripts/lighthouse.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -34,8 +36,10 @@
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "happy-dom": "^21.0.4",
+    "lighthouse": "^13.6.0",
     "node-html-parser": "^9.0.7",
     "prettier": "^3.10.1",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0",
     "vue-tsc": "^3.3.14"

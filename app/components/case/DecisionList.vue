@@ -5,7 +5,7 @@ defineProps<{ items: Decision[] }>()
 </script>
 
 <template>
-  <ul class="plain-list">
+  <ul class="plain-list" role="list">
     <li v-for="d in items" :key="d.title"><b>{{ d.title }}.</b> {{ d.text }}</li>
   </ul>
 </template>
