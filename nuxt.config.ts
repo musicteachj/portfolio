@@ -20,8 +20,12 @@ export default defineNuxtConfig({
     screens: { xs: 360, sm: 600, md: 900, lg: 1200, xl: 1440, '2xl': 1800 },
   },
   runtimeConfig: {
-    // Read by the footer so the server-rendered HTML and the client hydrate with the same value.
-    public: { buildYear: new Date().getFullYear() },
+    public: {
+      // Read by the footer so the server-rendered HTML and the client hydrate with the same value.
+      buildYear: new Date().getFullYear(),
+      // Baked in at generate time from NUXT_PUBLIC_EMAILJS_SERVICE_ID, NUXT_PUBLIC_EMAILJS_TEMPLATE_ID and NUXT_PUBLIC_EMAILJS_PUBLIC_KEY.
+      emailjs: { serviceId: '', templateId: '', publicKey: '' },
+    },
   },
   // The prerender crawl fails the build on any broken internal link.
   linkChecker: { failOnError: true },

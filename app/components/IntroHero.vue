@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { site } from '~/data/site'
+
+const emailHref = useEmailHref()
 </script>
 
 <template>
@@ -13,7 +15,7 @@ import { site } from '~/data/site'
         <p class="status">{{ site.status }}</p>
         <div class="actions">
           <a class="btn btn--primary" :href="site.resumePath">Résumé (PDF)</a>
-          <a class="btn" href="/contact">Email</a>
+          <a class="btn" :href="emailHref">Email</a>
           <a class="btn" :href="site.githubUrl">GitHub</a>
           <a class="btn" :href="site.linkedinUrl">LinkedIn</a>
         </div>

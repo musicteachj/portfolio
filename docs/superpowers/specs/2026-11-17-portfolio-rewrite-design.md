@@ -176,7 +176,7 @@ James isn't keeping any of the old site.
   - Tablet: 2-column stack, 3-column stats.
   - Screenshot beside text from 900px.
   - The photo goes small and above the name under 820px.
-- **Motion:** only the intro "settle" on load. Respect `prefers-reduced-motion`.
+- **Motion:** the intro "settle" on load, and a small spinner in the contact form's Send button while a message sends (added 2026-11-18 at James's request). Respect `prefers-reduced-motion`.
 - **Writing rules:** American English, no em dashes, no "→", no middle-dot meta strings, sentence case.
 
 ### Contact form

@@ -1,4 +1,4 @@
-# Carry-forward notes (Phases 1 to 3)
+# Carry-forward notes (Phases 1 to 4)
 
 Phase 1 ("Foundation and tracer bullet") is committed as `184d060`. These are the findings from its task reviews and its final whole-phase review that were deliberately left to later phases. The plan for each phase must account for the items listed under it.
 
@@ -100,10 +100,10 @@ Every item below was closed in Phase 2.
   - The four "Case study read" links have identical names. Add a visually hidden project name.
   - On the 404 page, the h1 sits tight under the header and the two links run together. `error.vue` shows "Page not found" for non-404 errors too.
 
-### Phase 4 (Contact form)
+### Phase 4 (Contact form): done
 
-- **Email links:** the hero and contact Email links are plain `/contact` hrefs. Clicking them reloads the page, and on `/contact` that clears a half-typed form. Phase 4's client-side `mailto:` switch replaces them; until hydration they must not wipe the form.
-- **No JS:** without JS the form submits a GET with the field values in the URL. Give it `method="post"` with no action, or another no-JS-safe fallback.
+- **Email links:** done. Both Email links switch to `mailto:` after hydration (`useEmailHref`), and `tests/e2e/contact.spec.ts` pins it.
+- **No JS:** done. The form has `method="post"` and no action, so field values never land in a URL.
 
 ### Phase 5 (SEO and performance)
 
@@ -111,7 +111,8 @@ Every item below was closed in Phase 2.
   - Tighten the loose `toContain('100vw')` check to the exact `sizes` string.
   - Screenshot `sizes` is 800px from 1200px up, about 45% over-fetch on desktop (accepted for now; revisit).
 - **Portrait:** has no `format="avif,webp"`, and `james.jpg` has no size test.
-- **Email scan:** `check-seo` must scan every text file for `mailto:` and `jameslittlefield3@`, not just `index.html`.
+- **Email scan:** `check-seo` must scan every file for the address and non-JS text output (HTML, JSON, Markdown, XML, TXT) for `mailto:`. `tests/output/privacy.test.ts` already does both, so `check-seo` can reuse that logic.
+- **Résumé PDF:** `public/resume.pdf` still contains the email address. It is the single named exception in `tests/output/privacy.test.ts`, pending James's decision (keep the exception or replace the PDF).
 - **Lighthouse:** the intro "settle" animation holds text at opacity 0 for up to about 900ms. Check LCP.
 
 ## Added by Phase 3 (for Phases 4 to 6)
@@ -146,7 +147,28 @@ Every item below was closed in Phase 2.
 
 ### Later polish (any phase before launch)
 
-Both behaved this way before the Phase 3 fixes. They only affect glide versus jump, and readers with reduced motion already get jumps.
+From Phase 3. Both behaved this way before the Phase 3 fixes. They only affect glide versus jump, and readers with reduced motion already get jumps.
 
 - **Back/Forward within a page with no saved position glides.** For example, Back between two TOC jumps, or Forward into one. `$isHistoryNav()` can't tell these from a TOC click, because both arrive as popstate. The popstate `event.state` (null for a fresh native hash entry, set on traversal) can.
 - **A direct landing on a case study hash glides from the top under default motion** (for example `/projects/folio#results`). On prerendered pages, Nuxt calls `scrollBehavior` a second time with a `from` that isn't `START_LOCATION`, so the "first load jumps" path never runs. The browser's own jump to the hash also animates, because of `html { scroll-behavior: smooth }`. The step 2 comment in `router.options.ts` ("the browser has already jumped there") is wrong in practice.
+
+From the Phase 4 final review (items M4, M5 and M7), parked by ruling. Each needs a rare condition.
+
+- **A stalled send shows "Sending..." indefinitely.** The SDK's `send` is a bare `fetch` with no timeout or signal. On a half-dead connection the button reads "Sending..." for minutes, the in-flight guard ignores every press of Send, and a reload (which loses the message) is the only way out. Racing `send` against a timeout of about 20 seconds would show the failure copy with the text kept, but a late success plus a retry could send a duplicate email.
+- **With site storage blocked, every send fails, and the copy blames the connection.** The SDK reads `localStorage` when its module loads, so a browser that throws `SecurityError` for blocked site data makes the lazy import reject. The failure copy still offers to email directly, and the Email links work. The options are to accept it, or to post to the EmailJS REST endpoint with our own `fetch` (which would also allow an `AbortController` for the stall above). The second departs from the spec's `@emailjs/browser`, so it is James's call.
+- **A half-typed message is lost after visiting a case study and pressing Back.** Home unmounts when you leave it, so the fields come back empty. A send still pending when you leave completes, but its confirmation is never shown. This predates Phase 4. Keeping `fields` in `useState('contact-draft')` would keep the draft across client navigation.
+
+## Added by Phase 4 (for Phase 6)
+
+The polish items Phase 4 parked are under "Later polish" above.
+
+### Phase 6 (Hosting, CI and docs)
+
+- **CI config:** the `build-and-test` job needs non-empty `NUXT_PUBLIC_EMAILJS_SERVICE_ID`, `NUXT_PUBLIC_EMAILJS_TEMPLATE_ID` and `NUXT_PUBLIC_EMAILJS_PUBLIC_KEY` at generate time. Dummy values are fine, because every e2e request to EmailJS is intercepted. The deploy job maps the real secrets.
+- **Docs:** James turns on the EmailJS domain allowlist (adding `localhost` only if he wants local sends) and a rate limit in the EmailJS dashboard.
+- **Docs, EmailJS 412:** an HTTP 412 from EmailJS means its Gmail permission has expired, even when the dashboard still says "Connected as...". The fix is Email Services, the Gmail service, Disconnect, then Connect Account with "Send email on your behalf" checked, then Update Service. This happened on 2026-11-18, and the README should say so.
+- **DESIGN.md motion:** besides the intro "settle", the contact form's Send button shows a small spinner (`.spinner` in `ContactForm.vue`) while a message sends. The sending state lasts at least 600ms, so a fast reply doesn't flash. James asked for this on 2026-11-18, and the spec's Motion line records it.
+- **No-JS submit:** a send before the JS loads is a plain `POST /contact` (the form has `method="post"` and no action). `scripts/serve-static.mjs` ignores the method and returns the page with a 200, so e2e can't show what production does.
+  - CloudFront allows only GET and HEAD by default, so it probably answers with a 403. The 403 → `/404.html` custom error response would then show "Page not found" with a 404, and the message is lost.
+  - Allowing POST wouldn't help, because the S3 website endpoint serves only GET and HEAD.
+  - After the error responses are swapped, check with `curl -i -X POST https://jameslittlefield.net/contact`. Then decide whether to accept that for the tiny no-JS audience or to return something better.

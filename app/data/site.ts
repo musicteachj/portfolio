@@ -7,6 +7,9 @@ export const site = {
   githubUrl: 'https://github.com/musicteachj',
   linkedinUrl: 'https://www.linkedin.com/in/james-littlefield-93037713b/',
   resumePath: '/resume.pdf',
+  // The address is stored in two parts so it never appears whole in the source or the output.
+  emailUser: 'jameslittlefield3',
+  emailDomain: 'gmail.com',
   capabilitiesHeading: 'I work on',
   capabilities: [
     'Agents and tool use',
@@ -25,6 +28,8 @@ export const site = {
   githubUrl: string
   linkedinUrl: string
   resumePath: string
+  emailUser: string
+  emailDomain: string
   capabilitiesHeading: string
   capabilities: readonly string[]
 }
