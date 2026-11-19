@@ -1,0 +1,12 @@
+/* Shared UI: buttons, actions row, status pill. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2); min-height: var(--tap); padding: 0 16px;
+  border-radius: var(--r-ctl); border: 1px solid var(--field-border); background: var(--surface); color: var(--ink);
+  font: 500 0.9375rem/1 var(--font-sans); text-decoration: none; cursor: pointer; transition: background-color 120ms, border-color 120ms;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.btn--primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--on-accent); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-5); }
+.status { display: inline-flex; align-items: center; gap: 10px; font-size: var(--t-small); color: var(--ink-2); }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--pass); box-shadow: 0 0 0 3px var(--pass-soft); flex: none; }

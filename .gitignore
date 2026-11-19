@@ -1,35 +1,36 @@
 # Logs
-logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# OS and editor files
 .DS_Store
-dist
-dist-ssr
-coverage
-*.local
-
-/cypress/videos/
-/cypress/screenshots/
-
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
 
+# TypeScript build info
 *.tsbuildinfo
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+
+# Brainstorming mockups and plan workspaces (local only)
+.superpowers/
+
+# Nuxt (dist is the symlink nuxt generate makes to .output/public)
+.nuxt/
+.output/
+.data/
+dist
+
+# Playwright
+playwright-report/
+test-results/
+
+# Lighthouse reports
+.lighthouse/

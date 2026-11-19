@@ -1,0 +1,14 @@
+docs/
+DESIGN.md
+README.md
+.superpowers/
+.output/
+.nuxt/
+.data/
+dist
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+public/
+.claude/

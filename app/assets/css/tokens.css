@@ -1,0 +1,49 @@
+:root {
+  --paper: #f7f7f4;
+  --surface: #ffffff;
+  --sunken: #efefeb;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --field-border: #8a8f88;
+  --ink: #141614;
+  --ink-2: #464b47;
+  --ink-3: #5f655f;
+  --accent: #12354e;
+  --accent-hover: #0b2436;
+  --on-accent: #ffffff;
+  --soft: #a5c8d1;
+  --tint: #e6eff2;
+  --mark: #12354e;
+  --pass: #3d6650;
+  --pass-soft: #e7eee9;
+  --miss: #9a5800;
+  --error: #a32b22;
+  --error-soft: #fbecea;
+
+  --font-sans: 'Onest', ui-sans-serif, sans-serif;
+  --font-mono: 'Fragment Mono', ui-monospace, monospace;
+
+  --t-display: clamp(2.375rem, 1.6rem + 3.2vw, 3.75rem);
+  --t-h2: clamp(1.75rem, 1.4rem + 1.4vw, 2.375rem);
+  --t-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --t-small: 0.875rem;
+  --t-mono: 0.8125rem;
+  --t-stat: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 72px;
+  --r-ctl: 6px;
+  --r-frame: 10px;
+  --r-stage: 14px;
+  --shadow-frame: 0 1px 0 rgba(20, 22, 20, 0.05), 0 22px 44px -24px rgba(10, 20, 30, 0.45);
+  --wrap: 1180px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --tap: 44px;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
