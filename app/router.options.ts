@@ -39,7 +39,10 @@ export default <RouterConfig>{
     //    A direct landing jumps, so a shared deep link opens at its section: base.css
     //    keeps the browser's own jump to the hash instant until the app has hydrated,
     //    and this jump puts the section at its scroll margin.
-    if (to.hash) return when(() => hashPosition(to.hash, landing ? 'instant' : motion))
+    if (to.hash) {
+      if (landing) realignAfterFonts(to)
+      return when(() => hashPosition(to.hash, landing ? 'instant' : motion))
+    }
     // 3. A section URL (/projects, /contact) scrolls to its section. A direct landing
     //    follows the motion preference, as a click within Home does.
     const id = sectionIdForPath(to.path)
@@ -89,6 +92,31 @@ function afterRender(
     }
     const timer = setTimeout(settle, RENDER_TIMEOUT_MS)
     const off = nuxtApp.hooks.hookOnce('page:loading:end', settle)
+  })
+}
+
+// On a slow first visit the web fonts swap in after the landing jump, and the text above
+// the target reflows. Chromium and Firefox keep the reader in place (scroll anchoring);
+// Safari does not, and ends up off the section. So once the fonts are in, jump back to it,
+// unless the reader has started scrolling or has moved on to another page.
+const READER_INPUT = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
+let realignPending = false
+
+function realignAfterFonts(to: RouteLocationNormalized) {
+  if (realignPending || document.fonts.status === 'loaded') return
+  realignPending = true
+  const router = useRouter()
+  let readerMoved = false
+  const onInput = () => {
+    readerMoved = true
+  }
+  for (const type of READER_INPUT) addEventListener(type, onInput, { capture: true, passive: true })
+  void document.fonts.ready.then(() => {
+    realignPending = false
+    for (const type of READER_INPUT) removeEventListener(type, onInput, { capture: true })
+    if (readerMoved || router.currentRoute.value.fullPath !== to.fullPath) return
+    const pos = hashPosition(to.hash, 'instant')
+    if (pos && Math.abs(pos.top - window.scrollY) > 1) window.scrollTo(pos)
   })
 }
 
