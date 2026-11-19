@@ -58,13 +58,13 @@ Notes on order:
 
 ## How deploys work
 
-The workflow in `.github/workflows/deploy-aws.yml` runs on every pull request and on pushes to `main` and `dev`. Its `build-and-test` job runs lint, typecheck, unit tests, `generate`, the output tests, `check-seo` and the Playwright suite. It uses dummy EmailJS values and does not deploy.
+The workflow in `.github/workflows/deploy-aws.yml` runs on every pull request and on pushes to `main` and `dev`. Its `build-and-test` job runs lint, typecheck, unit tests, `generate`, the output tests, `check-seo` and the Playwright suite. On a push to `main` it builds with the real EmailJS values from the repository secrets, stops if any of the three is empty, and saves the tested `.output/public` for the deploy. Every other run uses dummy EmailJS values. The Playwright suite blocks every request to EmailJS either way.
 
-The `deploy` job runs only on a push to `main`, and only after `build-and-test` passes. It generates the site with the real EmailJS values from the repository secrets, and stops before uploading anything if any of the three is empty. Then it uploads `.output/public` to the S3 bucket and invalidates the CloudFront cache. Merging to `main` is the release.
+The `deploy` job runs only on a push to `main`, and only after `build-and-test` passes. It does not build: it downloads the site `build-and-test` just tested, uploads it to the S3 bucket and invalidates the CloudFront cache. Merging to `main` is the release.
 
-The `workflow_dispatch` trigger runs `build-and-test` only and never deploys. To redeploy without a new merge (for example after rotating a secret), re-run the workflow run of the latest push to `main` from the Actions tab.
+The `workflow_dispatch` trigger runs `build-and-test` only and never deploys. To redeploy without a new merge (for example after rotating a secret), open the workflow run of the latest push to `main` in the Actions tab and choose "Re-run all jobs", so the site is built again with the current secrets. Re-running only the `deploy` job reuses the saved site, which GitHub keeps for 7 days.
 
-The upload is `scripts/deploy-s3.mjs`: a series of `aws s3 sync` passes, each with the right `Cache-Control` and, where S3 would guess wrong, a content type. Hashed files under `_nuxt/` are cached for a year, HTML and data files are `no-cache`, and other assets are cached for a day. A final pass deletes stale files. To see the exact commands without running them:
+The upload is `scripts/deploy-s3.mjs`: a series of `aws s3 sync` passes, each with the right `Cache-Control` and, where S3 would guess wrong, a content type. Hashed files under `_nuxt/` are cached for a year, HTML and data files are `no-cache`, and other assets are cached for a day. A final pass deletes stale files, except under `_nuxt/`: the previous build's scripts stay, so a reader with the site open during a deploy can keep clicking around. The bucket keeps every build's `_nuxt/` files. They are small, but if they ever need pruning, an S3 lifecycle rule on the `_nuxt/` prefix can expire old ones. Use a generous age, such as 30 days: a tab left open longer than that reloads the page on its next click. To see the exact commands without running them:
 
 ```bash
 npm run deploy:print

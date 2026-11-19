@@ -322,7 +322,7 @@ Build in 7 phases. Each phase ends at a working, reviewable state. Then work sto
 ### Phase 0: Spec (docs only)
 - **Work:**
   - Save this document as `docs/superpowers/specs/2026-11-17-portfolio-rewrite-design.md`.
-  - Write the Phase 1 task plan in `docs/superpowers/plans/`.
+  - Write the Phase 1 task plan in `docs/superpowers/plans/`. (The phase plans were deleted after the rewrite was finished. Git history keeps them.)
 - **Done when:** both files exist and James has seen them.
 
 ### Phase 1: Foundation and tracer bullet (prove the risky tooling)

@@ -55,8 +55,16 @@ function urlFor(rel: string): string {
   return `${SITE}/${rel.replace(/\/index\.html$/, '')}`
 }
 
+// Each page is parsed once per output and shared by every check, so no check may change
+// a tree it gets from here (visibleText works on a copy).
+const parsed = new WeakMap<OutputReader, Map<string, HTMLElement>>()
+
 function page(out: OutputReader, rel: string): HTMLElement {
-  return parse(out.read(rel).toString('utf8'))
+  let pages = parsed.get(out)
+  if (!pages) parsed.set(out, (pages = new Map()))
+  let root = pages.get(rel)
+  if (!root) pages.set(rel, (root = parse(out.read(rel).toString('utf8'))))
+  return root
 }
 
 // Pages that exist; a missing page is reported once by the titles check.
@@ -69,8 +77,9 @@ function missing(out: OutputReader, rels: string[]): string[] {
 }
 
 function visibleText(root: HTMLElement): string {
-  for (const el of root.querySelectorAll('script, style, noscript, template')) el.remove()
-  return root.text
+  const copy = parse(root.toString())
+  for (const el of copy.querySelectorAll('script, style, noscript, template')) el.remove()
+  return copy.text
 }
 
 function metaContents(root: HTMLElement, selector: string): string[] {
@@ -221,7 +230,7 @@ const copyRules: Check = {
     const rels = [...present(out, INDEXABLE), ...present(out, ['404.html'])]
     for (const rel of rels) {
       const raw = out.read(rel).toString('utf8')
-      const text = visibleText(parse(raw))
+      const text = visibleText(page(out, rel))
       for (const bad of ['\u2014', '\u2192', ' \u00b7 ']) {
         if (text.includes(bad)) problems.push(`${rel}: visible text contains "${bad}"`)
       }
@@ -456,8 +465,8 @@ const caseStudySchema: Check = {
 // Expected address prefix. Hardcoded because this script cannot import app code; a unit
 // test asserts it equals app/data/site.ts emailUser plus "@".
 export const EMAIL_NEEDLE = 'jameslittlefield3@'
-// The resume PDF carries the address by design until James decides whether to replace it
-// (an open decision, tracked in the carry-forward notes).
+// The resume PDF carries the address on purpose, until it is replaced with the AI Engineer
+// version.
 export const EMAIL_ALLOWED = ['resume.pdf']
 
 const emailAddress: Check = {

@@ -17,7 +17,6 @@
   --pass: #3d6650;
   --pass-soft: #e7eee9;
   --miss: #9a5800;
-  --miss-soft: #f8eedc;
   --error: #a32b22;
   --error-soft: #fbecea;
 
@@ -39,7 +38,6 @@
   --s-6: 32px;
   --s-7: 48px;
   --s-8: 72px;
-  --s-9: 112px;
   --r-ctl: 6px;
   --r-frame: 10px;
   --r-stage: 14px;

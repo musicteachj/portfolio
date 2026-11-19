@@ -1,6 +1,6 @@
 // The Projects and Contact URLs are aliases of the Home page. These helpers keep
 // them behaving like in-page navigation: scroll, then (for nav clicks) focus.
-export const SECTION_PATHS: Record<'/projects' | '/contact', string> = {
+const SECTION_PATHS: Record<'/projects' | '/contact', string> = {
   '/projects': 'projects',
   '/contact': 'contact',
 }

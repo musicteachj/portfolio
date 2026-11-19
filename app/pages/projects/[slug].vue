@@ -43,7 +43,7 @@ onMounted(() => {
   heading?.focus({ preventScroll: true })
 })
 
-const hasVideo = project.links.video.enabled && !!project.links.video.src
+const showsVideo = hasVideo(project)
 const sections = [
   { id: 'overview', title: 'Overview' },
   { id: 'features', title: 'Key features' },
@@ -52,7 +52,7 @@ const sections = [
   { id: 'architecture', title: 'Architecture' },
   { id: 'results', title: 'Results and evals' },
   { id: 'decisions', title: 'Decisions and lessons' },
-  { id: 'media', title: hasVideo ? 'Video and screenshots' : 'Screenshots' },
+  { id: 'media', title: showsVideo ? 'Video and screenshots' : 'Screenshots' },
 ]
 </script>
 

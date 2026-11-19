@@ -130,6 +130,17 @@ test.describe('portrait sharpness', () => {
   })
 })
 
+test.describe('portrait size at 650 @1x', () => {
+  // Between the sm screen (600px) and 700px the portrait still renders at 90px.
+  test.use({ viewport: { width: 650, height: 900 }, deviceScaleFactor: 1 })
+  test('picks a source sized for the 90px portrait', async ({ page }) => {
+    await page.goto('/')
+    const w = await portraitWidths(page)
+    expect(w.css).toBeLessThan(100)
+    expect(w.src, w.url).toBeLessThanOrEqual(1.5 * w.css)
+  })
+})
+
 for (const dpr of [1, 3]) {
   test.describe(`portrait size at 390 @${dpr}x`, () => {
     test.use({ viewport: { width: 390, height: 800 }, deviceScaleFactor: dpr })

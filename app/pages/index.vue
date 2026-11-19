@@ -19,17 +19,6 @@ useHead({
 })
 
 useSeoMeta({ description: site.lede, ogDescription: site.lede })
-
-// Direct landing on a section URL: scroll there without moving focus. First load
-// only, so a Home remount (Back from a case study) leaves restore to the router,
-// and an explicit hash is left to the router too.
-const route = useRoute()
-const landing = useNuxtApp().isHydrating
-onMounted(() => {
-  if (!landing || route.hash) return
-  const id = sectionIdForPath(route.path)
-  if (id) scrollToSection(id)
-})
 </script>
 
 <template>

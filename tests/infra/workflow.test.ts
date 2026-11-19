@@ -35,7 +35,6 @@ const EMAILJS = [
 ]
 
 const runIndex = (job: Job, cmd: string) => job.steps.findIndex((s) => s.run?.includes(cmd))
-const allEnv = (job: Job) => [job.env ?? {}, ...job.steps.map((s) => s.env ?? {})]
 
 describe('triggers and permissions', () => {
   it('runs on push, pull_request and workflow_dispatch', () => {
@@ -89,12 +88,36 @@ describe('build-and-test', () => {
     expect([...indexes].sort((a, b) => a - b)).toEqual(indexes)
   })
 
-  it('uses dummy EmailJS values, never secrets', () => {
-    const env = Object.assign({}, ...allEnv(build)) as Record<string, string>
-    for (const key of EMAILJS) {
-      expect(env[key], key).toBeTruthy()
-      expect(env[key]).not.toContain('secrets.')
+  it('chooses the EmailJS values after npm ci and before anything builds', () => {
+    const choose = build.steps.findIndex((s) => s.name === 'Choose EmailJS values')
+    expect(choose).toBeGreaterThan(runIndex(build, 'npm ci'))
+    expect(choose).toBeLessThan(runIndex(build, 'npm run lint'))
+    // Nothing sets them at job level, where they would shadow the step's choice.
+    for (const key of EMAILJS) expect(build.env?.[key]).toBeUndefined()
+    const run = build.steps[choose]!.run!
+    for (const key of EMAILJS) expect(run).toContain(`${key}=`)
+    expect(run).toContain('$GITHUB_ENV')
+  })
+
+  it('reads the secrets only for a push to main, and stops if one is empty', () => {
+    const step = build.steps.find((s) => s.name === 'Choose EmailJS values')!
+    const env = step.env ?? {}
+    expect(env['RELEASE']).toBe("${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}")
+    for (const [name, secret] of [
+      ['SERVICE_ID', 'VITE_EMAILJS_SERVICE_ID'],
+      ['TEMPLATE_ID', 'VITE_EMAILJS_TEMPLATE_ID'],
+      ['PUBLIC_KEY', 'VITE_EMAILJS_PUBLIC_KEY'],
+    ] as const) {
+      expect(env[name]).toBe(
+        `\${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.${secret} || '' }}`,
+      )
     }
+    expect(step.run).toMatch(/if \[ -z "\$\{!name\}" \]/)
+    expect(step.run).toContain('exit 1')
+    expect(step.run).toContain('SERVICE_ID=ci_service_id TEMPLATE_ID=ci_template_id PUBLIC_KEY=ci_public_key')
+    // No other step or job sees the EmailJS secrets.
+    const others = Object.values(workflow.jobs).flatMap((j) => [j.env ?? {}, ...j.steps.filter((s) => s !== step).map((s) => s.env ?? {})])
+    expect(JSON.stringify(others)).not.toContain('VITE_EMAILJS')
   })
 
   it('uploads the Playwright report on failure', () => {
@@ -116,35 +139,35 @@ describe('deploy', () => {
     expect(deploy.concurrency?.['cancel-in-progress']).toBe(false)
   })
 
-  it('maps the EmailJS values from the existing secrets', () => {
-    const env = Object.assign({}, ...allEnv(deploy)) as Record<string, string>
-    for (const key of EMAILJS) {
-      const secret = key.replace('NUXT_PUBLIC_', 'VITE_')
-      expect(env[key]).toBe(`\${{ secrets.${secret} }}`)
-    }
+  it('build-and-test saves the tested site last, for a push to main only', () => {
+    const save = build.steps.findIndex((s) => s.name === 'Save the tested site for deploy')
+    expect(save).toBeGreaterThan(runIndex(build, 'npm run test:e2e'))
+    const step = build.steps[save]!
+    expect(step.uses).toMatch(/^actions\/upload-artifact@/)
+    expect(step.if).toBe(deploy.if)
+    expect(step.with).toMatchObject({ name: 'site', path: '.output/public/', 'if-no-files-found': 'error' })
   })
 
-  it('guards against empty EmailJS values before generating', () => {
-    const guard = deploy.steps.findIndex((s) => EMAILJS.every((k) => s.run?.includes(k)))
-    expect(guard).toBeGreaterThanOrEqual(0)
-    expect(guard).toBeLessThan(runIndex(deploy, 'npm run generate'))
+  it('ships the tested site: no install, no build', () => {
+    for (const cmd of ['npm ci', 'npm run generate', 'npm install']) expect(runIndex(deploy, cmd)).toBe(-1)
   })
 
-  it('generates, checks SEO, authenticates, syncs, then invalidates', () => {
+  it('downloads the site, authenticates, syncs, then invalidates', () => {
+    const download = deploy.steps.findIndex((s) => s.uses?.startsWith('actions/download-artifact'))
+    expect(deploy.steps[download]?.with).toMatchObject({ name: 'site', path: '.output/public' })
     const awsLogin = deploy.steps.findIndex((s) =>
       s.uses?.startsWith('aws-actions/configure-aws-credentials'),
     )
     expect(deploy.steps[awsLogin]?.with?.['aws-region']).toBe('us-east-1')
     const indexes = [
-      runIndex(deploy, 'npm run generate'),
-      runIndex(deploy, 'npm run check-seo'),
+      download,
       awsLogin,
       runIndex(deploy, 'node scripts/deploy-s3.mjs .output/public s3://jameslittlefield.net'),
       runIndex(deploy, 'aws cloudfront create-invalidation'),
     ]
     expect(indexes.every((i) => i >= 0)).toBe(true)
     expect([...indexes].sort((a, b) => a - b)).toEqual(indexes)
-    const invalidate = deploy.steps[indexes[4]!]!.run!
+    const invalidate = deploy.steps[indexes[3]!]!.run!
     expect(invalidate).toContain('--paths "/*"')
     expect(invalidate).toContain('secrets.CLOUDFRONT_DISTRIBUTION_ID')
   })

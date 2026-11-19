@@ -3,15 +3,17 @@ import type { Project } from '~/types/project'
 
 const props = defineProps<{ project: Project }>()
 const video = computed(() => props.project.links.video)
+// Set only when the project shows its video (see hasVideo).
+const videoSrc = computed(() => (hasVideo(props.project) ? props.project.links.video.src : undefined))
 </script>
 
 <template>
   <div>
-    <template v-if="video.enabled && video.src">
+    <template v-if="videoSrc">
       <MediaStage id="video" class="stage--video">
         <BrowserFrame label="Walkthrough">
           <CaseVideoPlayer
-            :src="video.src"
+            :src="videoSrc"
             :poster="video.poster"
             :captions="video.captions"
             :label="`${project.name} walkthrough video`"

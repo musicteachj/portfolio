@@ -1,3 +1,4 @@
+import { projects } from './app/data/projects'
 import { site } from './app/data/site'
 
 export default defineNuxtConfig({
@@ -78,7 +79,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/projects', '/contact', '/projects/open-door'],
+      routes: ['/', '/projects', '/contact', ...projects.map((p) => `/projects/${p.slug}`)],
       // nuxt-ai-ready has no route-level exclusion. These aliases of Home must not get a
       // Markdown copy, a llms.txt entry or an llms-full.txt section.
       ignore: ['/projects.md', '/contact.md'],

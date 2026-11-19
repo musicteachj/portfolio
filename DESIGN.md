@@ -49,7 +49,6 @@ Use the CSS variables. Do not write hex values in components.
 | `--pass` | `#3d6650` | Success text, the status dot |
 | `--pass-soft` | `#e7eee9` | Success background |
 | `--miss` | `#9a5800` | A missed result in a results table |
-| `--miss-soft` | `#f8eedc` | Background for a miss |
 | `--error` | `#a32b22` | Error text and invalid field borders |
 | `--error-soft` | `#fbecea` | Error background |
 
@@ -84,12 +83,11 @@ Ratios use the WCAG relative luminance formula, computed by a throwaway script f
 | `--pass` | `--paper` | 6.09 | Success text on the page |
 | `--miss` | `--paper` | 5.19 | Missed result |
 | `--miss` | `--surface` | 5.57 | Missed result on a card |
-| `--miss` | `--miss-soft` | 4.84 | Miss on its soft background |
 | `--error` | `--paper` | 6.69 | Inline field error |
 | `--error` | `--surface` | 7.18 | Error text on a card |
 | `--error` | `--error-soft` | 6.25 | Error message |
 
-Every text pair passes 4.5:1. The lowest is `--miss` on `--miss-soft` at 4.84.
+Every text pair passes 4.5:1. The lowest is `--ink-3` on `--sunken` at 5.18.
 
 Borders of controls:
 
@@ -119,7 +117,7 @@ Body copy has a line length cap (about 60 to 68 characters) so long paragraphs s
 
 | Token | Value |
 |---|---|
-| `--s-1` to `--s-9` | 4, 8, 12, 16, 24, 32, 48, 72, 112 px |
+| `--s-1` to `--s-8` | 4, 8, 12, 16, 24, 32, 48, 72 px |
 | `--r-ctl` | 6px, buttons and fields |
 | `--r-frame` | 10px, browser frames |
 | `--r-stage` | 14px, the soft media panel and the form |

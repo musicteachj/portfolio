@@ -31,7 +31,7 @@ const emailHref = useEmailHref()
             :alt="site.name"
             loading="eager"
             :img-attrs="{ class: 'portrait', fetchpriority: 'high' }"
-            sizes="xs:90px sm:200px md:256px lg:256px"
+            sizes="xs:90px 700:200px md:256px"
           />
         </div>
       </div>

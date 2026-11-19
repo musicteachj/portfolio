@@ -10,6 +10,12 @@ const DAY = 'max-age=86400'
 // so a copy already in the bucket is left alone (not removed).
 export const EXCLUDED = ['200.html', '_og-static-fonts/*']
 
+// Left in place by the final --delete. A reader whose tab still runs the previous
+// build loads its content-hashed chunks from here on the next click; deleting them
+// would turn that click into a failed load and a full page reload. They are small,
+// and nothing links to them once no open tab runs that build.
+export const KEPT_ON_DELETE = ['_nuxt/*']
+
 const only = (...includes) => [['exclude', '*'], ...includes.map((p) => ['include', p])]
 
 export const SYNC_PASSES = [
@@ -93,7 +99,7 @@ export function syncCommands(src, bucket) {
     src,
     bucket,
     '--delete',
-    ...EXCLUDED.flatMap((p) => ['--exclude', p]),
+    ...[...EXCLUDED, ...KEPT_ON_DELETE].flatMap((p) => ['--exclude', p]),
   ]
   return [...passes, cleanup]
 }

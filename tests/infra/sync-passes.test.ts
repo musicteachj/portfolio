@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { EXCLUDED, SYNC_PASSES, matches, syncCommands } from '../../infra/deploy/sync-passes.mjs'
+import { EXCLUDED, KEPT_ON_DELETE, SYNC_PASSES, matches, syncCommands } from '../../infra/deploy/sync-passes.mjs'
 
 const IMMUTABLE = 'max-age=31536000, immutable'
 const NO_CACHE = 'no-cache'
@@ -112,12 +112,24 @@ describe('syncCommands', () => {
     for (const argv of commands.slice(0, -1)) expect(argv).not.toContain('--delete')
   })
 
-  it('ends with --delete and an exclude for each EXCLUDED pattern', () => {
+  it('ends with --delete and an exclude for each EXCLUDED and KEPT_ON_DELETE pattern', () => {
     const last = commands.at(-1)!
     expect(last).toContain('--delete')
     const excludes = last.flatMap((a, i) => (a === '--exclude' ? [last[i + 1]] : []))
-    expect(excludes).toEqual(EXCLUDED)
+    expect(excludes).toEqual([...EXCLUDED, ...KEPT_ON_DELETE])
     expect(last).not.toContain('--cache-control')
+  })
+
+  it('keeps old _nuxt files, so tabs open on the previous build can still load them', () => {
+    expect(KEPT_ON_DELETE).toEqual(['_nuxt/*'])
+    const last = commands.at(-1)!
+    const filters = last.flatMap((a, i) =>
+      a === '--exclude' || a === '--include' ? [[a.slice(2), last[i + 1]] as [string, string]] : [],
+    )
+    // The cleanup pass skips (so never deletes) these; anything else stale is deleted.
+    expect(matches('_nuxt/OldChunk.abc123.js', filters)).toBe(false)
+    expect(matches('_nuxt/builds/meta/old-build-id.json', filters)).toBe(false)
+    expect(matches('projects/old-page/index.html', filters)).toBe(true)
   })
 
   it('passes cache control and content type', () => {

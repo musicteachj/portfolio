@@ -13,6 +13,8 @@ const submitted = ref(false)
 // Sending and the result are app state too. A send keeps running after the form unmounts (the
 // reader opens a case study mid-send), and the remounted form must still read "Sending..." and
 // refuse a second send. The first mount's promise settles these shared values, even unmounted.
+// While a send runs the fields are read-only: the success reset clears them, and it must not
+// take anything typed after the click with it.
 const sending = useState('contact-sending', () => false)
 const status = useState('contact-status', () => ({ kind: '', text: '' }))
 const SENDING_MIN_MS = 600
@@ -103,23 +105,23 @@ async function onSubmit() {
     <div class="f-row">
       <div class="field">
         <label for="f-name">Name</label>
-        <input id="f-name" v-model="fields.name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" :aria-invalid="errors.name ? 'true' : undefined" @input="onInput('name')" @blur="onBlur('name')">
+        <input id="f-name" v-model="fields.name" :readonly="sending" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" :aria-invalid="errors.name ? 'true' : undefined" @input="onInput('name')" @blur="onBlur('name')">
         <p id="f-name-err" class="f-err">{{ errors.name }}</p>
       </div>
       <div class="field">
         <label for="f-email">Email</label>
-        <input id="f-email" v-model="fields.email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" :aria-invalid="errors.email ? 'true' : undefined" @input="onInput('email')" @blur="onBlur('email')">
+        <input id="f-email" v-model="fields.email" :readonly="sending" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" :aria-invalid="errors.email ? 'true' : undefined" @input="onInput('email')" @blur="onBlur('email')">
         <p id="f-email-err" class="f-err">{{ errors.email }}</p>
       </div>
     </div>
     <div class="field">
       <label for="f-subject">Subject</label>
-      <input id="f-subject" v-model="fields.subject" name="subject" type="text" required aria-describedby="f-subject-err" :aria-invalid="errors.subject ? 'true' : undefined" @input="onInput('subject')" @blur="onBlur('subject')">
+      <input id="f-subject" v-model="fields.subject" :readonly="sending" name="subject" type="text" required aria-describedby="f-subject-err" :aria-invalid="errors.subject ? 'true' : undefined" @input="onInput('subject')" @blur="onBlur('subject')">
       <p id="f-subject-err" class="f-err">{{ errors.subject }}</p>
     </div>
     <div class="field">
       <label for="f-message">Message</label>
-      <textarea id="f-message" v-model="fields.message" name="message" rows="5" required aria-describedby="f-message-err" :aria-invalid="errors.message ? 'true' : undefined" @input="onInput('message')" @blur="onBlur('message')"></textarea>
+      <textarea id="f-message" v-model="fields.message" :readonly="sending" name="message" rows="5" required aria-describedby="f-message-err" :aria-invalid="errors.message ? 'true' : undefined" @input="onInput('message')" @blur="onBlur('message')"></textarea>
       <p id="f-message-err" class="f-err">{{ errors.message }}</p>
     </div>
     <div class="hp" aria-hidden="true">
@@ -146,6 +148,8 @@ async function onSubmit() {
 .field textarea { resize: vertical; min-height: 128px; }
 .field input:hover, .field textarea:hover { border-color: var(--ink-2); }
 .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); border-radius: var(--r-ctl); }
+/* Read-only while a send runs: quieter, so typing that does nothing is not a surprise. */
+.field input[readonly], .field textarea[readonly] { background: var(--sunken); color: var(--ink-2); border-color: var(--line-strong); }
 .field [aria-invalid="true"] { border-color: var(--error); box-shadow: inset 3px 0 0 var(--error); }
 .cform .f-err { margin-top: 6px; font-size: 0.8125rem; color: var(--error); }
 .cform .f-err:empty { display: none; }

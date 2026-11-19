@@ -108,6 +108,29 @@ it('a second submit while sending does nothing', async () => {
   expect(w.find('#f-submit .spinner').exists()).toBe(false)
 })
 
+it('locks the fields while sending, so nothing typed then is lost to the reset', async () => {
+  let resolve!: () => void
+  sendMock.mockReturnValue(new Promise<void>((r) => { resolve = r }))
+  const w = await mountForm()
+  await fill(w, valid)
+  for (const key of keys) expect(w.find(`#f-${key}`).attributes('readonly')).toBeUndefined()
+  await w.find('form').trigger('submit')
+  for (const key of keys) expect(w.find(`#f-${key}`).attributes('readonly')).toBeDefined()
+  resolve()
+  await vi.waitFor(() => expect(w.find('#f-submit').text()).toBe('Send message'), { timeout: 2000 })
+  for (const key of keys) expect(w.find(`#f-${key}`).attributes('readonly')).toBeUndefined()
+})
+
+it('a message over the limit shows its error and sends nothing', async () => {
+  const w = await mountForm()
+  await fill(w, { ...valid, message: 'a'.repeat(5001) })
+  await w.find('form').trigger('submit')
+  await flushPromises()
+  expect(w.find('#f-message-err').text()).toBe('Shorten your message to 5,000 characters or fewer. It has 5,001.')
+  expect(w.find('#f-message').attributes('aria-invalid')).toBe('true')
+  expect(sendMock).not.toHaveBeenCalled()
+})
+
 it('a send in flight survives a remount: still Sending..., and a submit sends nothing new', async () => {
   let resolve!: () => void
   sendMock.mockReturnValue(new Promise<void>((r) => { resolve = r }))

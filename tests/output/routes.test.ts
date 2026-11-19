@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { expect, test } from 'vitest'
 import { OUTPUT_DIR, exists, html } from './helpers'
 
-test('prerenders the four tracer routes', () => {
+test('prerenders Home, its section URLs and a case study', () => {
   for (const f of [
     'index.html',
     'projects/index.html',

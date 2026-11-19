@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 import { projects } from '../../app/data/projects'
-import { proofItems } from '../../app/utils/proof'
+import { hasVideo, proofItems } from '../../app/utils/proof'
 import type { Project } from '../../app/types/project'
 
 const base = projects[0]!
@@ -44,4 +44,10 @@ it('enabled flags without a url or src stay disabled', () => {
 
 it('video sub falls back to watch', () => {
   expect(proofItems(projects[1]!, 'home')[1]!.sub).toBe('watch')
+})
+
+it('hasVideo needs both enabled and a src', () => {
+  expect(hasVideo(withLinks({ video: { enabled: true, src: '/videos/x.mp4' } }))).toBe(true)
+  expect(hasVideo(withLinks({ video: { enabled: true } }))).toBe(false)
+  expect(hasVideo(withLinks({ video: { enabled: false, src: '/videos/x.mp4' } }))).toBe(false)
 })

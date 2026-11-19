@@ -50,8 +50,7 @@ dd {
   margin: 0;
   padding: 0;
 }
-code,
-.mono {
+code {
   font-family: var(--font-mono);
   font-size: var(--t-mono);
   letter-spacing: 0;

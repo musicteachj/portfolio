@@ -12,11 +12,6 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      # Dummy values so the build and tests never touch the real EmailJS account.
-      NUXT_PUBLIC_EMAILJS_SERVICE_ID: ci_service_id
-      NUXT_PUBLIC_EMAILJS_TEMPLATE_ID: ci_template_id
-      NUXT_PUBLIC_EMAILJS_PUBLIC_KEY: ci_public_key
 
     steps:
       - name: Checkout code
@@ -30,6 +25,34 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # A push to main builds the site that ships, so it uses the real EmailJS values from the
+      # repository secrets and stops if any is empty. Every other run uses dummy values. The
+      # e2e tests block every request to EmailJS either way, so no test sends an email.
+      - name: Choose EmailJS values
+        env:
+          RELEASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          SERVICE_ID: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.VITE_EMAILJS_SERVICE_ID || '' }}
+          TEMPLATE_ID: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.VITE_EMAILJS_TEMPLATE_ID || '' }}
+          PUBLIC_KEY: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.VITE_EMAILJS_PUBLIC_KEY || '' }}
+        run: |
+          if [ "$RELEASE" = true ]; then
+            missing=0
+            for name in SERVICE_ID TEMPLATE_ID PUBLIC_KEY; do
+              if [ -z "${!name}" ]; then
+                echo "::error::The VITE_EMAILJS_$name repository secret is empty."
+                missing=1
+              fi
+            done
+            [ "$missing" = 0 ] || exit 1
+          else
+            SERVICE_ID=ci_service_id TEMPLATE_ID=ci_template_id PUBLIC_KEY=ci_public_key
+          fi
+          {
+            echo "NUXT_PUBLIC_EMAILJS_SERVICE_ID=$SERVICE_ID"
+            echo "NUXT_PUBLIC_EMAILJS_TEMPLATE_ID=$TEMPLATE_ID"
+            echo "NUXT_PUBLIC_EMAILJS_PUBLIC_KEY=$PUBLIC_KEY"
+          } >> "$GITHUB_ENV"
 
       - name: Lint
         run: npm run lint
@@ -65,6 +88,16 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      # The deploy job uploads exactly this tested build, rather than building again.
+      - name: Save the tested site for deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: .output/public/
+          if-no-files-found: error
+          retention-days: 7
+
   deploy:
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -72,12 +105,9 @@ jobs:
     concurrency:
       group: deploy-production
       cancel-in-progress: false
-    env:
-      NUXT_PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
-      NUXT_PUBLIC_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
-      NUXT_PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
 
     steps:
+      # For the deploy script only. It needs Node but no npm packages.
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -85,27 +115,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Check EmailJS secrets are set
-        run: |
-          missing=0
-          for name in NUXT_PUBLIC_EMAILJS_SERVICE_ID NUXT_PUBLIC_EMAILJS_TEMPLATE_ID NUXT_PUBLIC_EMAILJS_PUBLIC_KEY; do
-            if [ -z "${!name}" ]; then
-              echo "::error::$name is empty. Check the matching VITE_EMAILJS_* repository secret."
-              missing=1
-            fi
-          done
-          exit $missing
-
-      - name: Generate static site
-        run: npm run generate
-
-      - name: SEO check
-        run: npm run check-seo
+      - name: Download the tested site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: .output/public
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

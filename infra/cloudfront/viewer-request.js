@@ -16,7 +16,6 @@ var REDIRECTS = {
   '/work': '/',
   '/projects/6': '/projects/resumeiq',
   '/projects/7': '/projects/folio',
-  '/projects/12': '/projects',
   '/James_Littlefield_Senior_Full_Stack_Developer.pdf': '/resume.pdf',
 }
 

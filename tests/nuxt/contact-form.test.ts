@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fieldError, sendContactMessage } from '../../app/utils/contact-form'
+import { CONTACT_MAX_LENGTH, fieldError, sendContactMessage } from '../../app/utils/contact-form'
 
 const { sendMock } = vi.hoisted(() => ({ sendMock: vi.fn() }))
 vi.mock('@emailjs/browser', () => ({ send: sendMock }))
@@ -21,6 +21,20 @@ describe('fieldError', () => {
     expect(fieldError('subject', '')).toBe('Enter a subject')
     expect(fieldError('message', '')).toBe('Enter a message')
     expect(fieldError('message', 'Hi')).toBe('')
+  })
+
+  it('caps each field, counting the trimmed value', () => {
+    expect(CONTACT_MAX_LENGTH).toEqual({ name: 100, email: 254, subject: 150, message: 5000 })
+    expect(fieldError('name', 'a'.repeat(100))).toBe('')
+    expect(fieldError('name', ` ${'a'.repeat(100)} `)).toBe('')
+    expect(fieldError('name', 'a'.repeat(101))).toBe('Shorten your name to 100 characters or fewer')
+    const email = `${'a'.repeat(245)}@example.com`
+    expect(fieldError('email', email)).toBe('Shorten your email address to 254 characters or fewer')
+    expect(fieldError('subject', 'a'.repeat(151))).toBe('Shorten the subject to 150 characters or fewer')
+    expect(fieldError('message', 'a'.repeat(5000))).toBe('')
+    expect(fieldError('message', 'a'.repeat(5001))).toBe(
+      'Shorten your message to 5,000 characters or fewer. It has 5,001.',
+    )
   })
 })
 

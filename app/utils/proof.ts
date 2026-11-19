@@ -1,6 +1,6 @@
 import type { Project } from '../types/project'
 
-export type ProofKey = 'case' | 'video' | 'code' | 'demo'
+type ProofKey = 'case' | 'video' | 'code' | 'demo'
 
 /** An undefined href means the item is disabled. */
 export interface ProofItem {
@@ -8,6 +8,14 @@ export interface ProofItem {
   label: string
   sub: string
   href?: string
+}
+
+/**
+ * A project shows a video only when it is enabled and has a file. The Video proof link,
+ * the case study's #video player and its section title all follow this one rule.
+ */
+export function hasVideo(project: Project): boolean {
+  return project.links.video.enabled && !!project.links.video.src
 }
 
 export function proofItems(project: Project, context: 'home' | 'page'): ProofItem[] {
@@ -22,7 +30,7 @@ export function proofItems(project: Project, context: 'home' | 'page'): ProofIte
     key: 'video',
     label: 'Video',
     sub: video.durationLabel ?? 'watch',
-    href: video.enabled && video.src ? `/projects/${project.slug}#video` : undefined,
+    href: hasVideo(project) ? `/projects/${project.slug}#video` : undefined,
   }
   const codeItem: ProofItem = {
     key: 'code',
