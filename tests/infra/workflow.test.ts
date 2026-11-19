@@ -12,6 +12,7 @@ interface Step {
 }
 interface Job {
   'runs-on': string
+  'timeout-minutes'?: number
   needs?: string
   if?: string
   concurrency?: { group?: string; 'cancel-in-progress'?: boolean }
@@ -20,6 +21,7 @@ interface Job {
 }
 interface Workflow {
   on: Record<string, unknown>
+  concurrency?: { group?: string; 'cancel-in-progress'?: boolean | string }
   permissions: Record<string, string>
   jobs: Record<string, Job>
 }
@@ -50,6 +52,20 @@ describe('triggers and permissions', () => {
   it('writes an html Playwright report under CI', () => {
     const config = readFileSync('playwright.config.ts', 'utf8')
     expect(config).toMatch(/process\.env\.CI\s*\?[^:]*'html'/)
+  })
+
+  it('cancels a pull request run superseded by a newer push, and nothing else', () => {
+    // Pull requests share a group per number. Every other run gets its own group (its run
+    // id), so pushes to main and dev never wait on or cancel each other here.
+    expect(workflow.concurrency?.group).toBe(
+      "${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}",
+    )
+    expect(workflow.concurrency?.['cancel-in-progress']).toBe("${{ github.event_name == 'pull_request' }}")
+  })
+
+  it('gives every job a time limit', () => {
+    expect(build['timeout-minutes']).toBe(30)
+    expect(deploy['timeout-minutes']).toBe(15)
   })
 
   it('is read-only by default', () => {

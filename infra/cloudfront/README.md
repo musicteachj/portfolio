@@ -266,10 +266,10 @@ Expected: `font/woff2` for the font and an XML type (`application/xml` or `text/
 ### Compression
 
 ```bash
-curl -sI -H 'accept-encoding: br' https://jameslittlefield.net/ | grep -i '^content-encoding'
+curl -s -D - -o /dev/null -H 'accept-encoding: br' https://jameslittlefield.net/ | grep -i '^content-encoding'
 ```
 
-Expected: `content-encoding: br`.
+Expected: `content-encoding: br`. This must be a full GET request: CloudFront compresses only those, so a header-only request (`curl -I`) never shows the header, even when compression is on.
 
 ### Form posts without JavaScript
 
