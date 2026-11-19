@@ -152,7 +152,9 @@ test('a direct landing on a case study hash jumps there @cross-browser', async (
 // target reflows. Chromium and Firefox keep the reader in place (scroll anchoring); WebKit
 // does not, so the app jumps back to the section once the fonts are in.
 test.describe('a direct hash landing with slow fonts @cross-browser', () => {
-  const FONT_DELAY_MS = 1500
+  // The fonts are held until the test releases them, not for a fixed time: a slow CI
+  // browser could otherwise finish hydrating after the fonts had already arrived.
+  let releaseFonts: () => void = () => {}
   const offBy = (page: Page) =>
     page.locator('#results').evaluate((s) => {
       const margin = parseFloat(getComputedStyle(s).scrollMarginTop)
@@ -161,20 +163,36 @@ test.describe('a direct hash landing with slow fonts @cross-browser', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
+    const released = new Promise<void>((resolve) => {
+      releaseFonts = resolve
+    })
     await page.route(/\.woff2$/, async (route) => {
-      await new Promise((r) => setTimeout(r, FONT_DELAY_MS))
+      await released
       await route.continue()
     })
   })
+
+  test.afterEach(() => releaseFonts())
+
+  // Lets the fonts in and waits for the page to settle with them. document.fonts.ready
+  // settles before WebKit has redrawn with the new fonts, hence the short pause after it.
+  const letFontsIn = async (page: Page) => {
+    releaseFonts()
+    await page.evaluate(() => document.fonts.ready)
+    await page.waitForTimeout(300)
+    await waitForScrollIdle(page)
+  }
 
   test('still ends on the section', async ({ page }) => {
     // Not the load event, which waits for the fonts.
     await page.goto('/projects/folio#results', { waitUntil: 'domcontentloaded' })
     await waitForHydration(page)
-    await page.evaluate(() => document.fonts.ready)
-    await waitForScrollIdle(page)
+    expect(await page.evaluate(() => document.fonts.status)).toBe('loading')
+    // Landed on the section while the page still uses the fallback font.
+    expect(Math.abs(await offBy(page))).toBeLessThanOrEqual(2)
+    await letFontsIn(page)
     // Within a couple of pixels: Firefox rounds its anchoring.
-    await expect.poll(async () => Math.abs(await offBy(page))).toBeLessThanOrEqual(2)
+    expect(Math.abs(await offBy(page))).toBeLessThanOrEqual(2)
   })
 
   test('leaves a reader who has started scrolling where they are', async ({ page }) => {
@@ -186,8 +204,7 @@ test.describe('a direct hash landing with slow fonts @cross-browser', () => {
     await page.mouse.wheel(0, 600)
     await waitForScrollIdle(page)
     const before = await scrollY(page)
-    await page.evaluate(() => document.fonts.ready)
-    await waitForScrollIdle(page)
+    await letFontsIn(page)
     // Within a few pixels: the font swap may reflow text, but there is no jump back.
     expect(Math.abs((await scrollY(page)) - before)).toBeLessThan(150)
     expect(Math.abs(await offBy(page))).toBeGreaterThan(300)
