@@ -148,6 +148,52 @@ test('a direct landing on a case study hash jumps there @cross-browser', async (
   expect(asked.filter((b) => b !== 'instant')).toEqual([])
 })
 
+// The web fonts swap in after the landing jump on a slow first visit, and the text above the
+// target reflows. Chromium and Firefox keep the reader in place (scroll anchoring); WebKit
+// does not, so the app jumps back to the section once the fonts are in.
+test.describe('a direct hash landing with slow fonts @cross-browser', () => {
+  const FONT_DELAY_MS = 1500
+  const offBy = (page: Page) =>
+    page.locator('#results').evaluate((s) => {
+      const margin = parseFloat(getComputedStyle(s).scrollMarginTop)
+      return Math.round(s.getBoundingClientRect().top - margin)
+    })
+
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.route(/\.woff2$/, async (route) => {
+      await new Promise((r) => setTimeout(r, FONT_DELAY_MS))
+      await route.continue()
+    })
+  })
+
+  test('still ends on the section', async ({ page }) => {
+    // Not the load event, which waits for the fonts.
+    await page.goto('/projects/folio#results', { waitUntil: 'domcontentloaded' })
+    await waitForHydration(page)
+    await page.evaluate(() => document.fonts.ready)
+    await waitForScrollIdle(page)
+    // Within a couple of pixels: Firefox rounds its anchoring.
+    await expect.poll(async () => Math.abs(await offBy(page))).toBeLessThanOrEqual(2)
+  })
+
+  test('leaves a reader who has started scrolling where they are', async ({ page }) => {
+    // Not the load event, which waits for the fonts.
+    await page.goto('/projects/folio#results', { waitUntil: 'domcontentloaded' })
+    await waitForHydration(page)
+    expect(await page.evaluate(() => document.fonts.status)).toBe('loading')
+    await page.mouse.move(640, 400)
+    await page.mouse.wheel(0, 600)
+    await waitForScrollIdle(page)
+    const before = await scrollY(page)
+    await page.evaluate(() => document.fonts.ready)
+    await waitForScrollIdle(page)
+    // Within a few pixels: the font swap may reflow text, but there is no jump back.
+    expect(Math.abs((await scrollY(page)) - before)).toBeLessThan(150)
+    expect(Math.abs(await offBy(page))).toBeGreaterThan(300)
+  })
+})
+
 // After hydration a TOC link moves within the page, so it follows the motion preference.
 for (const reduced of [false, true]) {
   test(`a TOC click ${reduced ? 'jumps to its section under reduced motion' : 'glides to its section'}`, async ({ page }) => {

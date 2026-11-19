@@ -9,9 +9,17 @@ on:
 permissions:
   contents: read
 
+# A newer push to a pull request cancels that pull request's run in progress. Every other
+# run gets a group of its own, so pushes to main and dev are never canceled or held here.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    # A full run takes about 13 minutes.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -102,6 +110,7 @@ jobs:
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     concurrency:
       group: deploy-production
       cancel-in-progress: false
