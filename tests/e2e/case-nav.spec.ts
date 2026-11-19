@@ -138,8 +138,11 @@ test('a direct landing on a case study hash jumps there @cross-browser', async (
   const { margin, target, landed } = await place()
   expect(margin).toBeGreaterThan(0)
   expect(landed).toBe(true)
-  // A jump: nothing recorded between the top of the page and the target.
-  expect(await scrollsBetween(page, 10, target - 10)).toEqual([])
+  // A jump, not a glide. The browser's own jump to the fragment can stop once or twice
+  // short of the target before the layout settles (Firefox on Linux in CI did, once,
+  // at 2652 for a target past 2700), and the router then jumps to the exact spot. A glide
+  // from the top would record a position on nearly every frame of the way down.
+  expect((await scrollsBetween(page, 10, target - 10)).length).toBeLessThanOrEqual(2)
   // Including the router's own scrolls, which would glide wherever the page happened to be.
   const asked = await page.evaluate(() => (window as unknown as { __asked: string[] }).__asked)
   expect(asked.filter((b) => b !== 'instant')).toEqual([])
