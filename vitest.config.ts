@@ -1,33 +1,34 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vuetify from 'vite-plugin-vuetify'
-import { fileURLToPath, URL } from 'node:url'
+import { defineVitestProject } from '@nuxt/test-utils/config'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    vuetify({
-      autoImport: true,
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
   test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    css: true,
-    deps: {
-      inline: ['vuetify'],
-    },
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/test/', '**/*.d.ts', 'dist/', 'coverage/'],
-    },
+    projects: [
+      await defineVitestProject({
+        test: {
+          name: 'unit',
+          environment: 'nuxt',
+          include: ['tests/nuxt/**/*.test.ts'],
+          environmentOptions: {
+            nuxt: {
+              // The Nuxt test environment forces ssr: false, which makes the SEO modules
+              // warn on every run. Test-only: production nuxt.config.ts is unchanged.
+              // Cast: the tooling tsconfig does not load the Nuxt module type augmentations.
+              overrides: { ogImage: { enabled: false }, site: { indexable: false } } as Record<
+                string,
+                unknown
+              >,
+            },
+          },
+        },
+      }),
+      {
+        test: {
+          name: 'infra',
+          environment: 'node',
+          include: ['tests/infra/**/*.test.ts'],
+        },
+      },
+    ],
   },
 })
