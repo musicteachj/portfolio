@@ -15,6 +15,8 @@ interface Job {
   'timeout-minutes'?: number
   needs?: string
   if?: string
+  environment?: string
+  permissions?: Record<string, string>
   concurrency?: { group?: string; 'cancel-in-progress'?: boolean }
   env?: Record<string, string>
   steps: Step[]
@@ -26,7 +28,8 @@ interface Workflow {
   jobs: Record<string, Job>
 }
 
-const workflow = parse(readFileSync('.github/workflows/deploy-aws.yml', 'utf8')) as Workflow
+const workflowText = readFileSync('.github/workflows/deploy-aws.yml', 'utf8')
+const workflow = parse(workflowText) as Workflow
 const build = workflow.jobs['build-and-test']!
 const deploy = workflow.jobs['deploy']!
 
@@ -174,7 +177,11 @@ describe('deploy', () => {
     const awsLogin = deploy.steps.findIndex((s) =>
       s.uses?.startsWith('aws-actions/configure-aws-credentials'),
     )
-    expect(deploy.steps[awsLogin]?.with?.['aws-region']).toBe('us-east-1')
+    const creds = deploy.steps[awsLogin]?.with ?? {}
+    expect(creds['role-to-assume']).toBe('arn:aws:iam::572459017185:role/portfolio-site-deploy')
+    expect(creds['aws-region']).toBe('us-east-1')
+    expect(creds).not.toHaveProperty('aws-access-key-id')
+    expect(creds).not.toHaveProperty('aws-secret-access-key')
     const indexes = [
       download,
       awsLogin,
@@ -185,7 +192,34 @@ describe('deploy', () => {
     expect([...indexes].sort((a, b) => a - b)).toEqual(indexes)
     const invalidate = deploy.steps[indexes[3]!]!.run!
     expect(invalidate).toContain('--paths "/*"')
-    expect(invalidate).toContain('secrets.CLOUDFRONT_DISTRIBUTION_ID')
+    expect(invalidate).toContain('--distribution-id E1LYCW0Q332784')
+    expect(invalidate).not.toContain('secrets.')
+  })
+
+  it('runs in the production environment with only contents read and an OIDC token', () => {
+    expect(deploy.environment).toBe('production')
+    expect(deploy.permissions).toEqual({ contents: 'read', 'id-token': 'write' })
+  })
+})
+
+describe('credentials and pinning', () => {
+  it('lets only the deploy job request an OIDC token', () => {
+    expect(build.permissions?.['id-token']).toBeUndefined()
+    expect(workflow.permissions['id-token']).toBeUndefined()
+  })
+
+  it('pins every action to a 40-character commit SHA', () => {
+    for (const job of Object.values(workflow.jobs)) {
+      for (const step of job.steps) {
+        if (step.uses !== undefined) expect(step.uses).toMatch(/@[0-9a-f]{40}$/)
+      }
+    }
+  })
+
+  it('references no long-lived AWS or distribution secrets', () => {
+    for (const name of ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'CLOUDFRONT_DISTRIBUTION_ID']) {
+      expect(workflowText).not.toContain(`secrets.${name}`)
+    }
   })
 })
 
