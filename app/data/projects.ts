@@ -24,7 +24,7 @@ export const projects: Project[] = [
         group: 'Data',
         items: 'PostgreSQL with pgvector, row-level security, envelope encryption',
       },
-      { group: 'Infra', items: 'Docker, AWS ECS Fargate, GitHub Actions' },
+      { group: 'Infra', items: 'Docker, AWS ECS on EC2, GitHub Actions' },
     ],
     stats: [
       { value: '100', unit: '%', label: 'Red team pass rate' },
@@ -39,8 +39,8 @@ export const projects: Project[] = [
     },
     frameLabel: 'Open Door',
     links: {
-      code: { url: `${github}open-door`, enabled: false },
-      demo: { enabled: false },
+      code: { url: `${github}open-door`, enabled: true },
+      demo: { url: 'https://opendoor.jameslittlefield.net', enabled: true },
       video: { enabled: false, durationLabel: '3.5 min' },
     },
     caseStudy: {
@@ -173,17 +173,17 @@ export const projects: Project[] = [
     stack: [
       {
         group: 'AI',
-        items: 'Claude Opus 5 (vision, structured output), Anthropic SDK, MCP TypeScript SDK',
+        items: 'Claude Opus 5.5 (vision, structured output), Anthropic SDK, MCP TypeScript SDK',
       },
       { group: 'Frontend', items: 'Vue 3, TypeScript, Vite, Pinia, Tailwind CSS v4' },
       { group: 'Backend', items: 'Node.js, Express 5, Zod 4, PDFKit, bwip-js (barcodes)' },
-      { group: 'Data', items: 'MongoDB, Mongoose' },
-      { group: 'Infra', items: 'Docker, AWS ECS Fargate, GitHub Actions, Vitest, Playwright' },
+      { group: 'Data', items: 'MongoDB Atlas, Mongoose' },
+      { group: 'Infra', items: 'Docker, AWS ECS on EC2, GitHub Actions, Vitest, Playwright' },
     ],
     stats: [
       { value: '30', unit: '/30', label: 'Defects Sonnet caught with tools (27 without)' },
       { value: '20', label: 'Sonnet wrong citations with tools (33 without)' },
-      { value: '$0.13', label: 'Per vision call, about' },
+      { value: '$0.11', label: 'Most a photo read can cost' },
     ],
     hero: {
       src: '/images/projects/packwright-ghs-editor.png',
@@ -194,8 +194,8 @@ export const projects: Project[] = [
     },
     frameLabel: 'Packwright',
     links: {
-      code: { url: `${github}packwright`, enabled: false },
-      demo: { enabled: false },
+      code: { url: `${github}packwright`, enabled: true },
+      demo: { url: 'https://packwright.jameslittlefield.net', enabled: true },
       video: { enabled: false },
     },
     caseStudy: {
@@ -206,13 +206,13 @@ export const projects: Project[] = [
         '36 rules across GS1, GHS, and US food labeling, each finding linked to its regulation',
         'Click a finding to highlight the part of the label it refers to',
         'Photo audit: Claude vision reads an existing chemical label into typed fields; a person confirms each one',
-        'MCP server with 4 read-only tools (`check_label`, `list_rules`, `ghs_statement_text`, `check_gtin`)',
+        'Public MCP server at `/mcp` with 4 read-only tools (`check_label`, `list_rules`, `ghs_statement_text`, `check_gtin`)',
       ],
       howAiWorks: {
         intro:
           '"The LLM reads. The rule engine judges." No verdict or citation comes from a model.',
         points: [
-          'Claude Opus 5 reads a label photo into a Zod-validated schema with a confidence score per field.',
+          'Claude Opus 5.5 reads a label photo into a Zod-validated schema with a confidence score per field.',
           'Hazard codes are checked against verified tables, and a person confirms each field.',
           'Only then do the deterministic rules run.',
           'The MCP tools let assistants like Claude check labels with the same rules.',
@@ -298,7 +298,7 @@ export const projects: Project[] = [
             values: ['36', '7'],
           },
         ],
-        note: '12 labels with planted defects, 144 conversations, $5.28. Later fixes brought Haiku with tools to 35 of 36. Vision call about 5 s and $0.13. 3,054 unit and 95 browser tests.',
+        note: '12 labels with planted defects, 144 conversations, $5.28. Later fixes brought Haiku with tools to 35 of 36. A photo read takes about 5 s and costs at most $0.11. 3,054 unit and 95 browser tests.',
       },
       decisions: [
         {
@@ -343,7 +343,7 @@ export const projects: Project[] = [
       {
         group: 'AI',
         items:
-          'Claude Sonnet 4.6, Anthropic SDK, OpenAI text-embedding-3-small, LangChain text splitters',
+          'Claude Sonnet 5.5, Anthropic SDK, OpenAI text-embedding-3-small, LangChain text splitters',
       },
       {
         group: 'Frontend',
@@ -524,7 +524,7 @@ export const projects: Project[] = [
     overview:
       'A resume builder with a split-screen editor and live preview. Claude sharpens bullet points, tailors a resume to a job description with a match score and missing keywords, runs an ATS check, writes a cover letter, and imports an existing PDF or Word resume.',
     stack: [
-      { group: 'AI', items: 'Claude Haiku 4.5, Claude Sonnet 4.6, Anthropic SDK' },
+      { group: 'AI', items: 'Claude Haiku 5.5, Claude Sonnet 5.5, Anthropic SDK' },
       {
         group: 'Frontend',
         items: 'React 19, TypeScript, Vite, Tailwind CSS, TanStack Query, Orval (typed API client)',
@@ -571,7 +571,7 @@ export const projects: Project[] = [
         intro:
           'Each task goes to the smallest model that does it well, and every structured answer goes through a schema.',
         points: [
-          'Claude Haiku 4.5 handles quick edits (bullets, summaries); Claude Sonnet 4.6 handles tailoring, ATS checks, cover letters, and import parsing.',
+          'Claude Haiku 5.5 handles quick edits (bullets, summaries); Claude Sonnet 5.5 handles tailoring, ATS checks, cover letters, and import parsing.',
           'Tailoring, ATS, and parsing each force a single tool call with a JSON schema. The server clamps scores and trims lists.',
           'Bullets are sent with IDs, so the model can only point at bullets that exist. Prompts forbid inventing employers, metrics, or skills.',
           'Contact details are never sent to the model.',

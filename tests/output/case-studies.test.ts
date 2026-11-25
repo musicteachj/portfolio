@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { projects, projectBySlug } from '../../app/data/projects'
+import { hasVideo, proofItems } from '../../app/utils/proof'
 import { html } from './helpers'
 
 const page = (slug: string) => html(`projects/${slug}/index.html`)
@@ -28,12 +29,25 @@ test('eight numbered sections in order, mirrored by the toc', () => {
   }
 })
 
-test('launch state on case studies: three disabled proof items, no video', () => {
+test('case study proof links follow the data: enabled ones link out, the rest are disabled', () => {
   for (const p of projects) {
     const r = page(p.slug)
-    expect(r.querySelectorAll('.cs-intro .proof [aria-disabled="true"]')).toHaveLength(3)
-    expect(r.querySelector('video')).toBeNull()
-    expect(r.querySelector('#media-h')?.text).toContain('Screenshots')
+    const items = proofItems(p, 'page')
+    const on = items.filter((i) => i.href).map((i) => i.href)
+    expect(r.querySelectorAll('.cs-intro .proof [aria-disabled="true"]')).toHaveLength(items.length - on.length)
+    expect(r.querySelectorAll('.cs-intro .proof a').map((a) => a.getAttribute('href'))).toEqual(on)
+    expect(r.querySelector('video') !== null).toBe(hasVideo(p))
+    expect(r.querySelector('#media-h')?.text).toContain(hasVideo(p) ? 'Video and screenshots' : 'Screenshots')
+  }
+})
+
+test('the live apps link their demo and code', () => {
+  for (const [slug, demo, code] of [
+    ['open-door', 'https://opendoor.jameslittlefield.net', 'https://github.com/musicteachj/open-door'],
+    ['packwright', 'https://packwright.jameslittlefield.net', 'https://github.com/musicteachj/packwright'],
+  ] as const) {
+    const hrefs = page(slug).querySelectorAll('.cs-intro .proof a').map((a) => a.getAttribute('href'))
+    expect(hrefs).toEqual(expect.arrayContaining([demo, code]))
   }
 })
 

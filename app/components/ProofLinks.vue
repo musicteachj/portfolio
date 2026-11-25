@@ -37,7 +37,7 @@ const isExternal = (href: string) => /^https?:/.test(href)
 }
 .proof a:hover { background: var(--tint); color: var(--accent); }
 .proof .state { font: 400 0.75rem/1.3 var(--font-mono); color: var(--ink-2); overflow-wrap: anywhere; }
-/* Video, Code, and Live demo stay disabled until the apps deploy: same shape, muted, not focusable. */
+/* A Video, Code, or Live demo link a project has not turned on: same shape, muted, not focusable. */
 .proof .proof-off {
   display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 5px;
   min-height: 58px; padding: 8px 14px; border-radius: var(--r-ctl); width: 100%;

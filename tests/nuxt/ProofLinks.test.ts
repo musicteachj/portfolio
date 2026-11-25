@@ -5,8 +5,13 @@ import { projects } from '../../app/data/projects'
 import { proofItems } from '../../app/utils/proof'
 
 it('disabled items are role=link aria-disabled and unfocusable', async () => {
+  const p = projects[0]!
+  const allOff = {
+    ...p,
+    links: { code: { ...p.links.code, enabled: false }, demo: { enabled: false }, video: { enabled: false } },
+  }
   const w = await mountSuspended(ProofLinks, {
-    props: { items: proofItems(projects[0]!, 'home'), label: 'Open Door links' },
+    props: { items: proofItems(allOff, 'home'), label: 'Open Door links' },
   })
   const off = w.findAll('[aria-disabled="true"]')
   expect(off).toHaveLength(3)
