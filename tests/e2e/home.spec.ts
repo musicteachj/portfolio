@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { projects } from '../../app/data/projects'
+import { proofItems } from '../../app/utils/proof'
 import { expectNoSeriousAxe } from './helpers/axe'
 import { picksFor, sharpEnough } from './helpers/images'
 
@@ -17,13 +18,13 @@ test('résumé link serves the PDF', async ({ request }) => {
   expect(r.headers()['content-type']).toContain('application/pdf')
 })
 
-test('Tab reaches only the case study link inside each proof list', async ({ page }) => {
+test('Tab reaches only the enabled links inside each proof list', async ({ page }) => {
   await page.goto('/')
-  for (const id of ['opendoor', 'packwright', 'folio', 'resumeiq']) {
+  for (const p of projects) {
     const focusables = await page
-      .locator(`#${id} .proof`)
+      .locator(`#${p.anchorId} .proof`)
       .evaluate((ul) => ul.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])').length)
-    expect(focusables).toBe(1)
+    expect(focusables).toBe(proofItems(p, 'home').filter((i) => i.href).length)
   }
 })
 

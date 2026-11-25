@@ -9,8 +9,14 @@ function withLinks(links: Partial<Project['links']>): Project {
   return { ...base, links: { ...base.links, ...links } }
 }
 
-it('home order and launch-state hrefs', () => {
-  const items = proofItems(base, 'home')
+const allOff = withLinks({
+  code: { ...base.links.code, enabled: false },
+  demo: { enabled: false },
+  video: { ...base.links.video, enabled: false },
+})
+
+it('home order; with every link off, only the case study has an href', () => {
+  const items = proofItems(allOff, 'home')
   expect(items.map((i) => i.key)).toEqual(['case', 'video', 'code', 'demo'])
   expect(items.map((i) => i.href)).toEqual(['/projects/open-door', undefined, undefined, undefined])
   expect(items.map((i) => i.sub)).toEqual(['read', '3.5 min', 'GitHub', 'view'])
