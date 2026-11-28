@@ -356,12 +356,13 @@ export const projects: Project[] = [
       },
       {
         group: 'Data',
-        items: 'MongoDB (Motor), Chroma vector store (one collection per workspace)',
+        items:
+          'MongoDB Atlas (Motor), Chroma vector store (in-process, one collection per workspace)',
       },
-      { group: 'Infra', items: 'Docker, GitHub Actions, AWS' },
+      { group: 'Infra', items: 'Docker, AWS ECS on EC2, GitHub Actions' },
     ],
     stats: [
-      { value: '456', label: 'Automated tests, about' },
+      { value: '1,031', label: 'Automated tests' },
       { value: '8', label: 'Audit findings fixed (1 critical, 7 high)' },
       { value: '6', label: 'Semantic matches per generation, plus pinned voice passages' },
     ],
@@ -373,13 +374,13 @@ export const projects: Project[] = [
     },
     frameLabel: 'Folio',
     links: {
-      code: { url: `${github}brand-content-studio`, enabled: false },
-      demo: { enabled: false },
+      code: { url: `${github}brand-content-studio`, enabled: true },
+      demo: { url: 'https://folio.jameslittlefield.net', enabled: true },
       video: { enabled: false },
     },
     caseStudy: {
       overview:
-        "Folio writes LinkedIn posts, designed image cards, and branded documents that sound like a specific company. It indexes each brand's voice guides, past posts, and personas, then retrieves the right pieces at generation time so Claude writes on-brand instead of generic copy. Each brand lives in its own workspace, and every generation records which passages it used.",
+        "Folio writes LinkedIn posts, designed image cards, and branded documents that sound like a specific company. It indexes each brand's voice guides, past posts, and personas, then retrieves the right pieces at generation time so Claude writes on-brand instead of generic copy. Each brand lives in its own workspace, and every generation records which passages it used. Password sign-in is built and tested, but the public demo runs without accounts: one click starts a private session, and its work is removed after 24 hours.",
       features: [
         'One workspace per brand, with its own documents, palette, fonts, and voice',
         'LinkedIn posts and 1080x1350 image cards, with the preview identical to the exported PNG',
@@ -465,7 +466,7 @@ export const projects: Project[] = [
           },
           {
             label: 'Automated tests',
-            values: ['About 456 (296 server, 160 client)'],
+            values: ['1,031 (757 server, 274 client)'],
           },
           {
             label: 'July security audit',
@@ -485,7 +486,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Vector store',
-          text: 'Chroma and Qdrant over Pinecone, on cost.',
+          text: 'Chroma over Pinecone, on cost. It runs inside the API process, so there is no vector server to host or secure.',
         },
         {
           title: 'Hosting',
@@ -533,16 +534,16 @@ export const projects: Project[] = [
         group: 'Backend',
         items: 'Python, Django 5.2, Django REST Framework, drf-spectacular (OpenAPI)',
       },
-      { group: 'Data', items: 'PostgreSQL 15' },
+      { group: 'Data', items: 'PostgreSQL 17' },
       {
         group: 'Infra',
-        items: 'Docker, AWS ECS Fargate, RDS, Secrets Manager, GitHub Actions, CodeQL',
+        items: 'Docker, AWS ECS on EC2, SSM Parameter Store, GitHub Actions, CodeQL',
       },
     ],
     stats: [
-      { value: '248', label: 'Automated tests' },
-      { value: '10', label: 'AI calls per user per day, capped' },
-      { value: '50', label: 'AI calls per user per month, capped' },
+      { value: '826', label: 'Automated tests' },
+      { value: '30', label: 'AI calls per demo guest, capped' },
+      { value: '$0.15', label: 'AI spend per demo guest, capped' },
     ],
     hero: {
       src: '/images/projects/resumeiq-tailor.png',
@@ -552,13 +553,13 @@ export const projects: Project[] = [
     },
     frameLabel: 'ResumeIQ',
     links: {
-      code: { url: `${github}smart-resume-builder`, enabled: false },
-      demo: { enabled: false },
+      code: { url: `${github}smart-resume-builder`, enabled: true },
+      demo: { url: 'https://resumeiq.jameslittlefield.net', enabled: true },
       video: { enabled: false },
     },
     caseStudy: {
       overview:
-        'A resume builder with a split-screen editor and live preview. Claude sharpens bullet points, tailors a resume to a job description with a match score and missing keywords, runs an ATS check, writes a cover letter, and imports an existing PDF or Word resume. Exports to PDF, Word, or plain text, with per-user limits that keep AI costs capped.',
+        'A resume builder with a split-screen editor and live preview. Claude sharpens bullet points, tailors a resume to a job description with a match score and missing keywords, runs an ATS check, writes a cover letter, and imports an existing PDF or Word resume. Exports to PDF, Word, or plain text, with per-guest limits that keep AI costs capped. Sign-up and sign-in are built and tested, but the public demo runs without accounts: one click starts a 24-hour guest with a sample resume.',
       features: [
         'Split-screen editor with a live, print-accurate preview',
         'Tailor to a job description: match score, missing keywords, and suggested bullet rewrites',
@@ -625,11 +626,11 @@ export const projects: Project[] = [
         rows: [
           {
             label: 'Automated tests',
-            values: ['248 (105 server, 143 client)'],
+            values: ['826 (539 server, 287 client), plus 98 browser tests'],
           },
           {
-            label: 'AI calls per user',
-            values: ['10 per day, 50 per month'],
+            label: 'AI per demo guest',
+            values: ['30 calls or $0.15, whichever comes first'],
           },
           {
             label: 'Burst limit',

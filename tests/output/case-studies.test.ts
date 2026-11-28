@@ -45,6 +45,8 @@ test('the live apps link their demo and code', () => {
   for (const [slug, demo, code] of [
     ['open-door', 'https://opendoor.jameslittlefield.net', 'https://github.com/musicteachj/open-door'],
     ['packwright', 'https://packwright.jameslittlefield.net', 'https://github.com/musicteachj/packwright'],
+    ['folio', 'https://folio.jameslittlefield.net', 'https://github.com/musicteachj/brand-content-studio'],
+    ['resumeiq', 'https://resumeiq.jameslittlefield.net', 'https://github.com/musicteachj/smart-resume-builder'],
   ] as const) {
     const hrefs = page(slug).querySelectorAll('.cs-intro .proof a').map((a) => a.getAttribute('href'))
     expect(hrefs).toEqual(expect.arrayContaining([demo, code]))
